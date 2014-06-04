@@ -1,0 +1,30 @@
+{
+  "name": "juicy-tile-grid",
+  "version": "0.0.0",
+  "description": "<juicy-tile-grid> is a Polymer Element with CSS Grid Layout renderer for [`juicy-tile-list`](Juicy/juicy-tile-list).",
+  "main": "src/juicy-tile-grid.html",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "~1.9.1",
+    "grunt": "~0.4.4",
+    "grunt-mocha": "~0.4.10",
+    "mocha": "~1.18.2",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-text-replace": "~0.3.11"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Juicy/juicy-tile-grid"
+  },
+  "bugs": {
+    "url": "https://github.com/Juicy/juicy-tile-grid/issues"
+  },
+  "license": "MIT"
+}

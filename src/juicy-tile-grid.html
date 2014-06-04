@@ -1,0 +1,106 @@
+<!-- Import Polymer -->
+<!-- <link rel="import" href="../../polymer/polymer.html"> -->
+<!-- Import juicy-tile-list -->
+<link rel="import" href="../../juicy-tile-list/src/juicy-tile-list.html">
+
+<!-- Define your custom element -->
+<polymer-element name="juicy-tile-grid" extends="juicy-tile-list" noscript>
+
+    <template>
+    <style>
+        :host {
+            display: inline-block;
+            padding: 16px;
+        }
+        #container{
+            display: grid;
+        }
+        polyfill-next-selector { content: ':host #container> *'; }
+        #container ::content>*,
+        #container >*  {
+            position: static;
+        }
+        polyfill-next-selector { content: ':host #container.animate> *'; }
+        #container.animate ::content>*,
+        #container.animate >*  {
+            -webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
+            transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, transform 0.5s;
+            transition-timing-function: ease-out;
+        }
+    </style>
+    </template>
+    <script>
+        Polymer('juicy-tile-grid', {
+            renderer: function grid( packedTree, elements, offsetX, offsetY ){
+                var cols = []; // just position //{position: px, size: px [, gap: bool]}
+                var rows = []; // {position: px, size: px [, gap: bool]}
+                var renderedGrid = []; //{index: n, name: groupname, row: r, column: c, background, innerHTML, oversize}
+
+                function drawLine( array, position ){
+                    var len = array.length;
+                    while(len-- && array[len] > position){  // array[len].position > position){  
+                    }
+                    if(len>-1 && array[len] == position){ // array[len].position == position){
+                        return len;
+                    } else {
+                        array.splice( len+1, 0, position ); // {position: position});
+                        return len+1;
+                    }
+                    return len;
+                }
+                function drawLinesFromTree( node, offsetX, offsetY ){
+                    var ilen = node.items.length;
+                    while(ilen--){
+                        var item = node.items[ilen];
+                        drawLine(cols, offsetX + item.x);
+                        drawLine(cols, offsetX + item.x + item.width);
+
+                        drawLine(rows, offsetY + item.y);
+                        drawLine(rows, offsetY + item.y + item.height);
+
+                        if(item.items){
+                            drawLinesFromTree( item, offsetX + item.x, offsetY + item.y);
+                        }
+                    }
+                }
+                drawLinesFromTree(packedTree, 0,0);
+
+                function renderGrid(node, elements, offsetX, offsetY){
+                    var childNodeNo = node.items.length,
+                        child,
+                        element, elementStyle, left, top, colNo, rowNo;  
+                    while(childNodeNo--){
+                        child = node.items[childNodeNo]
+                        element = elements[ child.name || child.index ];
+                        elementStyle = element.style;
+                        left = ( child.x || 0 ) + offsetX; 
+                        top = ( child.y || 0 ) + offsetY;
+                        var oversize = child.oversize || 0;
+                        colNo = cols.indexOf( left );
+                        rowNo = rows.indexOf( top );
+                        elementStyle["grid-column"] = colNo + " / span " + ( cols.indexOf( left + child.width ) - colNo );
+                        elementStyle["grid-row"]= colNo + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
+                        elementStyle.width = ( child.width /*+ 2 * oversize*/ ) + "px";
+                        elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
+                        if(child.background !== undefined) {
+                        elementStyle.backgroundColor = child.background || "transparent";
+                        }
+
+                        if(child.items){// virtual container
+                            renderGrid( child, elements, left, top);
+                        }
+                    }
+                  }
+            var containerStyle = this.$.container.style;
+            containerStyle.display = "ms-grid";
+            containerStyle["grid-template-columns"] = cols.join("px ") + "px";
+            containerStyle["grid-template-rows"] = rows.join("px ") + "px";
+
+            renderGrid( packedTree, elements, 0,0);
+
+              
+            }
+        });
+    </script>
+
+</polymer-element>

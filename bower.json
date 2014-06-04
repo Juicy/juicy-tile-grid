@@ -1,0 +1,23 @@
+{
+    "name": "juicy-tile-grid",
+    "version": "0.0.0",
+    "description": "<juicy-tile-grid> is a Polymer Element with CSS Grid Layout renderer for [`juicy-tile-list`](Juicy/juicy-tile-list).",
+    "license": "MIT",
+    "main": "src/juicy-tile-grid.html",
+    "keywords": [
+        "polymer",
+        "web-components",
+        "tiles",
+        "masonry",
+        "bin-packing",
+        "css-grid"
+    ],
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "polymer": "Polymer/polymer#~0.3.1"
+    }
+}
