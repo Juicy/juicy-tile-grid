@@ -13,7 +13,15 @@
             padding: 16px;
         }
         #container{
-            display: grid;
+          display:grid;
+          grid-template-rows: 50px 50px;
+          grid-template-columns: 50px 50px 50px 100px;
+
+          grid-auto-columns: 100px;
+          grid-auto-rows: 100px;
+          display:-moz-grid;
+          -moz-grid-auto-columns: 100px;
+          -moz-grid-auto-rows: 100px;
         }
         polyfill-next-selector { content: ':host #container> *'; }
         #container ::content>*,
@@ -28,6 +36,8 @@
             transition-timing-function: ease-out;
         }
     </style>
+
+    <div id="container" class="animate"><content></content></div>
     </template>
     <script>
         Polymer('juicy-tile-grid', {
@@ -76,10 +86,14 @@
                         left = ( child.x || 0 ) + offsetX; 
                         top = ( child.y || 0 ) + offsetY;
                         var oversize = child.oversize || 0;
-                        colNo = cols.indexOf( left );
-                        rowNo = rows.indexOf( top );
-                        elementStyle["grid-column"] = colNo + " / span " + ( cols.indexOf( left + child.width ) - colNo );
-                        elementStyle["grid-row"]= colNo + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
+                        colNo = cols.indexOf( left ); 
+                        rowNo = rows.indexOf( top ); 
+                        // cols are 1 index based
+                        elementStyle["grid-column"] = ( colNo + 1 ) + " / span " + ( cols.indexOf( left + child.width ) - colNo );
+                        elementStyle["-ms-grid-column"] = ( colNo + 1 ) + " / span " + ( cols.indexOf( left + child.width ) - colNo );
+                        // rows are 1 index based
+                        elementStyle["grid-row"]= ( rowNo + 1 ) + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
+                        elementStyle["-ms-grid-row"]= ( rowNo + 1 ) + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
                         elementStyle.width = ( child.width /*+ 2 * oversize*/ ) + "px";
                         elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
                         if(child.background !== undefined) {
@@ -90,13 +104,26 @@
                             renderGrid( child, elements, left, top);
                         }
                     }
-                  }
-            var containerStyle = this.$.container.style;
-            containerStyle.display = "ms-grid";
-            containerStyle["grid-template-columns"] = cols.join("px ") + "px";
-            containerStyle["grid-template-rows"] = rows.join("px ") + "px";
+                }
 
-            renderGrid( packedTree, elements, 0,0);
+                function lineWidths(array){
+                    var alen = array.length,
+                        str = "";
+                    while(alen-- >1){
+                        str = (array[alen] - array[alen-1]) + "px " + str;
+                    }
+                    return str;
+                }
+                var containerStyle = this.$.container.style;
+                containerStyle.display = "-ms-grid";
+                // containerStyle.display = "grid";
+                renderGrid( packedTree, elements, 0,0);
+
+                containerStyle["grid-template-columns"] = containerStyle["-ms-grid-columns"] = 
+                    lineWidths(cols);
+                containerStyle["grid-template-rows"] = containerStyle["-ms-grid-rows"] = 
+                    lineWidths(rows);
+
 
               
             }
