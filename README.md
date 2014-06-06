@@ -41,7 +41,7 @@ Or [download as ZIP](https://github.com/Juicy/juicy-tile-grid/archive/master.zip
 
 Attribute     | Options     | Default      | Description
 ---           | ---         | ---          | ---
-`foo`         | *string*    | `bar`        | Lorem ipsum dolor.
+`layout`      | *string*    | `grid`       | Switch layout rendering `grid` to use CSS Grid, `absolute` to use default [`juicy-tile-list`](Juilcy/juicy-tile-list) one.
 
 ## Methods
 
