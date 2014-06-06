@@ -95,7 +95,8 @@
                         elementStyle["grid-row"]= ( rowNo + 1 ) + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
                         elementStyle["-ms-grid-row"]= ( rowNo + 1 ) + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
                         elementStyle.width = ( child.width /*+ 2 * oversize*/ ) + "px";
-                        elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
+                        // elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
+                        elementStyle.height = "100%";
                         if(child.background !== undefined) {
                         elementStyle.backgroundColor = child.background || "transparent";
                         }
