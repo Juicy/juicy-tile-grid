@@ -53,7 +53,8 @@ section input{
                 <button>1</button>
             </div>
             <div>
-                <input value="2">
+            	<h4>2</h4>
+                <button onclick="addMore( this )">Add more content</button>
             </div>
             <section>3</section>
             <div>
@@ -180,6 +181,12 @@ section input{
                 callMethod( document.querySelector("juicy-tile-grid"), "reprioritizeItem", event );
             });
         });
+        addMore = function( button ){
+        	var input = button.nextElementSibling;
+        	var newOne = document.createElement("div");
+        	newOne.innerHTML = "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
+        	button.parentNode.appendChild( newOne );
+        };
         </script>
     </section>
     <footer>

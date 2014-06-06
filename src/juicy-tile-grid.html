@@ -135,7 +135,17 @@
                     var alen = array.length,
                         str = "";
                     while(alen-- >1){
+                        // str = "minmax( " + (array[alen] - array[alen-1]) + "px , max-content ) " + str;
                         str = (array[alen] - array[alen-1]) + "px " + str;
+                    }
+                    return str;
+                }
+                function lineWidths2(array){
+                    var alen = array.length,
+                        str = "";
+                    while(alen-- >1){
+                        str = "minmax( " + (array[alen] - array[alen-1]) + "px , max-content ) " + str;
+                        // str = (array[alen] - array[alen-1]) + "px " + str;
                     }
                     return str;
                 }
@@ -147,7 +157,9 @@
                 containerStyle["grid-template-columns"] = containerStyle["-ms-grid-columns"] = 
                     lineWidths(cols);
                 containerStyle["grid-template-rows"] = containerStyle["-ms-grid-rows"] = 
-                    lineWidths(rows);
+                    lineWidths2(rows);
+// abosolute rendere do it as well
+                    containerStyle.height = "auto";
 
 
               
