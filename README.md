@@ -7,6 +7,10 @@
 
 [Check it live!](http://Juicy.github.io/juicy-tile-grid)
 
+### Rationale
+
+`<juicy-tile-grid>` is layer on top of [`<juicy-tile-list>`](Juicy/juicy-tile-list) that renders packed items using [CSS Grid Layout](http://www.w3.org/TR/2014/WD-css-grid-1-20140513/), so it leverages native way to handle tiles' overflow, and gives more structured CSS which can be styled according to design needs.
+
 ## Install
 
 Install the component using [Bower](http://bower.io/):
