@@ -8,24 +8,9 @@
 
     <template>
     <style>
-        :host {
-            display: inline-block;
-            padding: 16px;
-        }
-
-        /** absolute list positioning */
-        #container{
-            position: relative;
-        }
-        polyfill-next-selector { content: ':host #container> *'; }
-        #container ::content>*,
-        #container >*  {
-            position: absolute;
-            z-index: 2;
-        }
-
         /** our grid stuff */
-        #container.grid{
+        :host([layout=grid])::shadow #container,
+        :host(:not([layout]))::shadow #container{
           display:grid;
           grid-template-rows: 50px 50px;
           grid-template-columns: 50px 50px 50px 100px;
@@ -36,31 +21,30 @@
           -moz-grid-auto-columns: 100px;
           -moz-grid-auto-rows: 100px;
         }
-        polyfill-next-selector { content: ':host #container> *'; }
-        #container.grid ::content>*,
-        #container.grid >*  {
+        polyfill-next-selector { content: ':host([layout=grid])::shadow  #container> *,:host(:not([layout]))::shadow  #container> *'; }
+        :host([layout=grid])::shadow #container ::content>*,
+        :host(:not([layout]))::shadow #container ::content>*,
+        :host([layout=grid])::shadow #container >*,
+        :host(:not([layout]))::shadow #container >*  {
             position: static;
         }
-        polyfill-next-selector { content: ':host #container.animate> *'; }
-        #container.grid.animate ::content>*,
-        #container.grid.animate >*  {
+        polyfill-next-selector { content: ':host([layout=grid])::shadow  #container.animate> *,:host(:not([layout]))::shadow  #container.animate> *'; }
+        :host([layout=grid])::shadow #container.animate ::content>*,
+        :host(:not([layout]))::shadow #container.animate ::content>*,
+        :host([layout=grid])::shadow #container.animate >*,
+        :host(:not([layout]))::shadow #container.animate >*  {
             -webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
             transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, transform 0.5s;
             transition-timing-function: ease-out;
         }
     </style>
-
-    <div id="container" class="animate grid"><content></content></div>
+    <shadow></shadow>
     </template>
     <script>
         Polymer('juicy-tile-grid', {
             layout: "grid",
             layoutChanged: function(oldVal, newVal){
-                if(newVal != "grid"){
-                    this.$.container.classList.remove("grid");
-                }else{
-                    this.$.container.classList.add("grid");
-                }
+                // afterDomReady: this.refresh();
             },
             renderer: function grid( packedTree, elements, offsetX, offsetY ){
                 if(this.layout != "grid"){
