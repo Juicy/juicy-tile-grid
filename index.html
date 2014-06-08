@@ -32,6 +32,7 @@ juicy-tile-grid{
     padding:1em;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
+juicy-tile-grid #container>*, /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
 juicy-tile-grid>*{
     box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
     text-align: center;
@@ -56,6 +57,7 @@ section input{
             <div>
             	<h4>2</h4>
                 <button onclick="addMore( this )">Add more content</button>
+                <div id="ieHierarchyRequestErrorWorkaround"></div>
             </div>
             <section>3</section>
             <div>
@@ -183,10 +185,12 @@ section input{
             });
         });
         addMore = function( button ){
-        	var input = button.nextElementSibling;
-        	var newOne = document.createElement("div");
-        	newOne.innerHTML = "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
-        	button.parentNode.appendChild( newOne );
+        	// var newOne = button.ownerDocument.createElement("div");
+        	// newOne.innerHTML = "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
+        	// button.parentNode.appendChild( newOne );
+        	// With !<3 to IE
+        	document.getElementById("ieHierarchyRequestErrorWorkaround").innerHTML += 
+        		"<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
         };
         </script>
     </section>

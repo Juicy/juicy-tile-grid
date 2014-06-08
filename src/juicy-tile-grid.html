@@ -11,13 +11,12 @@
         /** our grid stuff */
         :host([layout=grid])::shadow #container,
         :host(:not([layout]))::shadow #container{
-          display:grid;
-          grid-template-rows: 50px 50px;
-          grid-template-columns: 50px 50px 50px 100px;
+          display: -ms-grid;
+          display: -moz-grid;
+          display: grid;
 
           grid-auto-columns: 100px;
           grid-auto-rows: 100px;
-          display:-moz-grid;
           -moz-grid-auto-columns: 100px;
           -moz-grid-auto-rows: 100px;
         }
@@ -34,8 +33,7 @@
         :host([layout=grid])::shadow #container.animate >*,
         :host(:not([layout]))::shadow #container.animate >*  {
             -webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
-            transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, transform 0.5s;
-            transition-timing-function: ease-out;
+            transition: width 0.5s ease-out, height 0.5s ease-out, top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out;
         }
     </style>
     <shadow></shadow>
@@ -98,10 +96,15 @@
                         rowNo = rows.indexOf( top ); 
                         // cols are 1 index based
                         elementStyle["grid-column"] = ( colNo + 1 ) + " / span " + ( cols.indexOf( left + child.width ) - colNo );
-                        elementStyle["-ms-grid-column"] = ( colNo + 1 ) + " / span " + ( cols.indexOf( left + child.width ) - colNo );
                         // rows are 1 index based
                         elementStyle["grid-row"]= ( rowNo + 1 ) + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
-                        elementStyle["-ms-grid-row"]= ( rowNo + 1 ) + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
+                        //IE support
+                            elementStyle["-ms-grid-column"] = ( colNo + 1 );
+                            elementStyle["-ms-grid-column-span"] = ( cols.indexOf( left + child.width ) - colNo );
+                            elementStyle["-ms-grid-row"]= ( rowNo + 1 );
+                            elementStyle["-ms-grid-row-span"]= ( rows.indexOf( top + child.height ) -rowNo );
+
+
                         elementStyle.width = ( child.width /*+ 2 * oversize*/ ) + "px";
                         // elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
                         elementStyle.height = "100%";
@@ -142,7 +145,7 @@
                     lineWidths(cols);
                 containerStyle["grid-template-rows"] = containerStyle["-ms-grid-rows"] = 
                     lineWidths2(rows);
-// abosolute rendere do it as well
+                // absolute renderer do it as well
                     containerStyle.height = "auto";
 
 
