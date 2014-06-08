@@ -1,7 +1,13 @@
 # &lt;juicy-tile-grid&gt;
 
 > Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only), and adapts it to CSS Grid Layout.
-> Extended renderer for [`juicy-tile-list`](Juicy/juicy-tile-list).
+> Extended renderer for [`juicy-tile-list`](https://github.com/Juicy/juicy-tile-list).
+
+## Features 
+
+[`juicy-tile-list` features](https://github.com/Juicy/juicy-tile-list#features), plus
+ - CSS Grid Layout, 
+ - adapting to dynamic changes of tile's content, without need to repack.
 
 ## Demo
 
@@ -9,7 +15,7 @@
 
 ### Rationale
 
-`<juicy-tile-grid>` is layer on top of [`<juicy-tile-list>`](Juicy/juicy-tile-list) that renders packed items using [CSS Grid Layout](http://www.w3.org/TR/2014/WD-css-grid-1-20140513/), so it leverages native way to handle tiles' overflow, and gives more structured CSS which can be styled according to design needs.
+`<juicy-tile-grid>` is layer on top of [`<juicy-tile-list>`](https://github.com/Juicy/juicy-tile-list) that renders packed items using [CSS Grid Layout](http://www.w3.org/TR/2014/WD-css-grid-1-20140513/), so it leverages native way to handle tiles' overflow, and gives more structured CSS which can be styled according to design needs.
 
 ## Install
 
@@ -43,55 +49,17 @@ Or [download as ZIP](https://github.com/Juicy/juicy-tile-grid/archive/master.zip
 
 ## Options
 
+All [`juicy-tile-list` options](https://github.com/Juicy/juicy-tile-list#options), plus 
+
 Attribute     | Options     | Default      | Description
 ---           | ---         | ---          | ---
-`layout`      | *string*    | `grid`       | Switch layout rendering `grid` to use CSS Grid, `absolute` to use default [`juicy-tile-list`](Juilcy/juicy-tile-list) one.
+`layout`      | *string*    | `grid`       | Switch layout rendering: `grid` to use CSS Grid, `absolute` to use default [`juicy-tile-list`](Juilcy/juicy-tile-list) one.
 
-## Methods
+## [Properties](https://github.com/Juicy/juicy-tile-list#properties)
 
-Method        | Parameters   | Returns     | Description
----           | ---          | ---         | ---
-`unicorn()`   | None.        | Nothing.    | Magic stuff appears.
+## [Methods](https://github.com/Juicy/juicy-tile-list#methods)
 
-## Events
-
-Event         | Description
----           | ---
-`onsomething` | Triggers when something happens.
-
-## Development
-
-In order to run it locally you'll need to fetch some dependencies and a basic server setup.
-
-* Install [Bower](http://bower.io/) & [Grunt](http://gruntjs.com/):
-
-    ```sh
-    $ [sudo] npm install -g bower grunt-cli
-    ```
-
-* Install local dependencies:
-
-    ```sh
-    $ bower install && npm install
-    ```
-
-* To test your project, start the development server and open `http://localhost:8000`.
-
-    ```sh
-    $ grunt server
-    ```
-
-* To build the distribution files before releasing a new version.
-
-    ```sh
-    $ grunt build
-    ```
-
-* To provide a live demo, send everything to `gh-pages` branch.
-
-    ```sh
-    $ grunt deploy
-    ```
+## [Events](https://github.com/Juicy/juicy-tile-list#events)
 
 ## Contributing
 
