@@ -1,0 +1,89 @@
+body {
+    font-family: sans-serif;
+    min-width: 200px;
+    width: 70%;
+    margin: 0 auto;
+    padding: 30px;
+}
+juicy-tile-grid{
+    /*width: 300px;
+    height: 150px;*/
+    display: block;
+    width: 100%;
+    padding:1em;
+    box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+}
+juicy-tile-grid #container>*, /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
+juicy-tile-grid>*{
+    box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    text-align: center;
+    border-radius: 2px;
+}
+section input{
+    width: 4em;
+}
+juicy-tile-grid>:first-child {
+    background:lightgreen;
+}
+
+juicy-tile-grid>:nth-child(2) {
+    background:lightblue;
+}
+
+juicy-tile-grid>:nth-child(3) {
+    background:yellow;
+    overflow:auto;
+}
+
+juicy-tile-grid>:nth-child(4) {
+    background:gray;
+    overflow:auto;
+}
+
+juicy-tile-grid>:nth-child(5) {
+    background:orange;
+}body {
+    font-family: sans-serif;
+    min-width: 200px;
+    width: 70%;
+    margin: 0 auto;
+    padding: 30px;
+}
+juicy-tile-grid{
+    /*width: 300px;
+    height: 150px;*/
+    display: block;
+    width: 100%;
+    padding:1em;
+    box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+}
+juicy-tile-grid #container>*, /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
+juicy-tile-grid>*{
+    box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    text-align: center;
+    border-radius: 2px;
+}
+section input{
+    width: 4em;
+}
+juicy-tile-grid>:first-child {
+    background:lightgreen;
+}
+
+juicy-tile-grid>:nth-child(2) {
+    background:lightblue;
+}
+
+juicy-tile-grid>:nth-child(3) {
+    background:yellow;
+    overflow:auto;
+}
+
+juicy-tile-grid>:nth-child(4) {
+    background:gray;
+    overflow:auto;
+}
+
+juicy-tile-grid>:nth-child(5) {
+    background:orange;
+}
