@@ -9,22 +9,22 @@
     <template>
     <style>
         /** our grid stuff */
-        :host([layout=grid])::shadow #container,
-        :host(:not([layout]))::shadow #container{
+        :host([layout=grid])::shadow #container:not(.disabled),
+        :host(:not([layout]))::shadow #container:not(.disabled){
           display: -ms-grid;
           display: -moz-grid;
           display: grid;
 
-          grid-auto-columns: 100px;
-          grid-auto-rows: 100px;
-          -moz-grid-auto-columns: 100px;
-          -moz-grid-auto-rows: 100px;
+          /*grid-auto-columns: 0;
+          grid-auto-rows: 0;
+          -moz-grid-auto-columns: 0;
+          -moz-grid-auto-rows: 0;*/
         }
-        polyfill-next-selector { content: ':host([layout=grid])::shadow  #container> *,:host(:not([layout]))::shadow  #container> *'; }
-        :host([layout=grid])::shadow #container ::content>*,
-        :host(:not([layout]))::shadow #container ::content>*,
-        :host([layout=grid])::shadow #container >*,
-        :host(:not([layout]))::shadow #container >*  {
+        polyfill-next-selector { content: ':host([layout=grid])::shadow  #container:not(.disabled)> *,:host(:not([layout]))::shadow  #container:not(.disabled)> *'; }
+        :host([layout=grid])::shadow #container:not(.disabled) ::content>*,
+        :host(:not([layout]))::shadow #container:not(.disabled) ::content>*,
+        :host([layout=grid])::shadow #container:not(.disabled) >*,
+        :host(:not([layout]))::shadow #container:not(.disabled) >*  {
             position: static;
         }
         polyfill-next-selector { content: ':host([layout=grid])::shadow  #container.animate> *,:host(:not([layout]))::shadow  #container.animate> *'; }
@@ -150,6 +150,12 @@
 
 
               
+            },
+            packItems: function packDOM2Grid(){
+                this.$.container.classList.add("disabled");
+                var packedTree = this.super( arguments );
+                this.$.container.classList.remove("disabled");
+                return packedTree;
             }
         });
     </script>
