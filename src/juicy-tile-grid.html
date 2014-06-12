@@ -105,9 +105,9 @@
                             elementStyle["-ms-grid-row-span"]= ( rows.indexOf( top + child.height ) -rowNo );
 
 
-                        elementStyle.width = ( child.width /*+ 2 * oversize*/ ) + "px";
+                        elementStyle.width = child.widthAdaptive || child.widthDynamic ? "100%" : child.width + "px";
                         // elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
-                        elementStyle.height = "100%";
+                        elementStyle.height = child.heightAdaptive || child.heightDynamic ? "100%" : child.height + "px";
                         if(child.background !== undefined) {
                         elementStyle.backgroundColor = child.background || "transparent";
                         }

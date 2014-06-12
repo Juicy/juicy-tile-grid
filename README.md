@@ -51,9 +51,13 @@ Or [download as ZIP](https://github.com/Juicy/juicy-tile-grid/archive/master.zip
 
 All [`juicy-tile-list` options](https://github.com/Juicy/juicy-tile-list#options), plus 
 
-Attribute     | Options     | Default      | Description
----           | ---         | ---          | ---
-`layout`      | *string*    | `grid`       | Switch layout rendering: `grid` to use CSS Grid, `absolute` to use default [`juicy-tile-list`](Juilcy/juicy-tile-list) one.
+Attribute                       | Options   | Default | Description
+---                             | ---       | ---     | ---
+`layout`                        | *string*  | `grid`  | Switch layout rendering: `grid` to use CSS Grid, `absolute` to use default [`juicy-tile-list`](Juilcy/juicy-tile-list) one.
+`setup.items[.].heightDynamic`  | *Boolean* | `false` | Let height of a tile and a row adapt to dynamic changes of content height after tiles are packed.
+`setup.items[.].widthDynamic`   | *Boolean* | `false` | Let width of a tile and a column adapt to dynamic changes of content width after tiles are packed.
+`setup.items[.].heightAdaptive` | *Boolean* | `false` | Let height of a tile adapt to changes of row height after tiles are packed
+`setup.items[.].widthAdaptive`  | *Boolean* | `false` | Let width of a tile adapt to changes of column width after tiles are packed
 
 ## [Properties](https://github.com/Juicy/juicy-tile-list#properties)
 

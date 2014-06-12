@@ -6,8 +6,8 @@
 
     <!-- Importing Web Component's Polyfill -->
     
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.0/platform.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.0/polymer.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.1/platform.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.1/polymer.js"></script>
     <!--
     <script src="../platform/platform.js"></script>
     <script src="../polymer/polymer.js"></script>
@@ -16,6 +16,9 @@
     <link rel="import" href="src/juicy-tile-grid.html">
 
     <link rel="stylesheet" href="http://juicy.github.io/juicy-tile-list/examples/github-markdown.css">
+
+
+    <link rel="import" href="../juicy-jsoneditor/src/juicy-jsoneditor.html"> 
 <style>
 body {
     font-family: sans-serif;
@@ -41,6 +44,9 @@ juicy-tile-grid>*{
 section input{
     width: 4em;
 }
+juicy-jsoneditor{
+    height: 15em;
+}
 </style>
 
 <body>
@@ -56,15 +62,24 @@ section input{
             </div>
             <div>
             	<h4>2</h4>
-                <button onclick="addMore( this )">Add more content</button>
-                <div id="ieHierarchyRequestErrorWorkaround"></div>
+                <p>
+                    <code>heightDynamic: true</code>Dynamically change height after tile was packed.
+                    <button onclick="addMore( this )">Add more content</button>
+                    <div id="ieHierarchyRequestErrorWorkaround"></div>
+                </p>
             </div>
-            <section>3</section>
+            <section>
+                <h4>3</h4>
+                <p><code>heightAdaptive: true</code> - adapt to siblings dynamic height change</p>
+            </section>
             <div>
                 <textarea>4</textarea>
             </div>
             <div>5</div>
-            <div>6</div>
+            <div>
+                <h4>6</h4>
+                <p><code>heightAuto: true</code> - pre-calculate element size before packing.</p>
+            </div>
             <div>7</div>
             <div>8</div>
             <div>9</div>
@@ -92,14 +107,16 @@ section input{
                     {
                         index:2,
                         priority:0.7,// 0.3,
-                        height: 50,
-                        width: 200
+                        height: 180,
+                        width: 200,
+                        heightDynamic: true
                     },
                     {
                         index:3,
                         priority:0.6,
-                        height: 50,
-                        width: 150
+                        height: 180,
+                        width: 150,
+                        heightAdaptive: true
                     },
                     {
                         index:4,
@@ -116,7 +133,7 @@ section input{
                     {
                         index:6,
                         priority:0.3,
-                        height: 150,
+                        heightAuto: true,
                         width: 100
                     },
                     {
