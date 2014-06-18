@@ -88,6 +88,9 @@
                     while(childNodeNo--){
                         child = node.items[childNodeNo]
                         element = elements[ child.name || child.index ];
+                        if(!element) {
+                            continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
+                        }
                         elementStyle = element.style;
                         left = ( child.x || 0 ) + offsetX; 
                         top = ( child.y || 0 ) + offsetY;
