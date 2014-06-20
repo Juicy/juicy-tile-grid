@@ -18,7 +18,11 @@
     <link rel="stylesheet" href="http://juicy.github.io/juicy-tile-list/examples/github-markdown.css">
 
 
-    <link rel="import" href="../juicy-jsoneditor/src/juicy-jsoneditor.html"> 
+    <!-- Use JSONEditor to edit tiles setup -->
+        <link rel="import" href="../juicy-jsoneditor/src/juicy-jsoneditor.html"> 
+
+        <!-- josdejong/jsoneditor#104 workaround-->
+        <link rel="stylesheet" type="text/css" href="../jsoneditor/jsoneditor.min.css">
 <style>
 body {
     font-family: sans-serif;
@@ -86,6 +90,8 @@ juicy-jsoneditor{
             <div>10</div>
             <div>11</div>
         </juicy-tile-grid>
+        <juicy-jsoneditor json="{{setup}}" name="juicy-tile-grid.setup" modes="['text','tree','form']"></juicy-jsoneditor>
+        <button onclick="javascript: document.querySelector('juicy-tile-grid').refresh();">Refresh grid</button>
     </template>
     <script type="text/javascript">
         model = {
@@ -202,12 +208,15 @@ juicy-jsoneditor{
             });
         });
         addMore = function( button ){
-        	// var newOne = button.ownerDocument.createElement("div");
-        	// newOne.innerHTML = "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
-        	// button.parentNode.appendChild( newOne );
-        	// With !<3 to IE
-        	document.getElementById("ieHierarchyRequestErrorWorkaround").innerHTML += 
-        		"<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
+            // var newOne = button.ownerDocument.createElement("div");
+            // newOne.innerHTML = "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
+            // button.parentNode.appendChild( newOne );
+            // With !<3 to IE
+            document.getElementById("ieHierarchyRequestErrorWorkaround").innerHTML += 
+                "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
+        };
+        refresh = function( button ){
+            document.querySelector("juicy-tile-grid").refresh();
         };
         </script>
     </section>
