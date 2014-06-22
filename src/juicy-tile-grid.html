@@ -48,31 +48,46 @@
                 if(this.layout != "grid"){
                     return this.super( [packedTree, elements, offsetX, offsetY] );
                 }
-                var cols = []; // just position //{position: px, size: px [, gap: bool]}
-                var rows = []; // {position: px, size: px [, gap: bool]}
-                var renderedGrid = []; //{index: n, name: groupname, row: r, column: c, background, innerHTML, oversize}
+                var cols = []; // just position, as Object Numer, with dynamic property 
+                //{position: px, dynamic: boolean}
+                var dynamicColPos = {};
+                var rows = [];
+                var dynamicRowPos = {};
 
+                /** 
+                 * Add new line at given position if there is none.
+                 * @param {Array} array of lines
+                 * @param {Number} position line position
+                 * @returns line number for line at given position
+                */
                 function drawLine( array, position ){
-                    var len = array.length;
-                    while(len-- && array[len] > position){  // array[len].position > position){  
+                    var len = array.length, newLine;
+                    while(len-- && array[len] > position){
+                    // while(len-- && array[len].position > position){  
                     }
-                    if(len>-1 && array[len] == position){ // array[len].position == position){
+                    if(len>-1 && array[len] == position){
+                    // if(len>-1 && array[len].position == position){
                         return len;
-                    } else {
-                        array.splice( len+1, 0, position ); // {position: position});
+                    } else { 
+                        array.splice( len+1, 0, position ); 
+                        // array.splice( len+1, 0, {position: position, dynamic: !!dynamic});
                         return len+1;
                     }
-                    return len;
                 }
                 function drawLinesFromTree( node, offsetX, offsetY ){
                     var ilen = node.items.length;
                     while(ilen--){
                         var item = node.items[ilen];
+
                         drawLine(cols, offsetX + item.x);
                         drawLine(cols, offsetX + item.x + item.width);
+                        // if any tile is dynamic, then line is dynamic
+                        dynamicColPos[ offsetX + item.x ] |= item.widthDynamic;
 
                         drawLine(rows, offsetY + item.y);
                         drawLine(rows, offsetY + item.y + item.height);
+                        // if any tile is dynamic, then line is dynamic
+                        dynamicRowPos[ offsetY + item.y ] |= item.heightDynamic;
 
                         if(item.items){
                             drawLinesFromTree( item, offsetX + item.x, offsetY + item.y);
@@ -121,21 +136,25 @@
                     }
                 }
 
-                function lineWidths(array){
-                    var alen = array.length,
+                /**
+                 * Calculate line widths ( line `n` position - line `n-1` position), 
+                 * take dynamic into account `minmax( _width_ px, max-content )`
+                 * @param  {Array<Number>} array  array of lines' positions
+                 * @param  {Object<Boolean>} dynamic Map  of dynamic lines positions
+                 * @return {String}         `grid template-(rows|columns)` compatible setup.
+                 */
+                function lineWidths(array, dynamic){
+                    var alen = array.length - 1, //last one is the border of our grid
                         str = "";
-                    while(alen-- >1){
+                    while(alen-- >0){
                         // str = "minmax( " + (array[alen] - array[alen-1]) + "px , max-content ) " + str;
-                        str = (array[alen] - array[alen-1]) + "px " + str;
-                    }
-                    return str;
-                }
-                function lineWidths2(array){
-                    var alen = array.length,
-                        str = "";
-                    while(alen-- >1){
-                        str = "minmax( " + (array[alen] - array[alen-1]) + "px , max-content ) " + str;
                         // str = (array[alen] - array[alen-1]) + "px " + str;
+                        if( dynamic[ array[alen] ] ){
+                           str = "minmax( " + (array[alen+1] - array[alen]) + "px , max-content ) " + str; 
+                        } else {
+
+                           str = (array[alen+1] - array[alen]) + "px " + str; 
+                        }
                     }
                     return str;
                 }
@@ -145,9 +164,10 @@
                 renderGrid( packedTree, elements, 0,0);
 
                 containerStyle["grid-template-columns"] = containerStyle["-ms-grid-columns"] = 
-                    lineWidths(cols);
+                    lineWidths(cols, dynamicColPos);
+
                 containerStyle["grid-template-rows"] = containerStyle["-ms-grid-rows"] = 
-                    lineWidths2(rows);
+                    lineWidths(rows, dynamicRowPos);
                 // absolute renderer do it as well
                     containerStyle.height = "auto";
 
