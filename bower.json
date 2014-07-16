@@ -20,7 +20,8 @@
     "preview.png"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.3.1"
+    "polymer": "Polymer/polymer#~0.3.4",
+    "juicy-tile-list": "~0.0.4"
   },
   "devDependencies": {
     "juicy-jsoneditor": "#gh-pages"
