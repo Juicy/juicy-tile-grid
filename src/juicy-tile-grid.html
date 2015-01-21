@@ -78,6 +78,9 @@
                     var ilen = node.items.length;
                     while(ilen--){
                         var item = node.items[ilen];
+                        if(item.hidden){
+                            continue;
+                        }
 
                         drawLine(cols, offsetX + item.x);
                         drawLine(cols, offsetX + item.x + item.width);
@@ -96,10 +99,10 @@
                 }
                 drawLinesFromTree(packedTree, 0,0);
 
-                function renderGrid(node, elements, offsetX, offsetY){
+                function renderGrid(node, elements, offsetX, offsetY, hideAll){
                     var childNodeNo = node.items.length,
                         child,
-                        element, elementStyle, left, top, colNo, rowNo;  
+                        element, elementStyle, left, top, colNo, rowNo, hidden;  
                     while(childNodeNo--){
                         child = node.items[childNodeNo]
                         element = elements[ child.name || child.index ];
@@ -107,31 +110,40 @@
                             continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
                         }
                         elementStyle = element.style;
-                        left = ( child.x || 0 ) + offsetX; 
-                        top = ( child.y || 0 ) + offsetY;
-                        var oversize = child.oversize || 0;
-                        colNo = cols.indexOf( left ); 
-                        rowNo = rows.indexOf( top ); 
-                        // cols are 1 index based
-                        elementStyle["grid-column"] = ( colNo + 1 ) + " / span " + ( cols.indexOf( left + child.width ) - colNo );
-                        // rows are 1 index based
-                        elementStyle["grid-row"]= ( rowNo + 1 ) + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
-                        //IE support
-                            elementStyle["-ms-grid-column"] = ( colNo + 1 );
-                            elementStyle["-ms-grid-column-span"] = ( cols.indexOf( left + child.width ) - colNo );
-                            elementStyle["-ms-grid-row"]= ( rowNo + 1 );
-                            elementStyle["-ms-grid-row-span"]= ( rows.indexOf( top + child.height ) -rowNo );
+                        // hide items marked as hidden ;)
+                        hidden = hideAll || child.hidden;
+                        if(hidden){
+                            elementStyle.display = "none";
+                            //continue; // do not process children?
+                        } else {
+                          // force default - block 
+                            elementStyle.display = "";
+                            left = ( child.x || 0 ) + offsetX; 
+                            top = ( child.y || 0 ) + offsetY;
+                            var oversize = child.oversize || 0;
+                            colNo = cols.indexOf( left ); 
+                            rowNo = rows.indexOf( top ); 
+                            // cols are 1 index based
+                            elementStyle["grid-column"] = ( colNo + 1 ) + " / span " + ( cols.indexOf( left + child.width ) - colNo );
+                            // rows are 1 index based
+                            elementStyle["grid-row"]= ( rowNo + 1 ) + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
+                            //IE support
+                                elementStyle["-ms-grid-column"] = ( colNo + 1 );
+                                elementStyle["-ms-grid-column-span"] = ( cols.indexOf( left + child.width ) - colNo );
+                                elementStyle["-ms-grid-row"]= ( rowNo + 1 );
+                                elementStyle["-ms-grid-row-span"]= ( rows.indexOf( top + child.height ) -rowNo );
 
 
-                        elementStyle.width = child.widthAdaptive || child.widthDynamic ? "100%" : child.width + "px";
-                        // elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
-                        elementStyle.height = child.heightAdaptive || child.heightDynamic ? "100%" : child.height + "px";
-                        if(child.background !== undefined) {
-                        elementStyle.backgroundColor = child.background || "transparent";
+                            elementStyle.width = child.widthAdaptive || child.widthDynamic ? "100%" : child.width + "px";
+                            // elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
+                            elementStyle.height = child.heightAdaptive || child.heightDynamic ? "100%" : child.height + "px";
+                            if(child.background !== undefined) {
+                            elementStyle.backgroundColor = child.background || "transparent";
+                            }
                         }
 
                         if(child.items){// virtual container
-                            renderGrid( child, elements, left, top);
+                            renderGrid( child, elements, left, top, hidden);
                         }
                     }
                 }
