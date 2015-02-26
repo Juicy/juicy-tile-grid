@@ -20,18 +20,16 @@
           -moz-grid-auto-columns: 0;
           -moz-grid-auto-rows: 0;*/
         }
-        polyfill-next-selector { content: ':host([layout=grid])::shadow  #container:not(.disabled)> *,:host(:not([layout]))::shadow  #container:not(.disabled)> *'; }
-        :host([layout=grid])::shadow #container:not(.disabled) ::content>*,
-        :host(:not([layout]))::shadow #container:not(.disabled) ::content>*,
-        :host([layout=grid])::shadow #container:not(.disabled) >*,
-        :host(:not([layout]))::shadow #container:not(.disabled) >*  {
+        :host([layout=grid])::shadow #container:not(.disabled) > .juicy-tile,
+        :host(:not([layout]))::shadow #container:not(.disabled) > .juicy-tile,
+        :host([layout=grid])::shadow #container:not(.disabled) > .containerBackground,
+        :host(:not([layout]))::shadow #container:not(.disabled) > .containerBackground{
             position: static;
         }
-        polyfill-next-selector { content: ':host([layout=grid])::shadow  #container.animate> *,:host(:not([layout]))::shadow  #container.animate> *'; }
-        :host([layout=grid])::shadow #container.animate ::content>*,
-        :host(:not([layout]))::shadow #container.animate ::content>*,
-        :host([layout=grid])::shadow #container.animate >*,
-        :host(:not([layout]))::shadow #container.animate >*  {
+        :host([layout=grid])::shadow #container.animate > .juicy-tile,
+        :host(:not([layout]))::shadow #container.animate > .juicy-tile,
+        :host([layout=grid])::shadow #container.animate >.containerBackground,
+        :host(:not([layout]))::shadow #container.animate >.containerBackground  {
             -webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
             transition: width 0.5s ease-out, height 0.5s ease-out, top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out;
         }
@@ -44,9 +42,22 @@
             layoutChanged: function(oldVal, newVal){
                 // afterDomReady: this.refresh();
             },
-            renderer: function grid( packedTree, elements, offsetX, offsetY ){
+            parseDeclaration: function(elementElement) {
+              var template = this.fetchTemplate(elementElement);
+              // make a shadow root
+              var root = this.createShadowRoot();
+              // stamp template
+              var dom = document.importNode(template.content, true);
+              // append to shadow dom
+              root.appendChild(dom);
+              // perform post-construction initialization tasks on shadow root
+              //this.shadowRootReady(root, template);
+              // return the created shadow root
+              this.shadowRoots[elementElement.name] = root;
+            },
+            renderer: function grid( packedTree, tiles, offsetX, offsetY ){
                 if(this.layout != "grid"){
-                    return this.super( [packedTree, elements, offsetX, offsetY] );
+                    return this.super( [packedTree, tiles, offsetX, offsetY] );
                 }
                 var cols = []; // just position, as Object Numer, with dynamic property 
                 //{position: px, dynamic: boolean}
@@ -98,14 +109,15 @@
                     }
                 }
                 drawLinesFromTree(packedTree, 0,0);
-
-                function renderGrid(node, elements, offsetX, offsetY, hideAll){
+                var that = this;
+                function renderGrid(node, tiles, offsetX, offsetY, hideAll){
                     var childNodeNo = node.items.length,
                         child,
                         element, elementStyle, left, top, colNo, rowNo, hidden;  
                     while(childNodeNo--){
                         child = node.items[childNodeNo]
-                        element = elements[ child.name || child.index ];
+                        element = tiles[ child.name || child.index ];
+                        console.log(element);
                         if(!element) {
                             continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
                         }
@@ -143,7 +155,7 @@
                         }
 
                         if(child.items){// virtual container
-                            renderGrid( child, elements, left, top, hidden);
+                            renderGrid( child, tiles, left, top, hidden);
                         }
                     }
                 }
@@ -173,7 +185,7 @@
                 var containerStyle = this.$.container.style;
                 // containerStyle.display = "-ms-grid";
                 // containerStyle.display = "grid";
-                renderGrid( packedTree, elements, 0,0);
+                renderGrid( packedTree, tiles, 0,0);
 
                 containerStyle["grid-template-columns"] = containerStyle["-ms-grid-columns"] = 
                     lineWidths(cols, dynamicColPos);
