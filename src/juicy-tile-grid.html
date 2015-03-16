@@ -116,8 +116,7 @@
                         element, elementStyle, left, top, colNo, rowNo, hidden;  
                     while(childNodeNo--){
                         child = node.items[childNodeNo]
-                        element = tiles[ child.name || child.index ];
-                        console.log(element);
+                        element = tiles[ child.id ];
                         if(!element) {
                             continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
                         }
