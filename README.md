@@ -25,14 +25,14 @@ Install the component using [Bower](http://bower.io/):
 $ bower install juicy-tile-grid --save
 ```
 
-Or [download as ZIP](https://github.com/Juicy/juicy-tile-grid/archive/master.zip).
+Or [download as ZIP](https://github.com/Juicy/juicy-tile-grid/archive/gh-pages.zip).
 
 ## Usage
 
 1. Import Web Components' polyfill:
 
     ```html
-    <script src="bower_components/platform/platform.js"></script>
+    <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
     ```
 
 2. Import Custom Element:
@@ -64,6 +64,8 @@ Attribute                       | Options   | Default | Description
 ## [Methods](https://github.com/Juicy/juicy-tile-list#methods)
 
 ## [Events](https://github.com/Juicy/juicy-tile-list#events)
+
+## [Tile ids](https://github.com/Juicy/juicy-tile-list#tile-ids)
 
 ## Contributing
 
