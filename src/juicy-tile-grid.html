@@ -155,10 +155,12 @@ version: 0.1.0
                             elementStyle.width = child.widthAdaptive || child.widthDynamic ? "100%" : child.width + "px";
                             // elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
                             elementStyle.height = child.heightAdaptive || child.heightDynamic ? "100%" : child.height + "px";
-                            if(child.background !== undefined) {
-                            elementStyle.backgroundColor = child.background || "transparent";
+                            if (child.background !== undefined) {
+                                elementStyle.backgroundColor = child.background || "transparent";
+                            } else {
+                                elementStyle.backgroundColor = "";
                             }
-                            elementStyle.border = child.border;
+                            elementStyle.border = child.border || "";
                         }
 
                         if(child.items){// virtual container
