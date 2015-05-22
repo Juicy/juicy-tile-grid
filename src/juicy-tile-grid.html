@@ -161,6 +161,14 @@ version: 0.1.0
                                 elementStyle.backgroundColor = "";
                             }
                             elementStyle.outline = child.outline || "";
+
+                            if (oversize) {
+                                elementStyle.padding = oversize + "px";
+                                elementStyle.margin = "-" + oversize + "px";
+                            } else {
+                                elementStyle.padding = "";
+                                elementStyle.margin = "";
+                            }
                         }
 
                         if(child.items){// virtual container
