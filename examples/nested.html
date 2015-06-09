@@ -20,11 +20,14 @@ body>juicy-tile-grid{
     padding:1em;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
-juicy-tile-grid>*{
+/* juicy-tile-grid>*{ */
+/** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
+juicy-tile-grid #container>*, 
+juicy-tile-grid > *:not(#container){
     box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
     height: 100%;
 }
-juicy-tile-grid>:first-child {
+juicy-tile-grid>:first-child:not(#container) {
     background:lightgreen;
 }
 
@@ -51,9 +54,9 @@ juicy-tile-grid>:nth-child(5) {
 
 <body>
     <template bind>
-        <juicy-tile-grid setup="{{setup}}">
+        <juicy-tile-grid refreshonresize setup="{{setup}}">
             <div>Item 0 </div>
-            <juicy-tile-grid setup="{{setup2}}">
+            <juicy-tile-grid refreshonresize setup="{{setup2}}">
                 <div>Item 0 </div>
                 <div>
                     <button>Item 1</button>
@@ -62,7 +65,7 @@ juicy-tile-grid>:nth-child(5) {
                     <input value="Input2">
                 </div>
                 <section>Item3</section>
-            </juicy-tile-grid>
+            </juicy-tile-grid refreshonresize 
             <div>
                 <input value="Input2">
             </div>            

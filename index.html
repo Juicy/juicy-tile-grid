@@ -33,8 +33,10 @@ juicy-tile-grid{
     padding:1em;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
-juicy-tile-grid #container>*, /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
-juicy-tile-grid>*{
+/* juicy-tile-grid>*{ */
+/** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
+juicy-tile-grid #container>*, 
+juicy-tile-grid > *:not(#container){
     box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
     text-align: center;
     border: 1px solid lightgray;
@@ -68,7 +70,7 @@ juicy-jsoneditor{
     </div>
     <blockquote><p>Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only), and adapts it to CSS Grid Layout.</p></blockquote>
     <template bind>
-        <juicy-tile-grid setup="{{setup}}">
+        <juicy-tile-grid setup="{{setup}}" refreshonresize>
             <div>0</div>
             <div>
                 <button>1</button>
@@ -78,7 +80,7 @@ juicy-jsoneditor{
                 <p>
                     <code>heightDynamic: true</code>Dynamically change height after tile was packed.
                     <button onclick="addMore( this )">Add more content</button>
-                    <div id="ieHierarchyRequestErrorWorkaround"></div>
+                    <span id="ieHierarchyRequestErrorWorkaround"></span>
                 </p>
             </div>
             <section>
