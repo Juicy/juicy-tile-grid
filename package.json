@@ -1,6 +1,6 @@
 {
   "name": "juicy-tile-grid",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "<juicy-tile-grid> is a Polymer Element with CSS Grid Layout renderer for [`juicy-tile-list`](Juicy/juicy-tile-list).",
   "main": "src/juicy-tile-grid.html",
   "directories": {
