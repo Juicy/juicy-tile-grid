@@ -114,6 +114,9 @@ version: 0.1.2
                             drawLinesFromTree( item, offsetX + item.x, offsetY + item.y);
                         }
                     }
+                    // draw lines for end (right bottom) of our container
+                    drawLine(cols, offsetX + node.width);
+                    drawLine(rows, offsetY + node.height);
                 }
                 drawLinesFromTree(packedTree, 0,0);
                 var that = this;
