@@ -10,8 +10,11 @@
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../../src/juicy-tile-grid.html">
     <style>
+    html,body{
+      min-width: 0;
+    }
     juicy-tile-grid > *{
-      background-color: gray;
+      background-color: rgba(99,99,99,0.3);
       height: 100%;
       margin: 0;
     }
@@ -20,157 +23,140 @@
     }
     juicy-tile-grid /deep/ .juicy-tile{
       background-color: lightblue;
-      border: 1px solid black;
-      box-sizing: border-box;
+      /*border: 1px solid black;*/
+      /*box-sizing: border-box;*/
+    }
+    juicy-tile-grid /deep/ .juicy-tile:nth-child(2){
+      background-color: lightpink;
+      /*border: 1px solid black;*/
+      /*box-sizing: border-box;*/
     }
     </style>
   </head>
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <juicy-tile-grid id="grid1">
-      <div>0</div>
-      <span>1</span>
-      <p>3</p>
-    </juicy-tile-grid>
-
+    <template bind id="root">
+      <juicy-tile-grid id="grid1" setup="{{setup}}" style="width: 800px;"><!-- to 1300-->
+        <div>0</div>
+        <div>1</div>
+        <div>3</div>
+      </juicy-tile-grid>
+    </template>
     <script>
+var templ = document.getElementById('root');
+var model = { 
+  setup : {
+    gutter: 0,
+    width: 800,
+    items:[
+      {
+          id:0,
+          priority:0.9,
+          height: 100,
+          width: 200
+      },
+      {
+          id:1,
+          priority:0.6,
+          height: 100,
+          width:200,
+          widthExpandable: true
+      },
+      {
+          id:2,
+          priority:0.4,
+          height: 200,
+          width:400,
+          widthExpandable: true
+      }
+    ]
+  }
+};
+
+document.addEventListener("polymer-ready", function(){
+    document.querySelector("template").model = model;
+    
+});
+
+function expectPosition(element, x, y){
+  expect( element.offsetTop).to.equal(x);
+  expect( element.offsetLeft).to.equal(y);
+}
+function expectSize(element, width, height){
+  expect( element.offsetWidth).to.equal(width);
+  expect( element.offsetHeight).to.equal(height);
+}
 /**
- * JuicyTiles tests
+ * juicy-tile-grid fractions tests
  */
-// var juicyTileList = document.getElementById('grid1');
-// var juicyTileList2 = document.getElementById('grid2');
-// describe('juicy-tile-grid', function() {
-//   xcontext('when onMutation attribute', function () {
-//     afterEach(function(){
-//       juicyTileList.refresh.restore && juicyTileList.refresh.restore();
-//     });
+var juicyTileList;
+describe('juicy-tile-grid', function() {
+  before(function(done){
+    Polymer.whenReady(function(){
+      done();
+      juicyTileList = document.getElementById('grid1');
+    });
+  });
+  context('fractions widthExpandable/heightExpandable', function () {
+    afterEach(function(){
+      juicyTileList.refresh.restore && juicyTileList.refresh.restore();
+    });
 
-//     context('was not set', function () {
-//       it('refresh method should not be called when some node is added', function (done) {
-//         var refresh = sinon.spy(juicyTileList, "refresh");
+    context('when rendered, ', function () {
+      it('should align items in correct places', function (done) {
+        expectPosition( juicyTileList.children[0], 0, 0);
+        expectPosition( juicyTileList.children[1], 0, 200);
+        expectPosition( juicyTileList.children[2], 0, 400);
+        done();
+      });
+      it('should align items in correct sizes', function (done) {
+        expectSize( juicyTileList.children[0], 200, 100);
+        expectSize( juicyTileList.children[1], 200, 100);
+        expectSize( juicyTileList.children[2], 400, 200);
+        done();
+      });
 
-//         var addedNode = document.createElement("div");
-//         addedNode.innerHTML = "4";
-//         juicyTileList.appendChild(addedNode);
+    });
+    context('when resized', function () {
+      it('refresh method should not be called', function (done) {
+        var refresh = sinon.spy(juicyTileList, "refresh");
 
-//         // wait for mutation observer callback
-//         setTimeout(function whenMutated(){
-//           expect( juicyTileList.refresh.callCount ).to.equal(0);
-//           juicyTileList.refresh.restore();
-//           done();
-//         });
-//       });
-//       it('refresh method should not be called when some node is removed', function (done) {
-//         var refresh = sinon.spy(juicyTileList, "refresh");
+        juicyTileList.style.width = "1100px";
 
-//         juicyTileList.removeChild(juicyTileList.firstElementChild);
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList.refresh.callCount ).to.equal(0);
+          done();
+        },10);
+      });
+      it('added width should be distributed proportionally among columns with items marked as expandable', function (done) {
+        juicyTileList.style.width = "1100px";
 
-//         // wait for mutation observer callback
-//         setTimeout(function whenMutated(){
-//           expect( juicyTileList.refresh.callCount ).to.equal(0);
-//           juicyTileList.refresh.restore();
-//           done();
-//         });
-//       });
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+        expectPosition( juicyTileList.children[0], 0, 0);
+        expectPosition( juicyTileList.children[1], 0, 200);
+        expectPosition( juicyTileList.children[2], 0, 500);
+        done();
+        });
+      });
+      it('items marked as expandable should change size accordingly', function (done) {
+        juicyTileList.style.width = "1100px";
 
-//     });
-//     context('was set when element was created', function () {
-//       it('refresh method should be called when some node is added', function (done) {
-//         var refresh = sinon.spy(juicyTileList2, "refresh");
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+        expectSize( juicyTileList.children[0], 200, 100);
+        expectSize( juicyTileList.children[1], 300, 100);
+        expectSize( juicyTileList.children[2], 600, 200);
+        done();
+        });
+      });
 
-//         var addedNode = document.createElement("div");
-//         addedNode.innerHTML = "4";
-//         juicyTileList2.appendChild(addedNode);
+    });
 
-//         // wait for mutation observer callback
-//         setTimeout(function whenMutated(){
-//           expect( juicyTileList2.refresh.callCount ).to.equal(1);
-//           juicyTileList2.refresh.restore();
-//           done();
-//         });
-//       });
-//       it('refresh method should be called when some node is removed', function (done) {
-//         var refresh = sinon.spy(juicyTileList2, "refresh");
-
-//         juicyTileList2.removeChild(juicyTileList2.firstElementChild);
-
-//         // wait for mutation observer callback
-//         setTimeout(function whenMutated(){
-//           expect( juicyTileList2.refresh.callCount ).to.equal(1);
-//           juicyTileList2.refresh.restore();
-//           done();
-//         });
-//       });
-
-//     });
-//     context('is set in runtime', function () {
-//       beforeEach(function(){
-//         juicyTileList.setAttribute("refreshOnMutation","");
-//       });
-//       it('refresh method should be called when some node is added', function (done) {
-//         var refresh = sinon.spy(juicyTileList, "refresh");
-
-//         var addedNode = document.createElement("div");
-//         addedNode.innerHTML = "4";
-//         juicyTileList.appendChild(addedNode);
-
-//         // wait for mutation observer callback
-//         setTimeout(function whenMutated(){
-//           expect( juicyTileList.refresh.callCount ).to.equal(1);
-//           juicyTileList.refresh.restore();
-//           done();
-//         });
-//       });
-//       it('refresh method should be called when some node is removed', function (done) {
-//         var refresh = sinon.spy(juicyTileList, "refresh");
-
-//         juicyTileList.removeChild(juicyTileList.firstElementChild);
-
-//         // wait for mutation observer callback
-//         setTimeout(function whenMutated(){
-//           expect( juicyTileList.refresh.callCount ).to.equal(1);
-//           juicyTileList.refresh.restore();
-//           done();
-//         });
-//       });
-
-//     });
-
-//     context('is removed in runtime', function () {
-//       beforeEach(function(){
-//         juicyTileList2.removeAttribute("refreshOnMutation");
-//       });
-//       it('refresh method should not be called when some node is added', function (done) {
-//         var refresh = sinon.spy(juicyTileList2, "refresh");
-
-//         var addedNode = document.createElement("div");
-//         addedNode.innerHTML = "4";
-//         juicyTileList2.appendChild(addedNode);
-
-//         // wait for mutation observer callback
-//         setTimeout(function whenMutated(){
-//           expect( juicyTileList2.refresh.callCount ).to.equal(0);
-//           juicyTileList2.refresh.restore();
-//           done();
-//         });
-//       });
-//       it('refresh method should not be called when some node is removed', function (done) {
-//         var refresh = sinon.spy(juicyTileList2, "refresh");
-
-//         juicyTileList2.removeChild(juicyTileList2.firstElementChild);
-
-//         // wait for mutation observer callback
-//         setTimeout(function whenMutated(){
-//           expect( juicyTileList2.refresh.callCount ).to.equal(0);
-//           juicyTileList2.refresh.restore();
-//           done();
-//         });
-//       });
-//     });
-
-//   });
-// });
+  });
+});
 
     </script>
 

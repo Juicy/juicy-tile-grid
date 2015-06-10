@@ -69,8 +69,10 @@ version: 0.1.2
                 var cols = []; // just position, as Object Numer, with dynamic property 
                 //{position: px, dynamic: boolean}
                 var dynamicColPos = {};
+                var expandableColPos = {};
                 var rows = [];
                 var dynamicRowPos = {};
+                var expandableRowPos = {};
 
                 /** 
                  * Add new line at given position if there is none.
@@ -104,11 +106,13 @@ version: 0.1.2
                         drawLine(cols, offsetX + item.x + item.width);
                         // if any tile is dynamic, then line is dynamic
                         dynamicColPos[ offsetX + item.x ] |= item.widthDynamic;
+                        expandableColPos[ offsetX + item.x ] |= item.widthExpandable;
 
                         drawLine(rows, offsetY + item.y);
                         drawLine(rows, offsetY + item.y + item.height);
                         // if any tile is dynamic, then line is dynamic
                         dynamicRowPos[ offsetY + item.y ] |= item.heightDynamic;
+                        expandableRowPos[ offsetY + item.y ] |= item.heidthExpandable;
 
                         if(item.items){
                             drawLinesFromTree( item, offsetX + item.x, offsetY + item.y);
@@ -155,9 +159,9 @@ version: 0.1.2
                                 elementStyle["-ms-grid-row-span"]= ( rows.indexOf( top + child.height ) -rowNo );
 
 
-                            elementStyle.width = child.widthAdaptive || child.widthDynamic ? "100%" : child.width + "px";
+                            elementStyle.width = child.widthAdaptive || child.widthDynamic || child.widthExpandable ? "100%" : child.width + "px";
                             // elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
-                            elementStyle.height = child.heightAdaptive || child.heightDynamic ? "100%" : child.height + "px";
+                            elementStyle.height = child.heightAdaptive || child.heightDynamic || child.heightExpandable ? "100%" : child.height + "px";
                             if (child.background !== undefined) {
                                 elementStyle.backgroundColor = child.background || "transparent";
                             } else {
@@ -187,14 +191,17 @@ version: 0.1.2
                  * @param  {Object<Boolean>} dynamic Map  of dynamic lines positions
                  * @return {String}         `grid template-(rows|columns)` compatible setup.
                  */
-                function lineWidths(array, dynamic){
+                function lineWidths(array, dynamic, expandable){
                     var alen = array.length - 1, //last one is the border of our grid
                         str = "";
                     while(alen-- >0){
-                        // str = "minmax( " + (array[alen] - array[alen-1]) + "px , max-content ) " + str;
-                        // str = (array[alen] - array[alen-1]) + "px " + str;
+                        // str = "minmax( " + (array[alen] - array[alen-1]) + "fr , max-content ) " + str;
+                        // str = (array[alen] - array[alen-1]) + "fr " + str;
                         if( dynamic[ array[alen] ] ){
-                           str = "minmax( " + (array[alen+1] - array[alen]) + "px , max-content ) " + str; 
+                           str = "minmax( " + (array[alen+1] - array[alen]) + "fr , max-content ) " + str; 
+                        } else if(expandable[ array[alen] ]){
+
+                           str = (array[alen+1] - array[alen]) + "fr " + str; 
                         } else {
 
                            str = (array[alen+1] - array[alen]) + "px " + str; 
@@ -208,10 +215,10 @@ version: 0.1.2
                 renderGrid( packedTree, tiles, 0,0);
 
                 containerStyle["grid-template-columns"] = containerStyle["-ms-grid-columns"] = 
-                    lineWidths(cols, dynamicColPos);
+                    lineWidths(cols, dynamicColPos, expandableColPos);
 
                 containerStyle["grid-template-rows"] = containerStyle["-ms-grid-rows"] = 
-                    lineWidths(rows, dynamicRowPos);
+                    lineWidths(rows, dynamicRowPos, expandableRowPos);
                 // absolute renderer do it as well
                     containerStyle.height = "auto";
 
