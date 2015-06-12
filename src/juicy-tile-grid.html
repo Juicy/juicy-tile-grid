@@ -66,13 +66,13 @@ version: 0.1.2
                 if(this.layout != "grid"){
                     return this.super( [packedTree, tiles, offsetX, offsetY] );
                 }
-                var cols = []; // just position, as Object Numer, with dynamic property 
+                var columnAxes = []; // just position, as Object Numer, with dynamic property 
                 //{position: px, dynamic: boolean}
                 var dynamicColPos = {};
-                var expandableColPos = {};
-                var rows = [];
+                var flexibleColumns = {};
+                var rowAxes = [];
                 var dynamicRowPos = {};
-                var expandableRowPos = {};
+                var flexibleRows = {};
 
                 /** 
                  * Add new line at given position if there is none.
@@ -80,7 +80,7 @@ version: 0.1.2
                  * @param {Number} position line position
                  * @returns line number for line at given position
                 */
-                function drawLine( array, position ){
+                function drawGridLine( array, position ){
                     var len = array.length, newLine;
                     while(len-- && array[len] > position){
                     // while(len-- && array[len].position > position){  
@@ -94,7 +94,7 @@ version: 0.1.2
                         return len+1;
                     }
                 }
-                function drawLinesFromTree( node, offsetX, offsetY ){
+                function drawGridLinesFromTree( node, offsetX, offsetY ){
                     var ilen = node.items.length;
                     while(ilen--){
                         var item = node.items[ilen];
@@ -102,27 +102,27 @@ version: 0.1.2
                             continue;
                         }
 
-                        drawLine(cols, offsetX + item.x);
-                        drawLine(cols, offsetX + item.x + item.width);
+                        drawGridLine(columnAxes, offsetX + item.x);
+                        drawGridLine(columnAxes, offsetX + item.x + item.width);
                         // if any tile is dynamic, then line is dynamic
                         dynamicColPos[ offsetX + item.x ] |= item.widthDynamic;
-                        expandableColPos[ offsetX + item.x ] |= item.widthExpandable;
+                        flexibleColumns[ offsetX + item.x ] |= item.widthFlexible;
 
-                        drawLine(rows, offsetY + item.y);
-                        drawLine(rows, offsetY + item.y + item.height);
+                        drawGridLine(rowAxes, offsetY + item.y);
+                        drawGridLine(rowAxes, offsetY + item.y + item.height);
                         // if any tile is dynamic, then line is dynamic
                         dynamicRowPos[ offsetY + item.y ] |= item.heightDynamic;
-                        expandableRowPos[ offsetY + item.y ] |= item.heidthExpandable;
+                        flexibleRows[ offsetY + item.y ] |= item.heightFlexible;
 
                         if(item.items){
-                            drawLinesFromTree( item, offsetX + item.x, offsetY + item.y);
+                            drawGridLinesFromTree( item, offsetX + item.x, offsetY + item.y);
                         }
                     }
                     // draw lines for end (right bottom) of our container
-                    drawLine(cols, offsetX + node.width);
-                    drawLine(rows, offsetY + node.height);
+                    drawGridLine(columnAxes, offsetX + node.width);
+                    drawGridLine(rowAxes, offsetY + node.height);
                 }
-                drawLinesFromTree(packedTree, 0,0);
+                drawGridLinesFromTree(packedTree, 0,0);
                 var that = this;
                 function renderGrid(node, tiles, offsetX, offsetY, hideAll){
                     var childNodeNo = node.items.length,
@@ -146,22 +146,22 @@ version: 0.1.2
                             left = ( child.x || 0 ) + offsetX; 
                             top = ( child.y || 0 ) + offsetY;
                             var oversize = child.oversize || 0;
-                            colNo = cols.indexOf( left ); 
-                            rowNo = rows.indexOf( top ); 
-                            // cols are 1 index based
-                            elementStyle["grid-column"] = ( colNo + 1 ) + " / span " + ( cols.indexOf( left + child.width ) - colNo );
+                            colNo = columnAxes.indexOf( left ); 
+                            rowNo = rowAxes.indexOf( top ); 
+                            // columns are 1 index based
+                            elementStyle["grid-column"] = ( colNo + 1 ) + " / span " + ( columnAxes.indexOf( left + child.width ) - colNo );
                             // rows are 1 index based
-                            elementStyle["grid-row"]= ( rowNo + 1 ) + " / span " + ( rows.indexOf( top + child.height ) -rowNo );
+                            elementStyle["grid-row"]= ( rowNo + 1 ) + " / span " + ( rowAxes.indexOf( top + child.height ) -rowNo );
                             //IE support
                                 elementStyle["-ms-grid-column"] = ( colNo + 1 );
-                                elementStyle["-ms-grid-column-span"] = ( cols.indexOf( left + child.width ) - colNo );
+                                elementStyle["-ms-grid-column-span"] = ( columnAxes.indexOf( left + child.width ) - colNo );
                                 elementStyle["-ms-grid-row"]= ( rowNo + 1 );
-                                elementStyle["-ms-grid-row-span"]= ( rows.indexOf( top + child.height ) -rowNo );
+                                elementStyle["-ms-grid-row-span"]= ( rowAxes.indexOf( top + child.height ) -rowNo );
 
 
-                            elementStyle.width = child.widthAdaptive || child.widthDynamic || child.widthExpandable ? "100%" : child.width + "px";
+                            elementStyle.width = child.widthAdaptive || child.widthDynamic || child.widthFlexible ? "100%" : child.width + "px";
                             // elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
-                            elementStyle.height = child.heightAdaptive || child.heightDynamic || child.heightExpandable ? "100%" : child.height + "px";
+                            elementStyle.height = child.heightAdaptive || child.heightDynamic || child.heightFlexible ? "100%" : child.height + "px";
                             if (child.background !== undefined) {
                                 elementStyle.backgroundColor = child.background || "transparent";
                             } else {
@@ -191,20 +191,21 @@ version: 0.1.2
                  * @param  {Object<Boolean>} dynamic Map  of dynamic lines positions
                  * @return {String}         `grid template-(rows|columns)` compatible setup.
                  */
-                function lineWidths(array, dynamic, expandable){
-                    var alen = array.length - 1, //last one is the border of our grid
+                function setTracks(gridLines, dynamic, flexible){
+                    var alen = gridLines.length - 1, //last one is the border of our grid
                         str = "";
                     while(alen-- >0){
-                        // str = "minmax( " + (array[alen] - array[alen-1]) + "fr , max-content ) " + str;
-                        // str = (array[alen] - array[alen-1]) + "fr " + str;
-                        if( dynamic[ array[alen] ] ){
-                           str = "minmax( " + (array[alen+1] - array[alen]) + "fr , max-content ) " + str; 
-                        } else if(expandable[ array[alen] ]){
+                        // str = "minmax( " + (gridLines[alen] - gridLines[alen-1]) + "fr , max-content ) " + str;
+                        // str = (gridLines[alen] - gridLines[alen-1]) + "fr " + str;
+                        if( dynamic[ gridLines[alen] ] ){
+                           str = "minmax( " + (gridLines[alen+1] - gridLines[alen]) + "fr , max-content ) " + str; 
+                        } else if(flexible[ gridLines[alen] ]){
 
-                           str = (array[alen+1] - array[alen]) + "fr " + str; 
+                           // str = "minmax( min-content, " + (gridLines[alen+1] - gridLines[alen]) + "fr ) " + str; // never less than min-content of elements 
+                           str = (gridLines[alen+1] - gridLines[alen]) + "fr " + str; 
                         } else {
 
-                           str = (array[alen+1] - array[alen]) + "px " + str; 
+                           str = (gridLines[alen+1] - gridLines[alen]) + "px " + str; 
                         }
                     }
                     return str;
@@ -215,10 +216,10 @@ version: 0.1.2
                 renderGrid( packedTree, tiles, 0,0);
 
                 containerStyle["grid-template-columns"] = containerStyle["-ms-grid-columns"] = 
-                    lineWidths(cols, dynamicColPos, expandableColPos);
+                    setTracks(columnAxes, dynamicColPos, flexibleColumns);
 
                 containerStyle["grid-template-rows"] = containerStyle["-ms-grid-rows"] = 
-                    lineWidths(rows, dynamicRowPos, expandableRowPos);
+                    setTracks(rowAxes, dynamicRowPos, flexibleRows);
                 // absolute renderer do it as well
                     containerStyle.height = "auto";
 
