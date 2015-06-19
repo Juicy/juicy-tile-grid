@@ -1,0 +1,397 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../src/juicy-tile-grid.html">
+    <style>
+    html,body{
+      min-width: 0;
+      font-size: 10px;
+    }
+    juicy-tile-grid > *{
+      background-color: rgba(99,99,99,0.3);
+      height: 100%;
+      margin: 0;
+    }
+    juicy-tile-grid /deep/ #container{
+      background-color: lightgrey;
+    }
+    juicy-tile-grid /deep/ .juicy-tile{
+      background-color: lightblue;
+      /*border: 1px solid black;*/
+      /*box-sizing: border-box;*/
+    }
+    juicy-tile-grid /deep/ .juicy-tile:nth-child(2n){
+      /*background-color: darkblue;*/
+      /*border: 1px solid black;*/
+      /*box-sizing: border-box;*/
+    }
+    </style>
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <template bind id="root">
+      <juicy-tile-grid id="gridLines" gutter="10" setup="{{gridLines}}" style="width: 500px;">
+        <div>100px x 100px</div>
+        <div>150px x 100px</div>
+        <div>200px x 215px</div>
+        <div>260px x 100px</div>
+        <div>265px x 50px</div>
+        <div>90px x 50px</div>
+      </juicy-tile-grid>
+      <juicy-tile-grid id="fixVSflex_cols" gutter="10" setup="{{fixVSflex_cols}}" style="width: 550px;">
+        <div>fiX</div>
+        <div>Flex</div>
+        <div>fiX</div>
+        <div>Flex</div>
+        <div>fiX</div>
+        <div>fiX</div>
+        <div>Flex</div>
+        <div>Flex</div>
+        <div>Flex</div>
+      </juicy-tile-grid>
+      <juicy-tile-grid id="fixVSflex_rows" gutter="10" setup="{{fixVSflex_rows}}" style="height: 550px; width: 50px;">
+        <div>fiX</div>
+        <div>Flex</div>
+        <div>fiX</div>
+        <div>Flex</div>
+        <div>fiX</div>
+        <div>fiX</div>
+        <div>Flex</div>
+        <div>Flex</div>
+        <div>Flex</div>
+      </juicy-tile-grid>
+    </template>
+    <script>
+var templ = document.getElementById('root');
+var model = {
+  width: 450,
+  gridLines : {
+    items:[
+      {
+          id:0,
+          priority:0.9,
+          width: 100,
+          height: 100,
+          widthFlexible: true
+      },
+      {
+          id:1,
+          priority:0.6,
+          width: 150,
+          height: 100,
+          widthFlexible: true
+      },
+      {
+          id:2,
+          priority:0.4,
+          width: 200,
+          height: 100+10+100+5,
+          widthFlexible: true
+      },
+      {
+          id:3,
+          priority:0.4,
+          width: 100+10+150,
+          height: 100,
+          widthFlexible: true
+      },
+      {
+          id:4,
+          priority:0.4,
+          width: 100+10+150+5,
+          height: 50,
+          widthFlexible: true
+      },
+      {
+          id:5,
+          priority:0.4,
+          width: 90,
+          height: 50,
+          widthFlexible: true
+      }
+    ]
+  },
+  fixVSflex_cols : {
+    items:[
+      {
+          id:0,
+          priority:0.9,
+          width: 100,
+          height: 20
+      },
+      {
+          id:1,
+          priority:0.6,
+          width: 100,
+          widthFlexible: true,
+          height: 20
+      },
+      {
+          id:2,
+          priority:0.4,
+          width: 100,
+          height: 20
+      },
+      {
+          id:3,
+          priority:0.4,
+          width: 100,
+          height: 20,
+          widthFlexible: true
+      },
+      {
+          id:4,
+          priority:0.4,
+          width: 100,
+          height: 20
+      },
+      {
+          id:5,
+          priority:0.4,
+          width: 100,
+          height: 20
+      },
+      {
+          id:6,
+          priority:0.4,
+          width: 100,
+          height: 20,
+          widthFlexible: true
+      },
+      {
+          id:7,
+          priority:0.4,
+          width: 100+10+100-5,
+          height: 20,
+          widthFlexible: true
+      },
+      {
+          id:8,
+          priority:0.4,
+          width: 100,
+          height: 20,
+          widthFlexible: true
+      }
+    ]
+  },
+  fixVSflex_rows : {
+    direction: "downRight",
+    items:[
+      {
+          id:0,
+          priority:0.9,
+          height: 100,
+          width: 20
+      },
+      {
+          id:1,
+          priority:0.6,
+          height: 100,
+          heightFlexible: true,
+          width: 20
+      },
+      {
+          id:2,
+          priority:0.4,
+          height: 100,
+          width: 20
+      },
+      {
+          id:3,
+          priority:0.4,
+          height: 100,
+          width: 20,
+          heightFlexible: true
+      },
+      {
+          id:4,
+          priority:0.4,
+          height: 100,
+          width: 20
+      },
+      {
+          id:5,
+          priority:0.4,
+          height: 100,
+          width: 20
+      },
+      {
+          id:6,
+          priority:0.4,
+          height: 100,
+          width: 20,
+          heightFlexible: true
+      },
+      {
+          id:7,
+          priority:0.4,
+          height: 100+10+100-5,
+          width: 20,
+          heightFlexible: true
+      },
+      {
+          id:8,
+          priority:0.4,
+          height: 100,
+          width: 20,
+          heightFlexible: true
+      }
+    ]
+  }
+};
+
+document.addEventListener("polymer-ready", function(){
+    document.querySelector("template").model = model;
+    
+});
+
+function getGridCols(element){
+  return element.shadowRoots["juicy-tile-list"]
+            .getElementById("container")
+              .style["gridTemplateColumns"]
+                // .split(" ")
+                .match(/\S+(.*\))?/g);
+}
+function getGridRows(element, width, height){
+  return element.shadowRoots["juicy-tile-list"]
+            .getElementById("container")
+              .style["gridTemplateRows"]
+                // .split(" ")
+                .match(/\S+(.*\))?/g);
+}
+/**
+ * juicy-tile-grid fractions tests
+ */
+describe('when parsed to CSS Grid', function() {
+  var juicyTileList_gridLines, juicyTileList_fixVSflex_cols, columns;
+  before(function(done){
+    Polymer.whenReady(function(){
+      juicyTileList_gridLines = document.getElementById('gridLines');
+      juicyTileList_fixVSflex_cols = document.getElementById('fixVSflex_cols');
+      columns = getGridCols(juicyTileList_fixVSflex_cols);
+      juicyTileList_fixVSflex_rows = document.getElementById('fixVSflex_rows');
+      rows = getGridRows(juicyTileList_fixVSflex_rows);
+
+      done();
+    });
+  });
+  context('should set a grid line for every item\'s and container\'s border', function () {
+    var shadowGrid;
+    it('and set applicable grid columns', function () {
+      expect(getGridCols(juicyTileList_gridLines).length).to.equal(9);
+    });
+    it('and set applicable grid rows', function () {
+      expect(getGridRows(juicyTileList_gridLines).length).to.equal(6);
+    });
+
+  });
+  context('grid track that',function(){
+    it('contains only fixed elements, should be set as fixed', function () {
+      expect(columns[0]).to.have.string("px");
+      expect(columns[0]).not.to.have.string("fr");
+
+      expect(rows[0]).to.have.string("px");
+      expect(rows[0]).not.to.have.string("fr");
+    });
+    it('intersects only fixed elements, should be set as fixed', function () {
+      expect(columns[11]).to.have.string("px");
+      expect(columns[11]).not.to.have.string("fr");
+
+      expect(rows[11]).to.have.string("px");
+      expect(rows[11]).not.to.have.string("fr");    
+    });
+    it('intersects a gutter, should be set as fixed', function () {
+      expect(columns[1]).to.have.string("px");
+      expect(columns[1]).not.to.have.string("fr");  
+
+      expect(columns[3]).to.have.string("px");
+      expect(columns[3]).not.to.have.string("fr");  
+
+      expect(columns[5]).to.have.string("px");
+      expect(columns[5]).not.to.have.string("fr");  
+
+      expect(columns[7]).to.have.string("px");
+      expect(columns[7]).not.to.have.string("fr");  
+
+      expect(columns[8]).to.have.string("px");
+      expect(columns[8]).not.to.have.string("fr");  
+
+      expect(columns[9]).to.have.string("px");
+      expect(columns[9]).not.to.have.string("fr");
+      //rows
+      expect(rows[1]).to.have.string("px");
+      expect(rows[1]).not.to.have.string("fr");  
+
+      expect(rows[3]).to.have.string("px");
+      expect(rows[3]).not.to.have.string("fr");  
+
+      expect(rows[5]).to.have.string("px");
+      expect(rows[5]).not.to.have.string("fr");  
+
+      expect(rows[7]).to.have.string("px");
+      expect(rows[7]).not.to.have.string("fr");  
+
+      expect(rows[8]).to.have.string("px");
+      expect(rows[8]).not.to.have.string("fr");  
+
+      expect(rows[9]).to.have.string("px");
+      expect(rows[9]).not.to.have.string("fr");  
+    });
+    context("does not intersect gutter", function(){
+
+      it('and contains only flex elements, should be set as flexible', function () {
+        expect(columns[2]).to.have.string("fr");
+
+        expect(rows[2]).to.have.string("fr");
+      });
+      it('and intersects only flex elements, should be set as flexible', function () {
+        expect(columns[6]).to.have.string("fr");
+
+        expect(rows[6]).to.have.string("fr");       
+      });
+      it('intersects only free space, should be set as flexible', function () {
+        expect(columns[12]).to.have.string("fr");
+
+        expect(rows[12]).to.have.string("fr");
+      });
+
+      it('and intersects both fixed and flex elements, should get minimum size set to given value in `px`', function () {
+        expect(columns[4]).to.match(/minmax\(\s*100px/);
+        expect(columns[10]).to.match(/minmax\(\s*95px/);
+
+        expect(rows[4]).to.match(/minmax\(\s*100px/);
+        expect(rows[10]).to.match(/minmax\(\s*95px/);
+      });
+      it('and contains only flex elements, should get minimum size set to `min-content`', function () {
+        expect(columns[2]).to.match(/minmax\(\s*min-content/);
+
+        expect(rows[2]).to.match(/minmax\(\s*min-content/);
+      });
+      xit('and intersects only flex elements, should get minimum size set to `min-content` - min-content does not make an effect for spanning items!!', function () {
+        expect(columns[6]).to.match(/minmax\(\s*min-content/);
+
+        expect(rows[6]).to.match(/minmax\(\s*min-content/);
+      });
+      it('and intersects only flex elements, should get minimum size set to given value in `px` - min-content does not make an effect for spanning items!!', function () {
+        expect(columns[6]).to.match(/minmax\(\s*95px/);  
+
+        expect(rows[6]).to.match(/minmax\(\s*95px/);   
+      });
+
+    });
+
+  });
+});
+
+    </script>
+
+  </body>
+</html>
