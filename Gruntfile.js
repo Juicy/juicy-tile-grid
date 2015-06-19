@@ -9,7 +9,7 @@ module.exports = function(grunt) {
                 files: [
                     '*.html',
                     'examples/**/*.html',
-                    'tests/*.js',
+                    'tests/*.*',
                     'tests/**/*.html'
                 ],
                 // tasks: ['jshint'],

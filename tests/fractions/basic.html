@@ -38,6 +38,11 @@
     <!-- You can use the document as a place to set up your fixtures. -->
     <template bind id="root">
       <juicy-tile-grid id="grid1" setup="{{setup}}" style="width: 800px;"><!-- to 1300-->
+        <div>0 - 200 x 100</div>
+        <div>1 - 200 x 100 - flex</div>
+        <div>2 - 400 x 200 - flex</div>
+      </juicy-tile-grid>
+      <juicy-tile-grid id="grid2" setup="{{setup2}}" style="width: 200px; height:400px"><!-- to 1300-->
         <div>0</div>
         <div>1</div>
         <div>3</div>
@@ -48,7 +53,6 @@ var templ = document.getElementById('root');
 var model = { 
   setup : {
     gutter: 0,
-    width: 800,
     items:[
       {
           id:0,
@@ -71,6 +75,32 @@ var model = {
           widthFlexible: true
       }
     ]
+  },
+  setup2 : {
+    gutter: 0,
+    direction: "downRight",
+    items:[
+      {
+          id:0,
+          priority:0.9,
+          height: 100,
+          width: 200
+      },
+      {
+          id:1,
+          priority:0.6,
+          height: 100,
+          width:200,
+          heightFlexible: true
+      },
+      {
+          id:2,
+          priority:0.4,
+          height: 200,
+          width:200,
+          heightFlexible: true
+      }
+    ]
   }
 };
 
@@ -91,14 +121,15 @@ function expectSize(element, width, height){
  * juicy-tile-grid fractions tests
  */
 var juicyTileList;
-describe('juicy-tile-grid', function() {
+describe('fractions', function() {
   before(function(done){
     Polymer.whenReady(function(){
       done();
       juicyTileList = document.getElementById('grid1');
+      juicyTileList2 = document.getElementById('grid2');
     });
   });
-  context('fractions widthFlexible/heightFlexible', function () {
+  context('with widthFlexible', function () {
     afterEach(function(){
       juicyTileList.refresh.restore && juicyTileList.refresh.restore();
     });
@@ -149,6 +180,64 @@ describe('juicy-tile-grid', function() {
         expectSize( juicyTileList.children[0], 200, 100);
         expectSize( juicyTileList.children[1], 300, 100);
         expectSize( juicyTileList.children[2], 600, 200);
+        done();
+        });
+      });
+
+    });
+
+  });
+  context('with heightFlexible', function () {
+    afterEach(function(){
+      juicyTileList2.refresh.restore && juicyTileList2.refresh.restore();
+    });
+
+    context('when rendered, ', function () {
+      it('should align items in correct places', function (done) {
+        expectPosition( juicyTileList2.children[0], 0, 0);
+        expectPosition( juicyTileList2.children[1], 100, 0);
+        expectPosition( juicyTileList2.children[2], 200, 0);
+        done();
+      });
+      it('should align items in correct sizes', function (done) {
+        expectSize( juicyTileList2.children[0], 200, 100);
+        expectSize( juicyTileList2.children[1], 200, 100);
+        expectSize( juicyTileList2.children[2], 200, 200);
+        done();
+      });
+
+    });
+    context('when resized', function () {
+      it('refresh method should not be called', function (done) {
+        var refresh = sinon.spy(juicyTileList2, "refresh");
+
+        juicyTileList2.style.height = "700px";
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList2.refresh.callCount ).to.equal(0);
+          done();
+        },10);
+      });
+      it('added width should be distributed proportionally among columns with items marked as expandable', function (done) {
+        juicyTileList2.style.height = "700px";
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+        expectPosition( juicyTileList2.children[0], 0, 0);
+        expectPosition( juicyTileList2.children[1], 100, 0);
+        expectPosition( juicyTileList2.children[2], 300, 0);
+        done();
+        });
+      });
+      it('items marked as expandable should change size accordingly', function (done) {
+        juicyTileList2.style.height = "700px";
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+        expectSize( juicyTileList2.children[0], 200, 100);
+        expectSize( juicyTileList2.children[1], 200, 200);
+        expectSize( juicyTileList2.children[2], 200, 400);
         done();
         });
       });

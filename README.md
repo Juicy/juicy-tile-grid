@@ -1,6 +1,7 @@
 # &lt;juicy-tile-grid&gt;
 
 > Masonry-like Polymer Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only), and adapts it to CSS Grid Layout.
+> So you will get (bin-packed) gap-less layout, with responsive, and adaptive features, handled natively by browser.
 > Extended renderer for [`juicy-tile-list`](https://github.com/Juicy/juicy-tile-list).
 
 ## Features 
