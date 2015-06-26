@@ -23,7 +23,12 @@
       background-color: lightgrey;
     }
     juicy-tile-grid /deep/ .juicy-tile{
-      background-color: lightblue;
+      background-color: lightgreen;
+      /*border: 1px solid black;*/
+      /*box-sizing: border-box;*/
+    }
+    juicy-tile-grid .fixed{
+      background-color: lightpink;
       /*border: 1px solid black;*/
       /*box-sizing: border-box;*/
     }
@@ -46,27 +51,31 @@
         <div>265px x 50px</div>
         <div>90px x 50px</div>
       </juicy-tile-grid>
-      <juicy-tile-grid id="fixVSflex_cols" gutter="10" setup="{{fixVSflex_cols}}" style="width: 550px;">
-        <div>fiX</div>
-        <div>Flex</div>
-        <div>fiX</div>
-        <div>Flex</div>
-        <div>fiX</div>
-        <div>fiX</div>
-        <div>Flex</div>
-        <div>Flex</div>
-        <div>Flex</div>
+      <juicy-tile-grid id="fixVSflex_cols" gutter="10" setup="{{fixVSflex_cols}}" style="width: 680px;">
+        <div class="fixed">0 fiX</div>
+        <div>1 Flex</div>
+        <div class="fixed">2 fiX</div>
+        <div>3 Flex</div>
+        <div class="fixed">4 fiX</div>
+        <div>5 Flex</div>
+        <div class="fixed">6 fiX</div>
+        <div>7 Flex</div>
+        <div>8 Flex</div>
+        <div>9 Flex</div>
+        <div>10 Flex</div>
       </juicy-tile-grid>
-      <juicy-tile-grid id="fixVSflex_rows" gutter="10" setup="{{fixVSflex_rows}}" style="height: 550px; width: 50px;">
-        <div>fiX</div>
-        <div>Flex</div>
-        <div>fiX</div>
-        <div>Flex</div>
-        <div>fiX</div>
-        <div>fiX</div>
-        <div>Flex</div>
-        <div>Flex</div>
-        <div>Flex</div>
+      <juicy-tile-grid id="fixVSflex_rows" gutter="10" setup="{{fixVSflex_rows}}" style="height: 680px; width: 50px;">
+        <div class="fixed">0 fiX</div>
+        <div>1 Flex</div>
+        <div class="fixed">2 fiX</div>
+        <div>3 Flex</div>
+        <div class="fixed">4 fiX</div>
+        <div>5 Flex</div>
+        <div class="fixed">6 fiX</div>
+        <div>7 Flex</div>
+        <div>8 Flex</div>
+        <div>9 Flex</div>
+        <div>10 Flex</div>
       </juicy-tile-grid>
     </template>
     <script>
@@ -136,47 +145,60 @@ var model = {
       },
       {
           id:2,
-          priority:0.4,
+          priority:0.49,
           width: 100,
           height: 20
       },
       {
           id:3,
-          priority:0.4,
+          priority:0.48,
           width: 100,
           height: 20,
           widthFlexible: true
       },
       {
           id:4,
-          priority:0.4,
+          priority:0.47,
           width: 100,
           height: 20
-      },
-      {
-          id:5,
-          priority:0.4,
-          width: 100,
-          height: 20
-      },
-      {
-          id:6,
-          priority:0.4,
+      },{
+          id: 5,
+          priority:0.45,
           width: 100,
           height: 20,
           widthFlexible: true
       },
       {
+          id:6,
+          priority:0.44,
+          width: 100,
+          height: 20
+      },
+      {
           id:7,
           priority:0.4,
-          width: 100+10+100-5,
+          width: 100,
           height: 20,
           widthFlexible: true
       },
       {
           id:8,
           priority:0.4,
+          width: 100+10+100-5,
+          height: 20,
+          widthFlexible: true
+      },
+      {
+          id:9,
+          priority:0.4,
           width: 100,
+          height: 20,
+          widthFlexible: true
+      },
+      {
+          id:10,
+          priority:0.4,
+          width: 90,
           height: 20,
           widthFlexible: true
       }
@@ -200,47 +222,60 @@ var model = {
       },
       {
           id:2,
-          priority:0.4,
+          priority:0.49,
           height: 100,
           width: 20
       },
       {
           id:3,
-          priority:0.4,
+          priority:0.48,
           height: 100,
           width: 20,
           heightFlexible: true
       },
       {
           id:4,
-          priority:0.4,
+          priority:0.47,
           height: 100,
           width: 20
-      },
-      {
-          id:5,
-          priority:0.4,
-          height: 100,
-          width: 20
-      },
-      {
-          id:6,
-          priority:0.4,
+      },{
+          id: 5,
+          priority:0.45,
           height: 100,
           width: 20,
           heightFlexible: true
       },
       {
+          id:6,
+          priority:0.44,
+          height: 100,
+          width: 20
+      },
+      {
           id:7,
           priority:0.4,
-          height: 100+10+100-5,
+          height: 100,
           width: 20,
           heightFlexible: true
       },
       {
           id:8,
           priority:0.4,
+          height: 100+10+100-5,
+          width: 20,
+          heightFlexible: true
+      },
+      {
+          id:9,
+          priority:0.4,
           height: 100,
+          width: 20,
+          heightFlexible: true
+      },
+      {
+          id:10,
+          priority:0.4,
+          height: 90,
           width: 20,
           heightFlexible: true
       }
@@ -258,14 +293,14 @@ function getGridCols(element){
             .getElementById("container")
               .style["gridTemplateColumns"]
                 // .split(" ")
-                .match(/\S+(.*\))?/g);
+                .match(/[a-z0-9]+(\([^\)]*\))?/g);
 }
 function getGridRows(element, width, height){
   return element.shadowRoots["juicy-tile-list"]
             .getElementById("container")
               .style["gridTemplateRows"]
                 // .split(" ")
-                .match(/\S+(.*\))?/g);
+                .match(/[a-z0-9]+(\([^\)]*\))?/g);
 }
 /**
  * juicy-tile-grid fractions tests
@@ -357,10 +392,12 @@ describe('when parsed to CSS Grid', function() {
 
         expect(rows[6]).to.have.string("fr");       
       });
-      it('intersects only free space, should be set as flexible', function () {
-        expect(columns[12]).to.have.string("fr");
+      it('intersects only free space between last item and container\'s border, should be set as flexible, without any constraints (min-size)', function () {
+        expect(columns[16]).to.have.string("fr");
+        expect(columns[16]).to.match(/\d+fr/);
 
-        expect(rows[12]).to.have.string("fr");
+        expect(rows[16]).to.have.string("fr");
+        expect(rows[16]).to.match(/\d+fr/);
       });
 
       it('and intersects both fixed and flex elements, should get minimum size set to given value in `px`', function () {
@@ -386,6 +423,16 @@ describe('when parsed to CSS Grid', function() {
         expect(rows[6]).to.match(/minmax\(\s*95px/);   
       });
 
+    });
+    it('intersects flexible element and whitespace wider than gutter, should be set as flexible', function () {
+        expect(columns[15]).to.have.string("fr");
+
+        expect(rows[15]).to.have.string("fr");  
+    });
+    it('intersects flexible element and whitespace wider than gutter, to avoid collapsing gutter, should get minimum size set to given value in `px` - min-content does not make an effect for spanning items!!', function () {
+        expect(columns[15]).to.match(/minmax\(\s*15px/)
+
+        expect(rows[15]).to.match(/minmax\(\s*15px/)  
     });
 
   });

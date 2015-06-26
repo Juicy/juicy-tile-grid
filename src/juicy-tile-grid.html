@@ -70,31 +70,41 @@ version: 0.1.2
                 }
                 var columnAxes = []; // just position, as Object Numer, with dynamic property 
                 //{position: px, dynamic: boolean}
-                var dynamicColPos = {};
-                var flexibleColumns = {};
                 var rowAxes = [];
-                var dynamicRowPos = {};
-                var flexibleRows = {};
 
                 /** 
                  * Add new line at given position if there is none.
                  * @param {Array} array of lines
                  * @param {Number} position line position
+                 * @param {Object} [starts] item that starts at this line
+                 * @param {Object} [ends] item that ends at this line
+                 * @param {Boolean} [gutter] do we have a gutter after this line?
                  * @returns line number for line at given position
                 */
-                function drawGridLine( array, position ){
-                    var len = array.length, newLine;
-                    while(len-- && array[len] > position){
-                    // while(len-- && array[len].position > position){  
+                function drawGridLine( array, position, starts, ends, gutter ){
+                    var len = array.length, line;
+                    // while(len-- && array[len] > position){
+                    while(len-- && array[len].position > position){  
                     }
-                    if(len>-1 && array[len] == position){
-                    // if(len>-1 && array[len].position == position){
-                        return len;
+                    // if(len>-1 && array[len] == position){
+                    if(len>-1 && array[len].position == position){
+                        line = array[len];
                     } else { 
-                        array.splice( len+1, 0, position ); 
-                        // array.splice( len+1, 0, {position: position, dynamic: !!dynamic});
-                        return len+1;
+                        // array.splice( len+1, 0, position );
+                        line = {
+                            position: position,
+                            starts: [],
+                            ends: [],
+                            gutter: []
+
+                        };
+                        len++;
+                        array.splice( len, 0, line);
                     }
+                    starts && line.starts.push(starts);
+                    ends && line.ends.push(ends);
+                    gutter && line.gutter.push(gutter);
+                    return len;
                 }
                 function drawGridLinesFromTree( node, offsetX, offsetY ){
                     var ilen = node.items.length;
@@ -104,124 +114,122 @@ version: 0.1.2
                             continue;
                         }
 
-                        drawGridLine(columnAxes, offsetX + item.x);
-                        drawGridLine(columnAxes, offsetX + item.x + item.width);
-                        // if any tile is dynamic, then line is dynamic
-                        dynamicColPos[ offsetX + item.x ] |= item.widthDynamic;
-                        flexibleColumns[ offsetX + item.x ] |= item.widthFlexible;
+                        drawGridLine(columnAxes, offsetX + item.x, item);
+                        drawGridLine(columnAxes, offsetX + item.x + item.width, undefined, item, node.gutter);
 
-                        drawGridLine(rowAxes, offsetY + item.y);
-                        drawGridLine(rowAxes, offsetY + item.y + item.height);
-                        // if any tile is dynamic, then line is dynamic
-                        dynamicRowPos[ offsetY + item.y ] |= item.heightDynamic;
-                        flexibleRows[ offsetY + item.y ] |= item.heightFlexible;
+                        drawGridLine(rowAxes, offsetY + item.y, item);
+                        drawGridLine(rowAxes, offsetY + item.y + item.height, undefined, item, node.gutter);
 
                         if(item.items){
                             drawGridLinesFromTree( item, offsetX + item.x, offsetY + item.y);
                         }
                     }
+                    // IDEA (tomalec): consider making it on-demand, so grid may auto-center/auto grow if last track is empty
                     // draw lines for end (right bottom) of our container
                     drawGridLine(columnAxes, offsetX + node.width);
                     drawGridLine(rowAxes, offsetY + node.height);
                 }
                 drawGridLinesFromTree(packedTree, 0,0);
+
                 var that = this;
-                function renderGrid(node, tiles, offsetX, offsetY, hideAll){
-                    var childNodeNo = node.items.length,
-                        child,
-                        element, elementStyle, left, top, colNo, rowNo, hidden;  
-                    while(childNodeNo--){
-                        child = node.items[childNodeNo]
-                        element = tiles[ child.id ];
-                        if(!element) {
-                            continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
-                        }
-                        elementStyle = element.style;
-                        // hide items marked as hidden ;)
-                        hidden = hideAll || child.hidden;
-                        if(hidden){
-                            elementStyle.display = "none";
-                            //continue; // do not process children?
-                        } else {
-                          // force default - block 
-                            elementStyle.display = "";
-                            left = ( child.x || 0 ) + offsetX; 
-                            top = ( child.y || 0 ) + offsetY;
-                            var oversize = child.oversize || 0;
-                            colNo = columnAxes.indexOf( left ); 
-                            rowNo = rowAxes.indexOf( top ); 
-                            // columns are 1 index based
-                            elementStyle["grid-column"] = ( colNo + 1 ) + " / span " + ( columnAxes.indexOf( left + child.width ) - colNo );
-                            // rows are 1 index based
-                            elementStyle["grid-row"]= ( rowNo + 1 ) + " / span " + ( rowAxes.indexOf( top + child.height ) -rowNo );
-                            //IE support
-                                elementStyle["-ms-grid-column"] = ( colNo + 1 );
-                                elementStyle["-ms-grid-column-span"] = ( columnAxes.indexOf( left + child.width ) - colNo );
-                                elementStyle["-ms-grid-row"]= ( rowNo + 1 );
-                                elementStyle["-ms-grid-row-span"]= ( rowAxes.indexOf( top + child.height ) -rowNo );
-
-
-                            elementStyle.width = child.widthAdaptive || child.widthDynamic || child.widthFlexible ? "100%" : child.width + "px";
-                            // elementStyle.height = ( child.height /*+ 2 * oversize*/ ) + "px";
-                            elementStyle.height = child.heightAdaptive || child.heightDynamic || child.heightFlexible ? "100%" : child.height + "px";
-                            if (child.background !== undefined) {
-                                elementStyle.backgroundColor = child.background || "transparent";
-                            } else {
-                                elementStyle.backgroundColor = "";
-                            }
-                            elementStyle.outline = child.outline || "";
-
-                            if (oversize) {
-                                elementStyle.padding = oversize + "px";
-                                elementStyle.margin = "-" + oversize + "px";
-                            } else {
-                                elementStyle.padding = "";
-                                elementStyle.margin = "";
-                            }
-                        }
-
-                        if(child.items){// virtual container
-                            renderGrid( child, tiles, left, top, hidden);
-                        }
-                    }
-                }
 
                 /**
-                 * Calculate line widths ( line `n` position - line `n-1` position), 
-                 * take dynamic into account `minmax( _width_ px, max-content )`
-                 * @param  {Array<Number>} array  array of lines' positions
-                 * @param  {Object<Boolean>} dynamic Map  of dynamic lines positions
-                 * @return {String}         `grid template-(rows|columns)` compatible setup.
+                 * Check whether all/any/none items have given property set
+                 * @param  {Array<Object>}  items list of items to check
+                 * @return {Number}       1 all, 0 any, -1 none
                  */
-                function setTracks(gridLines, dynamic, flexible){
-                    var alen = gridLines.length - 1, //last one is the border of our grid
-                        str = "";
-                    while(alen-- >0){
-                        // str = "minmax( " + (gridLines[alen] - gridLines[alen-1]) + "fr , max-content ) " + str;
-                        // str = (gridLines[alen] - gridLines[alen-1]) + "fr " + str;
-                        if( dynamic[ gridLines[alen] ] ){
-                           str = "minmax( " + (gridLines[alen+1] - gridLines[alen]) + "fr , max-content ) " + str; 
-                        } else if(flexible[ gridLines[alen] ]){
+                function countProperty(items, propertyName){
+                    var len = items.length,
+                        itemNo = 0,
+                        counter = 0;
+                    for(; itemNo < len; itemNo++){
+                        items[itemNo][propertyName] && counter++;
+                    }
+                    return counter;
+                }
+                /**
+                 * Subtracts one array from another
+                 * @param  {Array<Object>} from the array from which given elements should be subtracted
+                 * @param  {Array<Object>} what array of objects to be subtracted. IMPORTANT: we assume that the exist in `from`
+                 * @return {Array<Object>}      changed array
+                 */
+                function arraySubtractAndMarkEnd(from, what, trackType, lineNo){
+                    var whatLeft = what.length, 
+                        endingItem;
+                    while(whatLeft--){
+                        endingItem = what[whatLeft];
+                        endingItem[trackType+"End"] = lineNo;
+                        from.splice( from.indexOf(endingItem), 1);
+                    }
+                    return from;
+                }
 
-                           // str = "minmax( min-content, " + (gridLines[alen+1] - gridLines[alen]) + "fr ) " + str; // never less than min-content of elements 
-                           str = (gridLines[alen+1] - gridLines[alen]) + "fr " + str; 
+                function setGridTracks(trackType, gridLines, flexPropertyName, gutter){
+                    var linesAmount = gridLines.length,
+                        currentLine = gridLines[0],
+                        previousLine = currentLine,
+                        trackSize,
+                        str = "",
+                        openedTiles,
+                        openedGutters = [],
+                        lastGutterPosition = 0;
+
+                    // lineNo == 1, currentLine = gridLines[0]
+                    markGridItemsStart(trackType, currentLine.starts, 1);
+                    openedTiles = currentLine.starts;
+                    // In CSS Grid lines, and tracks are counted from 1
+                    for(var lineNo = 2; lineNo <= linesAmount; lineNo++){
+                        if(lineNo==16){debugger}
+                        currentLine = gridLines[lineNo-1];
+                        trackSize = currentLine.position - previousLine.position;
+                        reduceOpenedGutters(openedGutters, trackSize);
+
+                        if(lineNo == linesAmount && openedTiles.length == 0){
+                        // Last line, if empty, should be flexible
+                            str += trackSize +"fr ";
+                            break;
+                        } else if( openedGutters.length ) {
+                        // Gutters should be fixed size
+                            str += trackSize + "px ";
                         } else {
-
-                           str = (gridLines[alen+1] - gridLines[alen]) + "px " + str; 
+                        //does not contain any gutter    
+                            switch(countProperty(openedTiles, flexPropertyName)){
+                                case 0: // all are fixed
+                                    str += trackSize +"px ";
+                                    break;
+                                case openedTiles.length: // all intersected are flexible
+                                    // and it contains them
+                                    if(currentLine.ends.length === openedTiles.length && previousLine.starts.length === openedTiles.length){
+                                        str += "minmax( min-content, " + trackSize +"fr ) ";
+                                    } else {
+                                        // XXX(tomalec): min-content does not make an effect for spanning items! so we will force min size to fixed size
+                                        str += "minmax( " + trackSize + "px, " + trackSize +"fr ) ";   
+                                    }
+                                    break;
+                                default: //mix
+                                    str += "minmax( " + trackSize + "px, " + trackSize +"fr ) ";
+                                    break;
+                            }
                         }
+                        currentLine.ends.length && arraySubtractAndMarkEnd(openedTiles, currentLine.ends, trackType, lineNo);
+                        if(currentLine.starts.length){
+                            markGridItemsStart(trackType, currentLine.starts, lineNo);
+                            openedTiles = openedTiles.concat(currentLine.starts);
+                        }
+                        if(currentLine.gutter.length){
+                            openedGutters = openedGutters.concat(currentLine.gutter);
+                        }
+                        previousLine = currentLine;
                     }
                     return str;
                 }
+
                 var containerStyle = this.$.container.style;
-                // containerStyle.display = "-ms-grid";
-                // containerStyle.display = "grid";
-                renderGrid( packedTree, tiles, 0,0);
 
-                containerStyle["grid-template-columns"] = containerStyle["-ms-grid-columns"] = 
-                    setTracks(columnAxes, dynamicColPos, flexibleColumns);
+                containerStyle["grid-template-columns"] = setGridTracks("column", columnAxes, "widthFlexible");
+                containerStyle["grid-template-rows"] = setGridTracks("row", rowAxes, "heightFlexible");
 
-                containerStyle["grid-template-rows"] = containerStyle["-ms-grid-rows"] = 
-                    setTracks(rowAxes, dynamicRowPos, flexibleRows);
+                applyStyles(tiles, packedTree.items);
                 if(packedTree.direction === "downRight"){
                     containerStyle.height = "100%";
                 }
@@ -236,6 +244,73 @@ version: 0.1.2
                 return packedTree;
             }
         });
+        function reduceOpenedGutters(gutters, size){
+            var gutterNo = gutters.length;
+            while(gutterNo--){
+                gutters[gutterNo]-= size;
+                if( gutters[gutterNo] < 0 ){
+                    gutters.splice(gutterNo, 1);
+                }
+            }
+
+        }
+        function markGridItemsStart(trackType, starts, lineNo){ 
+            var itemNo = starts.length;
+            while(itemNo--){
+                starts[itemNo][trackType + "Start"] = lineNo;               
+            }
+        }
+
+        function applyStyles(tiles, packedItems, hideAll){ 
+            var itemNo = packedItems.length;
+            var packedItem, element, elementStyle;
+            while(itemNo--){
+                packedItem = packedItems[itemNo];
+                element = tiles[packedItem.id];
+                if(!element) {
+                    continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
+                }
+                elementStyle = element.style;
+                // hide items marked as hidden ;)
+                hidden = hideAll || packedItem.hidden;
+                if(hidden){
+                    elementStyle.display = "none";
+                } else {
+                    // force default - block 
+                    elementStyle.display = "";
+
+                    elementStyle["grid-column"] = packedItem.columnStart + " / " + packedItem.columnEnd;
+                    elementStyle["grid-row"]= packedItem.rowStart + " / " + packedItem.rowEnd;
+                    //IE support
+                        elementStyle["-ms-grid-column-start"] = packedItem.columnStart;
+                        elementStyle["-ms-grid-column-end"] = packedItem.columnEnd;
+                        elementStyle["-ms-grid-row-start"]= packedItem.rowStart;
+                        elementStyle["-ms-grid-row-end"]= packedItem.rowEnd;
+
+                    var oversize = packedItem.oversize || 0;
+                    elementStyle.width = packedItem.widthFlexible ? "100%" : packedItem.width + "px";
+                    // elementStyle.height = ( packedItem.height /*+ 2 * oversize*/ ) + "px";
+                    elementStyle.height = packedItem.heightFlexible ? "100%" : packedItem.height + "px";
+                    if (packedItem.background !== undefined) {
+                        elementStyle.backgroundColor = packedItem.background || "transparent";
+                    } else {
+                        elementStyle.backgroundColor = "";
+                    }
+                    elementStyle.outline = packedItem.outline || "";
+
+                    if (oversize) {
+                        elementStyle.padding = oversize + "px";
+                        elementStyle.margin = "-" + oversize + "px";
+                    } else {
+                        elementStyle.padding = "";
+                        elementStyle.margin = "";
+                    }
+                }
+                if(packedItem.items){// virtual container
+                    applyStyles( tiles, packedItem.items, hidden);
+                }
+            }
+        }
     </script>
 
 </polymer-element>
