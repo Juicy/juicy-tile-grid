@@ -8,7 +8,7 @@
 
 [`juicy-tile-list` features](https://github.com/Juicy/juicy-tile-list#features), plus
  - CSS Grid Layout, 
- - adapting to dynamic changes of tile's content, without need to repack.
+ - adapting to dynamic changes of the element, parent container, and tile's content, without need to repack.
 
 ## Demo
 
@@ -55,10 +55,8 @@ All [`juicy-tile-list` options](https://github.com/Juicy/juicy-tile-list#options
 Attribute                       | Options   | Default | Description
 ---                             | ---       | ---     | ---
 `layout`                        | *string*  | `grid`  | Switch layout rendering: `grid` to use CSS Grid, `absolute` to use default [`juicy-tile-list`](Juilcy/juicy-tile-list) one.
-`setup.items[.].heightDynamic`  | *Boolean* | `false` | Let height of a tile and a row adapt to dynamic changes of content height after tiles are packed.
-`setup.items[.].widthDynamic`   | *Boolean* | `false` | Let width of a tile and a column adapt to dynamic changes of content width after tiles are packed.
-`setup.items[.].heightAdaptive` | *Boolean* | `false` | Let height of a tile adapt to changes of row height after tiles are packed
-`setup.items[.].widthAdaptive`  | *Boolean* | `false` | Let width of a tile adapt to changes of column width after tiles are packed
+`setup.items[.].heightFlexible` | *Boolean* | `false` | Let the tile's row adapt to the element/parent HTML element resize - grow/shrink proportionally, without a need to repack items.
+`setup.items[.].widthFlexible`  | *Boolean* | `false` | Let the tile's column adapt to the element/parent HTML element resize - grow/shrink proportionally, without a need to repack items.
 
 ## [Properties](https://github.com/Juicy/juicy-tile-list#properties)
 
