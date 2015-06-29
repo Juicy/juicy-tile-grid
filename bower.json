@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "polymer": "<0.8.0",
-    "juicy-tile-list": ">=0.2.2"
+    "juicy-tile-list": "#gh-pages"
   },
   "devDependencies": {
     "juicy-jsoneditor": "#gh-pages"
