@@ -81,7 +81,7 @@ version: 0.1.2
                     return counter;
                 }
                 /**
-                 * Subtracts given _size_ from all elements in _gutters_ array, 
+                 * Subtracts given _size_ from all elements in _gutters_ array,
                  * removes negative ones
                  * @param  {Array<Number>} gutters array of gutters
                  * @param  {Number} size    size to subtract
@@ -102,10 +102,10 @@ version: 0.1.2
                  * @param  {Array<Object>} starts       list of items to set
                  * @param  {Number} lineNo       value to set
                  */
-                function markGridItems(starts, propertyName, lineNo){ 
+                function markGridItems(starts, propertyName, lineNo){
                     var itemNo = starts.length;
                     while(itemNo--){
-                        starts[itemNo][propertyName] = lineNo;               
+                        starts[itemNo][propertyName] = lineNo;
                     }
                 }
                 /**
@@ -117,7 +117,7 @@ version: 0.1.2
                  * @return {Array<Object>}      changed array
                  */
                 function arraySubtractAndMark(from, what, propertyName, lineNo){
-                    var whatLeft = what.length, 
+                    var whatLeft = what.length,
                         endingItem;
                     while(whatLeft--){
                         endingItem = what[whatLeft];
@@ -126,8 +126,8 @@ version: 0.1.2
                     }
                     return from;
                 }
-                /** 
-                 * Add new line at given position if there is none, 
+                /**
+                 * Add new line at given position if there is none,
                  * otherwise just update starts, ends, gutters arrays.
                  * @param {Array} array of lines
                  * @param {Number} position line position
@@ -139,12 +139,12 @@ version: 0.1.2
                 function drawGridLine( array, position, starts, ends, gutter ){
                     var len = array.length, line;
                     // while(len-- && array[len] > position){
-                    while(len-- && array[len].position > position){  
+                    while(len-- && array[len].position > position){
                     }
                     // if(len>-1 && array[len] == position){
                     if(len>-1 && array[len].position == position){
                         line = array[len];
-                    } else { 
+                    } else {
                         // array.splice( len+1, 0, position );
                         line = {
                             position: position,
@@ -164,14 +164,20 @@ version: 0.1.2
                 /**
                  * Apply styles given by _packedItems_ to _tiles_.
                  * @param  {Object<HTMLElement>} tiles   map (by id) of tiles
-                 * @param  {Array<Object>} packedItems configuration
+                 * @param  {Object} packedGroup configuration
                  * @param  {Boolean} [hideAll]     should all items be hidden (parent element has .hidden = true)
                  */
-                function applyStyles(tiles, packedItems, hideAll){ 
-                    var itemNo = packedItems.length;
-                    var packedItem, element, elementStyle;
+                function applyStyles(tiles, packedGroup, hideAll){
+                    var itemNo = packedGroup.items.length;
+                    var packedItem, element, elementStyle, containerStyle;
+
+                    if(packedGroup.tightGroup){
+                      containerStyle = tiles[packedGroup.id].style;
+                      containerStyle["grid-template-columns"] = setGridTracks("column", packedGroup.columnAxes, "widthFlexible");
+                      containerStyle["grid-template-rows"] = setGridTracks("row", packedGroup.rowAxes, "heightFlexible");
+                    }
                     while(itemNo--){
-                        packedItem = packedItems[itemNo];
+                        packedItem = packedGroup.items[itemNo];
                         element = tiles[packedItem.id];
                         if(!element) {
                             continue; //if element is not found, perhaps DOM was not yet rendered? Skip gracefully
@@ -182,7 +188,7 @@ version: 0.1.2
                         if(hidden){
                             elementStyle.display = "none";
                         } else {
-                            // force default - block 
+                            // force default - block
                             elementStyle.display = "";
 
                             elementStyle["grid-column"] = packedItem.columnStart + " / " + packedItem.columnEnd;
@@ -213,7 +219,7 @@ version: 0.1.2
                             }
                         }
                         if(packedItem.items){// virtual container
-                            applyStyles( tiles, packedItem.items, hidden);
+                            applyStyles( tiles, packedItem, hidden);
                         }
                     }
                 }
@@ -249,7 +255,7 @@ version: 0.1.2
                         // Gutters should be fixed size
                             str += trackSize + "px ";
                         } else {
-                        //does not contain any gutter    
+                        //does not contain any gutter
                             switch(countProperty(openedTiles, flexPropertyName)){
                                 case 0: // all are fixed
                                     str += trackSize +"px ";
@@ -260,7 +266,7 @@ version: 0.1.2
                                         str += "minmax( min-content, " + trackSize +"fr ) ";
                                     } else {
                                         // XXX(tomalec): min-content does not make an effect for spanning items! so we will force min size to fixed size
-                                        str += "minmax( " + trackSize + "px, " + trackSize +"fr ) ";   
+                                        str += "minmax( " + trackSize + "px, " + trackSize +"fr ) ";
                                     }
                                     break;
                                 default: //mix
@@ -280,16 +286,25 @@ version: 0.1.2
                     }
                     return str;
                 }
-            
+
                 return function grid( packedTree, tiles, offsetX, offsetY ){
                     if(this.layout != "grid"){
                         return this.super( [packedTree, tiles, offsetX, offsetY] );
                     }
-                    var columnAxes = []; // just position, as Object Number, with dynamic property 
-                    //{position: px, dynamic: boolean}
-                    var rowAxes = [];
+                    // root group is always a tight group
+                    // (have independent grid lines from its parent)
+                    packedTree.tightGroup = true;
 
-                    function drawGridLinesFromTree( node, offsetX, offsetY ){
+                    function drawGridLinesFromTree( node, offsetX, offsetY, columnAxes, rowAxes ){
+                        if(node.tightGroup){
+                          // just position, as Object Number, with dynamic property
+                          //{position: px, dynamic: boolean}
+                          columnAxes = node.columnAxes = [];
+                          rowAxes = node.rowAxes = [];
+                          //reposition cildnodes to 0,0
+                          offsetX = offsetY = 0;
+
+                        }
                         var ilen = node.items.length;
                         while(ilen--){
                             var item = node.items[ilen];
@@ -304,7 +319,7 @@ version: 0.1.2
                             drawGridLine(rowAxes, offsetY + item.y + item.height, undefined, item, node.gutter);
 
                             if(item.items){
-                                drawGridLinesFromTree( item, offsetX + item.x, offsetY + item.y);
+                                drawGridLinesFromTree( item, offsetX + item.x, offsetY + item.y, columnAxes, rowAxes);
                             }
                         }
                         // IDEA (tomalec): consider making it on-demand, so grid may auto-center/auto grow if last track is empty
@@ -312,16 +327,11 @@ version: 0.1.2
                         drawGridLine(columnAxes, offsetX + node.width);
                         drawGridLine(rowAxes, offsetY + node.height);
                     }
-                    drawGridLinesFromTree(packedTree, 0,0);
+                    drawGridLinesFromTree(packedTree, 0,0, packedTree.columnAxes, packedTree.rowAxes);
 
-                    var containerStyle = this.$.container.style;
-
-                    containerStyle["grid-template-columns"] = setGridTracks("column", columnAxes, "widthFlexible");
-                    containerStyle["grid-template-rows"] = setGridTracks("row", rowAxes, "heightFlexible");
-
-                    applyStyles(tiles, packedTree.items);
+                    applyStyles(tiles, packedTree);
                     if(packedTree.direction === "downRight"){
-                        containerStyle.height = "100%";
+                        this.$.container.style.height = "100%";
                     }
                 };
             }()),
