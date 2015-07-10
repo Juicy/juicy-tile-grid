@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../../webcomponentsjs/webcomponents.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../../src/juicy-tile-grid.html">
+    <style>
+    html,body{
+      min-width: 0;
+    }
+    juicy-tile-grid > *{
+      background-color: rgba(99,99,99,0.3);
+      height: 100%;
+      margin: 0;
+    }
+    juicy-tile-grid /deep/ #container{
+      background-color: lightgrey;
+    }
+    juicy-tile-grid /deep/ .juicy-tile{
+      background-color: lightblue;
+      /*border: 1px solid black;*/
+      /*box-sizing: border-box;*/
+    }
+    juicy-tile-grid /deep/ .juicy-tile:nth-child(2n){
+      background-color: cyan;
+      /*border: 1px solid black;*/
+      /*box-sizing: border-box;*/
+    }
+    </style>
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <template bind id="root">
+      <juicy-tile-grid id="gridLines" setup="{{gridlines}}" style="width: 900px;"><!-- to 1300-->
+        <div>0 - 300 x 300</div>
+        <div>1 - 600 x 100</div>
+        <div>2 - 300 x 100<br/>
+          tightgroup
+        </div>
+        <div>3 - 300 x 100<br/>
+          tightgroup
+        </div>
+        <div>4 - 300 x 100<br/>
+          tightgroup
+        </div>
+      </juicy-tile-grid>
+        <!-- <juicy-tile-grid id="gapless" setup="{{setup}}" style="width: 400px;">
+          <div>0 - 50% x 100</div>
+          <div>1 - 50% x 100 - flex</div>
+          <div>2 - 50% x 100 - flex<br/>
+            tightgroup
+          </div>
+          <div>3 - 50% x 100<br/>
+            tightgroup
+          </div>
+        </juicy-tile-grid>
+      <juicy-tile-grid id="grid2" setup="{{setup2}}" style="width: 200px; height:400px">
+        <div>0</div>
+        <div>1</div>
+        <div>3</div>
+      </juicy-tile-grid> -->
+    </template>
+    <script>
+var templ = document.getElementById('root');
+var model = {
+  gridlines : {
+    width: 900,
+    items:[
+      {
+          id:0,
+          priority:0.9,
+          height: 300,
+          width: 300
+      },
+      {
+          id:1,
+          priority:0.6,
+          height: 100,
+          width: 600
+      },
+      {
+          id:"tightGroup",
+          items:[
+            {
+                id:2,
+                priority:0.9,
+                height: 100,
+                width:  300
+            },
+            {
+                id:3,
+                priority:0.6,
+                height: 100,
+                width: 300
+            },
+            {
+                id:4,
+                priority:0.5,
+                height: 100,
+                width: 300
+            }
+          ],
+          priority:0.4,
+          height: 200,
+          width: 600
+      }
+    ]
+  }
+};
+
+document.addEventListener("polymer-ready", function(){
+    document.querySelector("template").model = model;
+
+});
+
+function expectPosition(element, x, y){
+  expect( element.offsetTop).to.equal(x);
+  expect( element.offsetLeft).to.equal(y);
+}
+function expectSize(element, width, height){
+  expect( element.offsetWidth).to.equal(width);
+  expect( element.offsetHeight).to.equal(height);
+}
+function getGridCols(element){
+  return element.shadowRoots["juicy-tile-list"]
+            .getElementById("container")
+              .style["gridTemplateColumns"]
+                // .split(" ")
+                .match(/[a-z0-9]+(\([^\)]*\))?/g);
+}
+function getGridRows(element, width, height){
+  return element.shadowRoots["juicy-tile-list"]
+            .getElementById("container")
+              .style["gridTemplateRows"]
+                // .split(" ")
+                .match(/[a-z0-9]+(\([^\)]*\))?/g);
+}
+/**
+ * juicy-tile-grid fractions tests
+ */
+var juicyTileList;
+describe('when items are packed to a `tightGroup`', function() {
+  before(function(done){
+    Polymer.whenReady(function(){
+      done();
+      juicyTileList_gridLines = document.getElementById('gridLines');
+      juicyTileList = document.getElementById('gapless');
+      juicyTileList2 = document.getElementById('grid2');
+    });
+  });
+  context('parent container grid lines should not get affected by items inside a group', function () {
+    it('and set applicable grid columns', function () {
+      expect(getGridCols(juicyTileList_gridLines).length).to.equal(2);
+    });
+    it('and set applicable grid rows', function () {
+      expect(getGridRows(juicyTileList_gridLines).length).to.equal(2);
+    });
+
+  });
+  context('items within should get their own grid positions', function () {
+    it('grid columns', function () {
+      expect(juicyTileList_gridLines.tiles[2].style.gridColumnStart).to.equal(1);
+      expect(juicyTileList_gridLines.tiles[2].style.gridColumnEnd).to.equal(2);
+
+      expect(juicyTileList_gridLines.tiles[3].style.gridColumnStart).to.equal(2);
+      expect(juicyTileList_gridLines.tiles[3].style.gridColumnEnd).to.equal(3);
+
+
+      expect(juicyTileList_gridLines.tiles[4].style.gridColumnStart).to.equal(1);
+      expect(juicyTileList_gridLines.tiles[4].style.gridColumnEnd).to.equal(2);
+    });
+    it('grid rows', function () {
+      expect(juicyTileList_gridLines.tiles[2].style.gridRowStart).to.equal(1);
+      expect(juicyTileList_gridLines.tiles[2].style.gridRowEnd).to.equal(2);
+
+      expect(juicyTileList_gridLines.tiles[3].style.gridRowStart).to.equal(1);
+      expect(juicyTileList_gridLines.tiles[3].style.gridRowEnd).to.equal(2);
+
+
+      expect(juicyTileList_gridLines.tiles[4].style.gridRowStart).to.equal(2);
+      expect(juicyTileList_gridLines.tiles[4].style.gridRowEnd).to.equal(3);
+    });
+
+  });
+});
+
+    </script>
+
+  </body>
+</html>
