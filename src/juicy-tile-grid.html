@@ -10,6 +10,8 @@ version: 0.1.2
 <!-- Import juicy-tile-list -->
 <link rel="import" href="../../juicy-tile-list/src/juicy-tile-list.html">
 
+<template id="juicy-tile"><div class="juicy-tile"><content></content></div></template>
+<!-- <template id="juicy-tight-group"><div class="juicy-tight-group"></div></template> -->
 <!-- Define your custom element -->
 <polymer-element name="juicy-tile-grid" extends="juicy-tile-list" attributes="layout">
 
@@ -32,8 +34,21 @@ version: 0.1.2
         :host([layout=grid])::shadow #container:not(.disabled) > .juicy-tile,
         :host(:not([layout]))::shadow #container:not(.disabled) > .juicy-tile,
         :host([layout=grid])::shadow #container:not(.disabled) > .containerBackground,
-        :host(:not([layout]))::shadow #container:not(.disabled) > .containerBackground{
+        :host(:not([layout]))::shadow #container:not(.disabled) > .containerBackground,
+        :host([layout=grid])::shadow .juicy-tight-group > .containerBackground,
+        :host(:not([layout]))::shadow .juicy-tight-group > .containerBackground,
+        :host([layout=grid])::shadow .juicy-tight-group > .juicy-tile,
+        :host(:not([layout]))::shadow .juicy-tight-group > .juicy-tile{
             position: static;
+        }
+        :host([layout=grid])::shadow #container:not(.disabled) .juicy-tight-group,
+        :host(:not([layout]))::shadow #container:not(.disabled) .juicy-tight-group{
+          display: -ms-grid;
+          display: -moz-grid;
+          display: grid;
+
+          height: 100%;
+          width: 100%;
         }
         :host([layout=grid])::shadow #container.animate > .juicy-tile,
         :host(:not([layout]))::shadow #container.animate > .juicy-tile,
@@ -46,6 +61,9 @@ version: 0.1.2
     <shadow></shadow>
     </template>
     <script>
+    (function(){
+        var tileDecorator = (document._currentScript || document.currentScript).ownerDocument
+                    .getElementById("juicy-tile").content;
         Polymer('juicy-tile-grid', {
             layout: "grid",
             layoutChanged: function(oldVal, newVal){
@@ -63,6 +81,112 @@ version: 0.1.2
               //this.shadowRootReady(root, template);
               // return the created shadow root
               this.shadowRoots[elementElement.name] = root;
+            },
+            /**
+             * Updates ShadowDOM wrappers for tiles.
+             * Workaround lack of imperative content distribution API.
+             * Builds `#tiles` map, and nested grids tree.
+             * @param  {Array of child elements to cover} elementsArray [description]
+             * @return {Array<HTMLElement>}               array and map of tiles in ShadowDOM
+             */
+            updateWrappers: function (elementsArray, element) {
+              //TODO: improve performance
+              //TODO: decide how to handle setup when something was removed/added in the middle
+              // to shift or not to shift indexes?
+              //when something added/ removed clear all first
+              if(element.$.container.children.length){
+                element.$.container.innerHTML = "";
+              }
+              var tiles = [], tile, child, id,
+                //scoping magic
+                scopePrefix = "", scopedIndex=0;
+              var wrappers = document.createDocumentFragment();
+              /**
+               * Builds tree of nested CSS Grid containers
+               * @param  {DocumentFragment} parentFragment where to append
+               * @param  {Array<SetupItem>} items          array of setup items
+               */
+              function buildGridsTree(parentFragment, items){
+                var item;
+                for (var itemNo = 0, len = items.length; itemNo < len; itemNo++) {
+                  item = items[itemNo];
+                  if(!item.items){
+                    stampShadowTileToFragment(parentFragment, item.id);
+                    // add also key based
+                  } else if (item.tightGroup) {
+                    buildGridsTree(
+                      stampShadowGridContainer(parentFragment, item.id),
+                      item.items
+                    );
+                  }
+                }
+              }
+              /**
+               * Stamps instance of `tileDecorator` into given Document _fragment_ with given _id_,
+               * adds tile into `tiles` map.
+               * @param  {DocumentFragment} fragment where to append
+               * @param  {String} id       tile id
+               * @return {DocumentFragment}          appended document fragment/tile instance
+               */
+              function stampShadowTileToFragment(fragment, id){
+                var frag = document.importNode(tileDecorator, true);
+                var tile = frag.firstChild;
+                tile.id = id;
+                tile.firstChild.setAttribute("select", "[juicytile='"+id+"']");
+                // add to key based map
+                tiles[id] = tile;
+                fragment.appendChild(frag);
+                return frag;
+              }
+              /**
+               * Stamps instance of juicy-tile-grid container into given Document _fragment_ with given _id_,
+               * adds tile into `tiles` map.
+               * @param  {DocumentFragment} fragment where to append
+               * @param  {String} id       container/tile id
+               * @return {DocumentFragment}          appended document fragment/tile instance
+               */
+              function stampShadowGridContainer(fragment, id){
+                var tightTile = document.createElement('DIV');
+                tightTile.className = 'containerBackground juicy-tight-group';
+                // add to key based map
+                tiles[ id ] = tightTile;
+                  tightTile.id = id;
+                fragment.appendChild(tightTile);
+                return tightTile;
+              }
+              // build tree from setup
+              buildGridsTree(wrappers, this.setup.items);
+
+              // set distribution attributes, and wrapp child elements w/o setup
+              for (var i=0, len = elementsArray.length; i < len; i++) {
+                child = elementsArray[i];
+                //scoping magic
+                //
+                  if(child.tagName === "JUICY-TILE-GROUP"){
+                    scopePrefix = child.getAttribute("name") || "";
+                    scopePrefix += "/";
+                    scopedIndex = 0;
+                    continue;
+                  }
+                  id = scopePrefix + scopedIndex;
+                  scopedIndex++;
+                //id = i;
+
+                tile = tiles[id];
+                // if tile was not yet distributed to a tight group
+                if(!tile){
+                  stampShadowTileToFragment(wrappers, id);
+                }
+                // make it work with good old indexes as well
+                tiles[i] = tile;
+                //if (elem.setAttribute) {
+                  // attach a selectable key to each light-dom node
+                  child.setAttribute('juicytile', id);
+                //}
+
+              }
+              element.$.container.appendChild(wrappers);
+              return tiles;
             },
             renderer: (function(){// scope for helper functions, to return grid renderer
 
@@ -342,6 +466,7 @@ version: 0.1.2
                 return packedTree;
             }
         });
+    }());
     </script>
 
 </polymer-element>
