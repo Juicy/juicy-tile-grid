@@ -194,6 +194,11 @@ describe('when items are packed to a `tightGroup`', function() {
       expect(juicyTileList_gridLines.tiles[3].parentElement).not.to.equal(juicyTileList_gridLines.tiles['root']);
       expect(juicyTileList_gridLines.tiles[4].parentElement).not.to.equal(juicyTileList_gridLines.tiles['root']);
     });
+    it('should get correct relative position', function (){
+      expectPosition( juicyTileList_gridLines.children[2], 100 + 0, 300 + 0);
+      expectPosition( juicyTileList_gridLines.children[3], 100 + 0, 300 + 300);
+      expectPosition( juicyTileList_gridLines.children[4], 100 + 100, 300 + 0);
+    });
 
   });
 });
