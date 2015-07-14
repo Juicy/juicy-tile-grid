@@ -177,6 +177,7 @@ version: 0.1.2
               buildGridsTree(wrappers, this.setup.items);
 
               // set distribution attributes, and wrapp child elements w/o setup
+              var regularTileIndex = -1;
               for (var i=0, len = elementsArray.length; i < len; i++) {
                 child = elementsArray[i];
                 //scoping magic
@@ -189,15 +190,17 @@ version: 0.1.2
                   }
                   id = scopePrefix + scopedIndex;
                   scopedIndex++;
+                  regularTileIndex++;
                 //id = i;
 
                 tile = tiles[id];
                 // if tile was not yet distributed to a tight group
                 if(!tile){
                   stampShadowTileToFragment(wrappers, id);
+                  tile = tiles[id];
                 }
                 // make it work with good old indexes as well
-                tiles[i] = tile;
+                tiles[regularTileIndex] = tile;
                 //if (elem.setAttribute) {
                   // attach a selectable key to each light-dom node
                   child.setAttribute('juicytile', id);
