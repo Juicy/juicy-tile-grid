@@ -118,6 +118,11 @@ version: 0.1.2
                       stampShadowGridContainer(parentFragment, item.id),
                       item.items
                     );
+                  } else {
+                    buildGridsTree(
+                      parentFragment,
+                      item.items
+                    );
                   }
                 }
               }
