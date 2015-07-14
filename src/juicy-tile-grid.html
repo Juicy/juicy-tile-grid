@@ -67,7 +67,7 @@ version: 0.1.2
         Polymer('juicy-tile-grid', {
             layout: "grid",
             layoutChanged: function(oldVal, newVal){
-                // afterDomReady: this.refresh();
+                // afterDomReady: this.refresh(true);
             },
             parseDeclaration: function(elementElement) {
               var template = this.fetchTemplate(elementElement);
@@ -81,6 +81,20 @@ version: 0.1.2
               //this.shadowRootReady(root, template);
               // return the created shadow root
               this.shadowRoots[elementElement.name] = root;
+            },
+
+            /**
+             * Perform action when setup get changed
+             * @param {Object} [oldVal] old value
+             * @param {Object} [newVal] new value
+             * @param {Object} [changes] changes
+             * @param {Boolean} [hard=true] Set to true if ShadowDOM structure is also changed
+             */
+            setupChanged: function (oldVal, newVal, changes, hard) {
+              if(hard === undefined){
+                hard = true;
+              }
+              this.super([oldVal, newVal, changes, hard]);
             },
             /**
              * Updates ShadowDOM wrappers for tiles.
