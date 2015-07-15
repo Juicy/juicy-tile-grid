@@ -320,8 +320,8 @@ version: 0.1.2
 
                     if(packedGroup.tightGroup){
                       containerStyle = tiles[packedGroup.id].style;
-                      containerStyle["grid-template-columns"] = setGridTracks("column", packedGroup.columnAxes, "widthFlexible");
-                      containerStyle["grid-template-rows"] = setGridTracks("row", packedGroup.rowAxes, "heightFlexible");
+                      containerStyle["grid-template-columns"] = setGridTracks("column", packedGroup.columnAxes, "widthFlexible", "widthDynamic");
+                      containerStyle["grid-template-rows"] = setGridTracks("row", packedGroup.rowAxes, "heightFlexible", "heightDynamic");
                     }
                     while(itemNo--){
                         packedItem = packedGroup.items[itemNo];
@@ -347,9 +347,9 @@ version: 0.1.2
                                 elementStyle["-ms-grid-row-end"]= packedItem.rowEnd;
 
                             var oversize = packedItem.oversize || 0;
-                            elementStyle.width = packedItem.widthFlexible ? "100%" : packedItem.width + "px";
+                            elementStyle.width = packedItem.widthFlexible || packedItem.widthDynamic ? "100%" : packedItem.width + "px";
                             // elementStyle.height = ( packedItem.height /*+ 2 * oversize*/ ) + "px";
-                            elementStyle.height = packedItem.heightFlexible ? "100%" : packedItem.height + "px";
+                            elementStyle.height = packedItem.heightFlexible || packedItem.heightDynamic ? "100%" : packedItem.height + "px";
                             if (packedItem.background !== undefined) {
                                 elementStyle.backgroundColor = packedItem.background || "transparent";
                             } else {
@@ -375,8 +375,9 @@ version: 0.1.2
                  * @param {String} trackType        type of track (`"column"||"row"`)
                  * @param {Array<Object>} gridLines        array of gridlines, see `drawGridLine`
                  * @param {String} flexPropertyName property name that indicates flexible size of axis in question
+                 * @param {String} dynamicPropertyName property name that indicates dynamic size of axis in question
                  */
-                function setGridTracks(trackType, gridLines, flexPropertyName){
+                function setGridTracks(trackType, gridLines, flexPropertyName, dynamicPropertyName){
                     var linesAmount = gridLines.length,
                         currentLine = gridLines[0],
                         previousLine = currentLine,
@@ -404,8 +405,14 @@ version: 0.1.2
                         } else {
                         //does not contain any gutter
                             switch(countProperty(openedTiles, flexPropertyName)){
-                                case 0: // all are fixed
-                                    str += trackSize +"px ";
+                                case 0: // all are non-flex
+                                    // there is dynamic
+                                    if(countProperty(openedTiles, dynamicPropertyName)){
+                                      str += "minmax( min-content, max-content ) "
+                                    } else {
+                                    // all are non-dynamic (fixed)
+                                      str += trackSize +"px ";
+                                    }
                                     break;
                                 case openedTiles.length: // all intersected are flexible
                                     // and it contains them
