@@ -459,21 +459,25 @@ version: 0.1.2
                           offsetX = offsetY = 0;
 
                         }
-                        var ilen = node.items.length;
+                        var ilen = node.items.length,
+                            item, x, y;
                         while(ilen--){
                             var item = node.items[ilen];
                             if(item.hidden){
                                 continue;
                             }
+                            x = node.leftToRight ?  node.width - item.width - item.x : item.x
+                            x += offsetX;
+                            y = node.bottomUp ?  node.height - item.height - item.y : item.y
+                            y += offsetY;
+                            drawGridLine(columnAxes, x, item);
+                            drawGridLine(columnAxes, x + item.width, undefined, item, node.gutter);
 
-                            drawGridLine(columnAxes, offsetX + item.x, item);
-                            drawGridLine(columnAxes, offsetX + item.x + item.width, undefined, item, node.gutter);
-
-                            drawGridLine(rowAxes, offsetY + item.y, item);
-                            drawGridLine(rowAxes, offsetY + item.y + item.height, undefined, item, node.gutter);
+                            drawGridLine(rowAxes, y, item);
+                            drawGridLine(rowAxes, y + item.height, undefined, item, node.gutter);
 
                             if(item.items){
-                                drawGridLinesFromTree( item, offsetX + item.x, offsetY + item.y, columnAxes, rowAxes);
+                                drawGridLinesFromTree( item, x, y, columnAxes, rowAxes);
                             }
                         }
                         // IDEA (tomalec): consider making it on-demand, so grid may auto-center/auto grow if last track is empty
