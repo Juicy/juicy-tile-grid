@@ -36,9 +36,9 @@
         // 011
         // 233
         // 2
-        // 
+        //
         // prioritized
-        // 
+        //
         // 110
         // 233
         // 2
@@ -60,11 +60,11 @@
                         id: "group1", //group id (optional?)
                         gutter: 16,
                         oversize: 12,
-                        direction: "downRight",
+                        direction: "vertical",
                         background: "#BDC3C7",
                         //items property indicates it is a group
                         items: [
-                            
+
                             {
                                 priority: 0.8,
                                 height: 100,
@@ -73,7 +73,7 @@
                                 id: "group2", //group id (optional?)
                                 gutter: 8,
                                 oversize: 8,
-                                direction: "rightDown",
+                                direction: "horizontal",
                                 background: "#89C4F4",
                                 //items property indicates it is a group
                                 items: [
@@ -110,7 +110,7 @@
         };
         document.addEventListener("polymer-ready", function(){
             document.querySelector("template").model = model;
-            
+
         });
     </script>
     <!-- EXAMPLE ENDS HERE -->
@@ -118,7 +118,7 @@
         <h3><a href="https://github.com/Juicy/juicy-tile-grid#juicy-tile-grid-">API</a></h3>
         <ul>
             <li><code>juicytilelist.resizeItem</code>(<input placeholder="itemIndex">, <input placeholder="width">, <input placeholder="height">) <button id="callResize">call</button></li>
-                
+
             <li><code>juicytilelist.reprioritizeItem</code>(<input placeholder="itemIndex">, <input placeholder="increase" title="Boolean (0|1)">, <input placeholder="end" title="Boolean (0|1)">) <button id="callReprioritize">call</button></li>
         </ul>
         <script type="text/javascript" src="examples-api.js"></script>

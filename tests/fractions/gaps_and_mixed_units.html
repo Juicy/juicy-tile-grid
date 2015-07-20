@@ -105,7 +105,7 @@ var model = {
   },
   setup2 : {
     gutter: 0,
-    direction: "downRight",
+    direction: "vertical",
     items:[
       {
           id:0,
@@ -147,7 +147,7 @@ var model = {
 
 document.addEventListener("polymer-ready", function(){
     document.querySelector("template").model = model;
-    
+
 });
 
 function expectPosition(element, x, y){

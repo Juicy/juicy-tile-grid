@@ -54,8 +54,8 @@ version: 0.1.2
         :host(:not([layout]))::shadow #container.animate > .juicy-tile,
         :host([layout=grid])::shadow #container.animate >.containerBackground,
         :host(:not([layout]))::shadow #container.animate >.containerBackground  {
-            -webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
-            transition: width 0.5s ease-out, height 0.5s ease-out, top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out;
+            /*-webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
+            transition: width 0.5s ease-out, height 0.5s ease-out, top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out;*/
         }
     </style>
     <shadow></shadow>
@@ -466,7 +466,7 @@ version: 0.1.2
                             if(item.hidden){
                                 continue;
                             }
-                            x = node.leftToRight ?  node.width - item.width - item.x : item.x
+                            x = node.rightToLeft ?  node.width - item.width - item.x : item.x
                             x += offsetX;
                             y = node.bottomUp ?  node.height - item.height - item.y : item.y
                             y += offsetY;
@@ -487,8 +487,9 @@ version: 0.1.2
                     }
                     drawGridLinesFromTree(packedTree, 0,0, packedTree.columnAxes, packedTree.rowAxes);
 
+                    packedTree.id = "root";
                     applyStyles(tiles, packedTree);
-                    if(packedTree.direction === "downRight"){
+                    if(packedTree.direction === "vertical"){
                         this.$.container.style.height = "100%";
                     }
                 };
