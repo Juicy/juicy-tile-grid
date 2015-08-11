@@ -318,7 +318,7 @@ version: 0.2.0
                     var itemNo = packedGroup.items.length;
                     var packedItem, element, elementStyle, containerStyle;
 
-                    if(packedGroup.tightGroup){
+                    if(packedGroup.tightGroup && !hideAll){
                       containerStyle = tiles[packedGroup.id].style;
                       containerStyle["grid-template-columns"] = setGridTracks("column", packedGroup.columnAxes, "widthFlexible", "widthDynamic");
                       containerStyle["grid-template-rows"] = setGridTracks("row", packedGroup.rowAxes, "heightFlexible", "heightDynamic");
