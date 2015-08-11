@@ -129,10 +129,11 @@ version: 0.2.0
                     // add also key based
                   } else if (item.tightGroup) {
                     buildGridsTree(
-                      stampShadowGridContainer(parentFragment, item.id),
+                      stampShadowContainer(parentFragment, item.id, 'containerBackground juicy-tight-group'),
                       item.items
                     );
                   } else {
+                    stampShadowContainer(parentFragment, item.id, 'containerBackground juicy-group');
                     buildGridsTree(
                       parentFragment,
                       item.items
@@ -162,11 +163,12 @@ version: 0.2.0
                * adds tile into `tiles` map.
                * @param  {DocumentFragment} fragment where to append
                * @param  {String} id       container/tile id
+               * @param  {String} [className] is container tight group/nested css grid?classname for the container
                * @return {DocumentFragment}          appended document fragment/tile instance
                */
-              function stampShadowGridContainer(fragment, id){
+              function stampShadowContainer(fragment, id, className){
                 var tightTile = document.createElement('DIV');
-                tightTile.className = 'containerBackground juicy-tight-group';
+                tightTile.className = className;
                 // add to key based map
                 tiles[ id ] = tightTile;
                   tightTile.id = id;
