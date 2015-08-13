@@ -16,6 +16,7 @@ version: 0.2.1
 <polymer-element name="juicy-tile-grid" extends="juicy-tile-list" attributes="layout">
 
     <template>
+    <!-- TODO(tomalec): Refactor inheritance of styles and shadow root -->
     <style>
         /** our grid stuff */
         :host([layout=grid])::shadow #container:not(.disabled),
@@ -29,7 +30,8 @@ version: 0.2.1
           -moz-grid-auto-columns: 0;
           -moz-grid-auto-rows: 0;*/
 
-          position: relative;
+          position: static;
+          z-index: initial;
         }
         :host([layout=grid])::shadow #container:not(.disabled) > .juicy-tile,
         :host(:not([layout]))::shadow #container:not(.disabled) > .juicy-tile,
@@ -40,6 +42,7 @@ version: 0.2.1
         :host([layout=grid])::shadow .juicy-tight-group > .juicy-tile,
         :host(:not([layout]))::shadow .juicy-tight-group > .juicy-tile{
             position: static;
+            z-index: initial;
         }
         :host([layout=grid])::shadow #container:not(.disabled) .juicy-tight-group,
         :host(:not([layout]))::shadow #container:not(.disabled) .juicy-tight-group{
