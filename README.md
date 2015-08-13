@@ -54,7 +54,6 @@ All [`juicy-tile-list` options](https://github.com/Juicy/juicy-tile-list#options
 
 Attribute                       | Options   | Default | Description
 ---                             | ---       | ---     | ---
-`layout`                        | *string*  | `grid`  | Switch layout rendering: `grid` to use CSS Grid, `absolute` to use default [`juicy-tile-list`](Juilcy/juicy-tile-list) one.
 `setup.items[.].heightFlexible` | *Boolean* | `false` | Let the tile's row adapt to the element/parent HTML element resize - grow/shrink proportionally, without a need to repack items.
 `setup.items[.].widthFlexible`  | *Boolean* | `false` | Let the tile's column adapt to the element/parent HTML element resize - grow/shrink proportionally, without a need to repack items.
 `setup.items[.].heightDynamic`  | *Boolean* | `false` | Let the tile's row adapt to the tile HTML element resize - grow/shrink accordingly, without a need to repack items.
