@@ -14,6 +14,9 @@
       min-width: 0;
       font-size: 10px;
     }
+    juicy-tile-grid{
+      position: relative;
+    }
     juicy-tile-grid > *{
       background-color: rgba(99,99,99,0.3);
       height: 100%;
@@ -285,7 +288,7 @@ var model = {
 
 document.addEventListener("polymer-ready", function(){
     document.querySelector("template").model = model;
-    
+
 });
 
 function getGridCols(element){
@@ -341,44 +344,44 @@ describe('when parsed to CSS Grid', function() {
       expect(columns[11]).not.to.have.string("fr");
 
       expect(rows[11]).to.have.string("px");
-      expect(rows[11]).not.to.have.string("fr");    
+      expect(rows[11]).not.to.have.string("fr");
     });
     it('intersects a gutter, should be set as fixed', function () {
       expect(columns[1]).to.have.string("px");
-      expect(columns[1]).not.to.have.string("fr");  
+      expect(columns[1]).not.to.have.string("fr");
 
       expect(columns[3]).to.have.string("px");
-      expect(columns[3]).not.to.have.string("fr");  
+      expect(columns[3]).not.to.have.string("fr");
 
       expect(columns[5]).to.have.string("px");
-      expect(columns[5]).not.to.have.string("fr");  
+      expect(columns[5]).not.to.have.string("fr");
 
       expect(columns[7]).to.have.string("px");
-      expect(columns[7]).not.to.have.string("fr");  
+      expect(columns[7]).not.to.have.string("fr");
 
       expect(columns[8]).to.have.string("px");
-      expect(columns[8]).not.to.have.string("fr");  
+      expect(columns[8]).not.to.have.string("fr");
 
       expect(columns[9]).to.have.string("px");
       expect(columns[9]).not.to.have.string("fr");
       //rows
       expect(rows[1]).to.have.string("px");
-      expect(rows[1]).not.to.have.string("fr");  
+      expect(rows[1]).not.to.have.string("fr");
 
       expect(rows[3]).to.have.string("px");
-      expect(rows[3]).not.to.have.string("fr");  
+      expect(rows[3]).not.to.have.string("fr");
 
       expect(rows[5]).to.have.string("px");
-      expect(rows[5]).not.to.have.string("fr");  
+      expect(rows[5]).not.to.have.string("fr");
 
       expect(rows[7]).to.have.string("px");
-      expect(rows[7]).not.to.have.string("fr");  
+      expect(rows[7]).not.to.have.string("fr");
 
       expect(rows[8]).to.have.string("px");
-      expect(rows[8]).not.to.have.string("fr");  
+      expect(rows[8]).not.to.have.string("fr");
 
       expect(rows[9]).to.have.string("px");
-      expect(rows[9]).not.to.have.string("fr");  
+      expect(rows[9]).not.to.have.string("fr");
     });
     context("does not intersect gutter", function(){
 
@@ -390,7 +393,7 @@ describe('when parsed to CSS Grid', function() {
       it('and intersects only flex elements, should be set as flexible', function () {
         expect(columns[6]).to.have.string("fr");
 
-        expect(rows[6]).to.have.string("fr");       
+        expect(rows[6]).to.have.string("fr");
       });
       it('intersects only free space between last item and container\'s border, should be set as flexible, without any constraints (min-size)', function () {
         expect(columns[16]).to.have.string("fr");
@@ -418,21 +421,21 @@ describe('when parsed to CSS Grid', function() {
         expect(rows[6]).to.match(/minmax\(\s*min-content/);
       });
       it('and intersects only flex elements, should get minimum size set to given value in `px` - min-content does not make an effect for spanning items!!', function () {
-        expect(columns[6]).to.match(/minmax\(\s*95px/);  
+        expect(columns[6]).to.match(/minmax\(\s*95px/);
 
-        expect(rows[6]).to.match(/minmax\(\s*95px/);   
+        expect(rows[6]).to.match(/minmax\(\s*95px/);
       });
 
     });
     it('intersects flexible element and whitespace wider than gutter, should be set as flexible', function () {
         expect(columns[15]).to.have.string("fr");
 
-        expect(rows[15]).to.have.string("fr");  
+        expect(rows[15]).to.have.string("fr");
     });
     it('intersects flexible element and whitespace wider than gutter, to avoid collapsing gutter, should get minimum size set to given value in `px` - min-content does not make an effect for spanning items!!', function () {
         expect(columns[15]).to.match(/minmax\(\s*15px/)
 
-        expect(rows[15]).to.match(/minmax\(\s*15px/)  
+        expect(rows[15]).to.match(/minmax\(\s*15px/)
     });
 
   });

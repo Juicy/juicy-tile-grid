@@ -13,6 +13,9 @@
     html,body{
       min-width: 0;
     }
+    juicy-tile-grid{
+      position: relative;
+    }
     juicy-tile-grid > *{
       background-color: rgba(99,99,99,0.3);
       height: 100%;
@@ -50,7 +53,7 @@
     </template>
     <script>
 var templ = document.getElementById('root');
-var model = { 
+var model = {
   setup : {
     gutter: 0,
     items:[
@@ -106,7 +109,7 @@ var model = {
 
 document.addEventListener("polymer-ready", function(){
     document.querySelector("template").model = model;
-    
+
 });
 
 function expectPosition(element, x, y){
