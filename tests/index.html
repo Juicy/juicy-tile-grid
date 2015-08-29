@@ -1,34 +1,33 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
     <script src="../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-
     <!-- if we use WCT suites, it is loaded per suite -->
-      <link rel="import" href="../src/juicy-tile-grid.html">
-<!--
-    <script src="rectangleSpec.js"></script>
-    <script src="packerSpec.js"></script>
-    <script src="packageSpec.js"></script>
-    <script src="juicy-tile-listSpec.js"></script> -->
+    <link rel="import" href="../src/juicy-tile-grid.html">
+    <!--
+        <script src="rectangleSpec.js"></script>
+        <script src="packerSpec.js"></script>
+        <script src="packageSpec.js"></script>
+        <script src="juicy-tile-listSpec.js"></script> -->
 
-
-  </head>
-  <body>
+    <title>juicy-tile-grid test suit</title>
+</head>
+<body>
     <script>
-      // Load and run all tests (.html, .js):
-      WCT.loadSuites([
-        'grid_building_algorithm.html',
-        'fractions/basic.html',
-        'fractions/gaps_and_mixed_units.html',
-        'tightGroups/tracks.html',
-        'directions.html',
-        'precalculate.html'
-      ]);
+        // Load and run all tests (.html, .js):
+        WCT.loadSuites([
+          'grid_building_algorithm.html',
+          'fractions/basic.html',
+          'fractions/gaps_and_mixed_units.html',
+          'tightGroups/tracks.html',
+          'directions.html',
+          'precalculate.html'
+        ]);
     </script>
-  </body>
+</body>
 </html>

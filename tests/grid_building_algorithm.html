@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -6,6 +6,8 @@
 
     <script src="../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../../polymer/polymer.html" />
 
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../src/juicy-tile-grid.html">
@@ -291,15 +293,15 @@ document.addEventListener("polymer-ready", function(){
 
 });
 
-function getGridCols(element){
-  return element.shadowRoots["juicy-tile-list"]
+function getGridCols(element) {
+  return element.shadowRoot
             .getElementById("container")
               .style["gridTemplateColumns"]
                 // .split(" ")
                 .match(/[a-z0-9]+(\([^\)]*\))?/g);
 }
 function getGridRows(element, width, height){
-  return element.shadowRoots["juicy-tile-list"]
+  return element.shadowRoot
             .getElementById("container")
               .style["gridTemplateRows"]
                 // .split(" ")
