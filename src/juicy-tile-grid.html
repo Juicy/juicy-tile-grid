@@ -73,13 +73,16 @@ version: 0.3.0
         #container .containerBackground,
         #container.disabled .containerBackground {
             position: absolute;
-            z-index: -1;
+            /*z-index: -1;*/
         }
 
+        /*
+        // Makes <a> un-clickable and un-focusable, but required for background.
         #container:not(.disabled) > .containerBackground,
         .juicy-tight-group > .containerBackground {
             z-index: -1;
         }
+        */
     </style>
     <div id="container" class="animate"></div>
 </template>
