@@ -9,11 +9,13 @@
     <!-- Importing Custom Elements -->
     <link rel="import" href="../src/juicy-tile-grid.html">
 
+    <!-- Importing Polymer for demos -->
+    <link rel="import" href="../../polymer/polymer.html" />
     <link rel="stylesheet" href="http://juicy.github.io/juicy-tile-list/examples/github-markdown.css">
 
 
     <!-- Use JSONEditor to edit tiles setup -->
-        <link rel="import" href="../../juicy-jsoneditor/src/juicy-jsoneditor.html"> 
+        <!-- <link rel="import" href="../../juicy-jsoneditor/src/juicy-jsoneditor.html">  -->
 
         <!-- josdejong/jsoneditor#104 workaround-->
         <link rel="stylesheet" type="text/css" href="../../jsoneditor/jsoneditor.min.css">
@@ -68,7 +70,7 @@ juicy-jsoneditor{
 
 </article>
 <section class="playground markdown-body">
-    <template bind>
+    <template is="dom-bind">
         <juicy-tile-grid refreshonresize setup="{{setup}}">
             <div>0</div>
             <div>
@@ -105,59 +107,54 @@ juicy-jsoneditor{
     </template>
     <script type="text/javascript">
         model = {
-            setup:
-{
-  "gutter": 25,
-  "items": [
-    {
-      "id": 0,
-      "priority": 0.9,
-      "height": 50,
-      "width": 160
-    },
-    {
-      "id": 1,
-      "priority": 0.8,
-      "height": 140,
-      "width": 160,
-      "heightAdaptive": true
-    },
-    {
-      "id": 4,
-      "priority": 0.79,
-      "height": 115,
-      "width": 160
-    },
-    {
-      "id": 5,
-      "priority": 0.61,
-      "height": 25,
-      "width": 160,
-      "heightAdaptive": true
-    },
-    {
-      "id": 2,
-      "priority": 0.7,
-      "height": 140,
-      "width": 160,
-      "heightDynamic": true
-    },
-    {
-      "id": 3,
-      "priority": 0.6,
-      "height": 50,
-      "width": 160,
-      "heightAdaptive": true
-    }
-  ],
-  "name": "root",
-  "width": 539.703125,
-  "precalculateHeight": true
-}
+        "gutter": 25,
+        "items": [
+            {
+              "id": 0,
+              "priority": 0.9,
+              "height": 50,
+              "width": 160
+            },
+            {
+              "id": 1,
+              "priority": 0.8,
+              "height": 140,
+              "width": 160,
+              "heightAdaptive": true
+            },
+            {
+              "id": 4,
+              "priority": 0.79,
+              "height": 115,
+              "width": 160
+            },
+            {
+              "id": 5,
+              "priority": 0.61,
+              "height": 25,
+              "width": 160,
+              "heightAdaptive": true
+            },
+            {
+              "id": 2,
+              "priority": 0.7,
+              "height": 140,
+              "width": 160,
+              "heightDynamic": true
+            },
+            {
+              "id": 3,
+              "priority": 0.6,
+              "height": 50,
+              "width": 160,
+              "heightAdaptive": true
+            }
+        ],
+        "name": "root",
+        "width": 539.703125,
+        "precalculateHeight": true
         };
-        document.addEventListener("polymer-ready", function(){
-            document.querySelector("template").model = model;
-        });
+        document.querySelector("template").setup = model;
 
 
 
@@ -169,7 +166,7 @@ juicy-jsoneditor{
         <h3><a href="https://github.com/Juicy/juicy-tile-grid#juicy-tile-grid-">API</a></h3>
         <ul>
             <li><code>juicytilelist.resizeItem</code>(<input placeholder="itemIndex">, <input placeholder="width">, <input placeholder="height">) <button id="callResize">call</button></li>
-                
+
             <li><code>juicytilelist.reprioritizeItem</code>(<input placeholder="itemIndex">, <input placeholder="increase" title="Boolean (0|1)">, <input placeholder="end" title="Boolean (0|1)">) <button id="callReprioritize">call</button></li>
         </ul>
         <script type="text/javascript">
@@ -193,7 +190,7 @@ juicy-jsoneditor{
             // newOne.innerHTML = "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
             // button.parentNode.appendChild( newOne );
             // With !<3 to IE
-            document.getElementById("ieHierarchyRequestErrorWorkaround").innerHTML += 
+            document.getElementById("ieHierarchyRequestErrorWorkaround").innerHTML +=
                 "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
         };
         refresh = function( button ){
@@ -238,4 +235,3 @@ juicy-jsoneditor{
 
 </article>
 </body>
-

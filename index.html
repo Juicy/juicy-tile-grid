@@ -6,17 +6,19 @@
 
     <!-- Importing Web Component's Polyfill -->
     <script src="../webcomponentsjs/webcomponents.js"></script>
-    
-    <!-- Importing Polymer -->
-    <link rel="import" href="../polymer/polymer.html" />
-    
+
+
     <!-- Importing Custom Elements -->
     <link rel="import" href="src/juicy-tile-grid.html">
+
+
+    <!-- Importing Polymer for demos -->
+    <link rel="import" href="../polymer/polymer.html" />
 
     <link rel="stylesheet" href="http://juicy.github.io/juicy-tile-list/examples/github-markdown.css">
 
     <!-- Use JSONEditor to edit tiles setup -->
-    <link rel="import" href="../juicy-jsoneditor/src/juicy-jsoneditor.html">
+    <!-- <link rel="import" href="../juicy-jsoneditor/src/juicy-jsoneditor.html"> -->
 
     <!-- josdejong/jsoneditor#104 workaround-->
     <link rel="stylesheet" type="text/css" href="../jsoneditor/dist/jsoneditor.min.css">
@@ -78,7 +80,7 @@
             We use <a href="http://www.w3.org/TR/css3-grid-layout/">CSS3 Grid Layout</a>. Unfortunately, it is <a href="http://caniuse.com/#search=css%20grid">not widely supported</a>. In Chrome you can enable it through the "experimental Web Platform features" flag in <code>chrome://flags</code> In IE we use it with <code>-ms</code> prefix, which implements pretty old spec, but works. For other browsers, you need to use polyfill.
         </div>
         <blockquote><p>Masonry-like Custom Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only), and adapts it to CSS Grid Layout.</p></blockquote>
-        <template bind>
+        <template is="dom-bind">
             <juicy-tile-grid setup="{{setup}}" refreshonresize>
                 <div>0</div>
                 <div>
@@ -115,91 +117,87 @@
         </template>
         <script type="text/javascript">
             model = {
-                setup: {
-                    gutter: 8,
-                    items: [
-                        {
-                            id: 0,
-                            priority: 0.9,// 0.6,
-                            height: 50,
-                            width: 50
-                        },
-                        {
-                            id: 1,
-                            priority: 0.8,// 0.9,
-                            height: 100,
-                            width: 50,
-                            hidden: false
-                        },
-                        {
-                            id: 2,
-                            priority: 0.7,// 0.3,
-                            height: 180,
-                            width: 200,
-                            heightDynamic: true
-                        },
-                        {
-                            id: 3,
-                            priority: 0.6,
-                            height: 180,
-                            width: 150,
-                            heightAdaptive: true
-                        },
-                        {
-                            id: 4,
-                            priority: 0.5,
-                            height: 50,
-                            width: 200
-                        },
-                        {
-                            id: 5,
-                            priority: 0.4,
-                            height: 100,
-                            width: 50
-                        },
-                        {
-                            id: 6,
-                            priority: 0.3,
-                            precalculateHeight: true,
-                            width: 100
-                        },
-                        {
-                            id: 7,
-                            priority: 0.2,
-                            height: 50,
-                            width: 50
-                        },
-                        {
-                            id: 8,
-                            priority: 0.1,
-                            height: 50,
-                            width: 50
-                        },
-                        {
-                            id: 9,
-                            priority: 0.09,
-                            height: 150,
-                            width: 50
-                        },
-                        {
-                            id: 10,
-                            priority: 0.08,
-                            height: 50,
-                            width: 100
-                        },
-                        {
-                            id: 11,
-                            priority: 0.07,
-                            height: 50,
-                            width: 200
-                        }
+                gutter: 8,
+                items: [
+                    {
+                        id: 0,
+                        priority: 0.9,// 0.6,
+                        height: 50,
+                        width: 50
+                    },
+                    {
+                        id: 1,
+                        priority: 0.8,// 0.9,
+                        height: 100,
+                        width: 50,
+                        hidden: false
+                    },
+                    {
+                        id: 2,
+                        priority: 0.7,// 0.3,
+                        height: 180,
+                        width: 200,
+                        heightDynamic: true
+                    },
+                    {
+                        id: 3,
+                        priority: 0.6,
+                        height: 180,
+                        width: 150,
+                        heightAdaptive: true
+                    },
+                    {
+                        id: 4,
+                        priority: 0.5,
+                        height: 50,
+                        width: 200
+                    },
+                    {
+                        id: 5,
+                        priority: 0.4,
+                        height: 100,
+                        width: 50
+                    },
+                    {
+                        id: 6,
+                        priority: 0.3,
+                        precalculateHeight: true,
+                        width: 100
+                    },
+                    {
+                        id: 7,
+                        priority: 0.2,
+                        height: 50,
+                        width: 50
+                    },
+                    {
+                        id: 8,
+                        priority: 0.1,
+                        height: 50,
+                        width: 50
+                    },
+                    {
+                        id: 9,
+                        priority: 0.09,
+                        height: 150,
+                        width: 50
+                    },
+                    {
+                        id: 10,
+                        priority: 0.08,
+                        height: 50,
+                        width: 100
+                    },
+                    {
+                        id: 11,
+                        priority: 0.07,
+                        height: 50,
+                        width: 200
+                    }
 
-                    ]
-                }
+                ]
             };
-            document.addEventListener("polymer-ready", function () {
-                document.querySelector("template").model = model;
-            });
+            document.querySelector("template").setup = model;
         </script>
         <section>
             <h3>Features</h3>
