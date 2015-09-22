@@ -97,6 +97,7 @@ version: 1.0.0
             var root = this.createShadowRoot();
             var template = scriptDocument.querySelector("#juicy-tile-grid");
             var clone = document.importNode(template.content, true);
+            var gutter = this.getAttribute("gutter");
 
             root.appendChild(clone);
             this.$ = {
@@ -112,8 +113,9 @@ version: 1.0.0
             // IDEA: consider merging with createItemsList, and re-flow setup, to fix Polyjuice glitches (tomalec)
             Package.call(this, this.setup && this.setup.items !== undefined ? this.setup : undefined);
 
-            if (this.gutter != undefined) {
-                this.setup.gutter = parseInt(this.gutter, 10);
+            if (gutter) {
+                this.gutter = parseInt(gutter, 10);
+                this.setup.gutter = this.gutter;
             }
 
             this.createItemsList();
