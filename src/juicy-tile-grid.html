@@ -168,7 +168,6 @@ version: 1.0.0
         * @param {Boolean} [hard=true] Set to true if ShadowDOM structure is also changed
         */
         proto.setupChanged = function (oldVal, newVal, changes, hard) {
-            debugger
             if (hard === undefined) {
                 hard = true;
             }
@@ -437,7 +436,7 @@ version: 1.0.0
                         var oversize = packedItem.oversize || 0;
                         elementStyle.width = packedItem.widthFlexible || packedItem.widthDynamic ? "100%" : packedItem.width + "px";
                         // elementStyle.height = ( packedItem.height /*+ 2 * oversize*/ ) + "px";
-                        elementStyle.height = packedItem.heightFlexible || packedItem.heightDynamic ? "100%" : packedItem.height + "px";
+                        elementStyle.height = packedItem.heightFlexible? '100%' : packedItem.heightDynamic ? 'min-content' : packedItem.height + "px";
                         if (packedItem.background !== undefined) {
                             elementStyle.backgroundColor = packedItem.background || "transparent";
                         } else {
@@ -479,6 +478,9 @@ version: 1.0.0
                 markGridItems(currentLine.starts, trackType + "Start", 1);
                 openedTiles = currentLine.starts;
                 // In CSS Grid lines, and tracks are counted from 1
+                if(linesAmount == 1){
+                    markGridItems(currentLine.ends, trackType + "End", 1);
+                }
                 for (var lineNo = 2; lineNo <= linesAmount; lineNo++) {
                     currentLine = gridLines[lineNo - 1];
                     trackSize = currentLine.position - previousLine.position;
