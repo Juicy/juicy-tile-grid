@@ -1,6 +1,6 @@
 {
   "name": "juicy-tile-grid",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "<juicy-tile-grid> is a Custom Element with CSS Grid Layout renderer for [`juicy-tile-list`](Juicy/juicy-tile-list).",
   "main": "src/juicy-tile-grid.html",
   "directories": {
