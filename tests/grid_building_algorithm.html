@@ -47,8 +47,8 @@
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <template bind id="root">
-      <juicy-tile-grid id="gridLines" gutter="10" setup="{{gridLines}}" style="width: 500px;">
+    <template is="dom-bind" id="root">
+      <juicy-tile-grid id="gridLines" setup="{{model.gridLines}}" style="width: 500px;">
         <div>100px x 100px</div>
         <div>150px x 100px</div>
         <div>200px x 215px</div>
@@ -56,7 +56,7 @@
         <div>265px x 50px</div>
         <div>90px x 50px</div>
       </juicy-tile-grid>
-      <juicy-tile-grid id="fixVSflex_cols" gutter="10" setup="{{fixVSflex_cols}}" style="width: 680px;">
+      <juicy-tile-grid id="fixVSflex_cols" setup="{{model.fixVSflex_cols}}" style="width: 680px;">
         <div class="fixed">0 fiX</div>
         <div>1 Flex</div>
         <div class="fixed">2 fiX</div>
@@ -69,7 +69,7 @@
         <div>9 Flex</div>
         <div>10 Flex</div>
       </juicy-tile-grid>
-      <juicy-tile-grid id="fixVSflex_rows" gutter="10" setup="{{fixVSflex_rows}}" style="height: 680px; width: 50px;">
+      <juicy-tile-grid id="fixVSflex_rows" setup="{{model.fixVSflex_rows}}" style="height: 680px; width: 50px;">
         <div class="fixed">0 fiX</div>
         <div>1 Flex</div>
         <div class="fixed">2 fiX</div>
@@ -88,6 +88,7 @@ var templ = document.getElementById('root');
 var model = {
   width: 450,
   gridLines : {
+    gutter: 10,
     items:[
       {
           id:0,
@@ -134,6 +135,7 @@ var model = {
     ]
   },
   fixVSflex_cols : {
+    gutter: 10,
     items:[
       {
           id:0,
@@ -210,6 +212,7 @@ var model = {
     ]
   },
   fixVSflex_rows : {
+    gutter: 10,
     direction: "vertical",
     items:[
       {
@@ -288,10 +291,8 @@ var model = {
   }
 };
 
-document.addEventListener("polymer-ready", function(){
-    document.querySelector("template").model = model;
+document.querySelector("template").model = model;
 
-});
 
 function getGridCols(element) {
   return element.shadowRoot
@@ -313,7 +314,8 @@ function getGridRows(element, width, height){
 describe('when parsed to CSS Grid', function() {
   var juicyTileList_gridLines, juicyTileList_fixVSflex_cols, columns;
   before(function(done){
-    Polymer.whenReady(function(){
+    setTimeout(function(){
+    // Polymer.whenReady(function(){
       juicyTileList_gridLines = document.getElementById('gridLines');
       juicyTileList_fixVSflex_cols = document.getElementById('fixVSflex_cols');
       columns = getGridCols(juicyTileList_fixVSflex_cols);
@@ -321,7 +323,8 @@ describe('when parsed to CSS Grid', function() {
       rows = getGridRows(juicyTileList_fixVSflex_rows);
 
       done();
-    });
+    // });
+    },100);
   });
   context('should set a grid line for every item\'s and container\'s border', function () {
     var shadowGrid;

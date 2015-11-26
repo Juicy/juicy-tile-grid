@@ -7,6 +7,8 @@
     <script src="../../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../../web-component-tester/browser.js"></script>
 
+    <link rel="import" href="../../../polymer/polymer.html">
+
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../../src/juicy-tile-grid.html">
     <style>
@@ -40,22 +42,22 @@
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <template bind id="root">
-      <juicy-tile-grid id="grid0" gutter="10" setup="{{setup}}" style="width: 420px;<!--  visibility: hidden; -->"><!-- to 1300-->
+    <template is="dom-bind" id="root">
+      <juicy-tile-grid id="grid0" setup="{{model.setup}}" style="width: 420px;<!--  visibility: hidden; -->"><!-- to 1300-->
         <div>100px x 100px</div>
         <div>200px x 100px <br/>flexible</div>
         <div>100px x 100px <br/>flexible</div>
         <div>100% x 100px <br/>flexible</div>
         <div>50% x 100px <br/>flexible</div>
       </juicy-tile-grid>
-      <juicy-tile-grid id="grid1" gutter="10" setup="{{setup}}" style="width: 420px; <!-- visibility: hidden; -->"><!-- to 1300-->
+      <juicy-tile-grid id="grid1" setup="{{model.setup}}" style="width: 420px; <!-- visibility: hidden; -->"><!-- to 1300-->
         <div>100px x 100px</div>
         <div>200px x 100px <br/>flexible</div>
         <div>100px x 100px <br/>flexible</div>
         <div>100% x 100px <br/>flexible</div>
         <div>50% x 100px <br/>flexible</div>
       </juicy-tile-grid>
-      <juicy-tile-grid id="grid2" gutter="10" setup="{{setup2}}" style="height: 420px; width: 320px<!-- visibility: hidden; -->"><!-- to 1300-->
+      <juicy-tile-grid id="grid2" setup="{{model.setup2}}" style="height: 420px; width: 320px<!-- visibility: hidden; -->"><!-- to 1300-->
         <div>100px x 100px</div>
         <div>200px x 100px <br/>flexible</div>
         <div>100px x 100px <br/>flexible</div>
@@ -69,6 +71,7 @@ var templ = document.getElementById('root');
 var model = {
   width: 450,
   setup : {
+    gutter: 10,
     items:[
       {
           id:0,
@@ -107,7 +110,7 @@ var model = {
     ]
   },
   setup2 : {
-    gutter: 0,
+    gutter: 10,
     direction: "vertical",
     items:[
       {
@@ -148,10 +151,8 @@ var model = {
   }
 };
 
-document.addEventListener("polymer-ready", function(){
-    document.querySelector("template").model = model;
+document.querySelector("template").model = model;
 
-});
 
 function expectPosition(element, x, y){
   expect( element.offsetTop).to.equal(x);
@@ -173,11 +174,12 @@ function expectSize_hw(element, height, width){
 var juicyTileList;
 describe('fractions', function() {
   before(function(done){
-    Polymer.whenReady(function(){
+    setTimeout(function(){
+    // Polymer.whenReady(function(){
       done();
       juicyTileList = document.getElementById('grid1');
       juicyTileList_height = document.getElementById('grid2');
-    });
+    },100);
   });
   context('with widthFlexible', function () {
     afterEach(function(){
