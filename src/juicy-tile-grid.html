@@ -16,11 +16,15 @@ version: 1.0.1
     <!-- TODO(tomalec): Refactor inheritance of styles and shadow root -->
     <style>
         :host {
-            display: block;
+            display: flex;
+            flex-direction: column;
         }
 
         /** our grid stuff */
         #container:not(.disabled) {
+            flex: 1;
+            height: 100%; /** TODO(tomalec): consider removing container */
+
             display: -ms-grid;
             display: -moz-grid;
             display: grid;
