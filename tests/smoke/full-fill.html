@@ -40,11 +40,9 @@
     <!-- You can use the document as a place to set up your fixtures. -->
     <template is="dom-bind" id="root">
         <juicy-tile-grid id="fullfill_number" setup="{{model.fullfill_number}}" style="width: 200px; height: 200px;">
-            <!-- to 1300-->
             <div>0 - 300 x 300</div>
         </juicy-tile-grid>
-        <juicy-tile-grid id="fullfill_number" setup="{{model.fullfill_percent}}" style="width: 200px; height: 200px;">
-            <!-- to 1300-->
+        <juicy-tile-grid id="fullfill_percent" setup="{{model.fullfill_percent}}" style="width: 200px; height: 200px;">
             <div>0 - 300 x 300</div>
         </juicy-tile-grid>
     </template>
@@ -88,21 +86,6 @@
             expect(element.offsetHeight).to.equal(height);
         }
 
-        function getGridCols(element) {
-            return element.shadowRoot
-                .getElementById("container")
-                .style["gridTemplateColumns"]
-                // .split(" ")
-                .match(/[a-z0-9]+(\([^\)]*\))?/g);
-        }
-
-        function getGridRows(element, width, height) {
-            return element.shadowRoot
-                .getElementById("container")
-                .style["gridTemplateRows"]
-                // .split(" ")
-                .match(/[a-z0-9]+(\([^\)]*\))?/g);
-        }
         /**
          * juicy-tile-grid fractions tests
          */
@@ -123,6 +106,17 @@
                     });
                     it('should be place in (0,0)', function() {
                         expectPosition(juicyTileList_fullfill_number.children[0], 0, 0);
+                    });
+
+                });
+            });
+            describe('using percentage values', function() {
+                context('item', function() {
+                    it('should be in the size of a container', function() {
+                        expectSize(juicyTileList_fullfill_percent.children[0], juicyTileList_fullfill_percent.offsetWidth, juicyTileList_fullfill_percent.offsetHeight );
+                    });
+                    it('should be place in (0,0)', function() {
+                        expectPosition(juicyTileList_fullfill_percent.children[0], 0, 0);
                     });
 
                 });
