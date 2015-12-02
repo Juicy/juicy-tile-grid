@@ -139,29 +139,6 @@ version: 1.0.1
             this.isReady = true;
         };
 
-        proto.parentParseDeclaration = proto.parseDeclaration;
-
-        proto.parseDeclaration = function (elementElement) {
-            // call `juicy-tile-list#parseDeclaration` for this document element/template;
-            return this.parentParseDeclaration([elementElement]);
-
-            // var template = this.fetchTemplate(elementElement);
-            // // make a shadow root
-            // var root = this.createShadowRoot();
-            // // stamp template
-            // var dom = document.importNode(template.content, true);
-            // this.$ = {
-            //   // workaround for lack of getElementById in IE polyfilled templates
-            //   container: dom.getElementById && dom.getElementById("container") || dom.querySelector("#container")
-            // };
-            // // append to shadow dom
-            // root.appendChild(dom);
-            // // perform post-construction initialization tasks on shadow root
-            // //this.shadowRootReady(root, template);
-            // // return the created shadow root
-            // this.shadowRoots[elementElement.name] = root;
-        };
-
         proto.parentSetupChanged = proto.setupChanged;
 
         /**
