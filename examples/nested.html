@@ -21,15 +21,12 @@
             padding: 1em;
             box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
         }
-        /* juicy-tile-grid>*{ */
-        /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
-        juicy-tile-grid #container > *,
-        juicy-tile-grid > *:not(#container) {
+        juicy-tile-grid > *{
             box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
             height: 100%;
         }
 
-        juicy-tile-grid > :first-child:not(#container) {
+        juicy-tile-grid > :first-child{
             background: lightgreen;
         }
 
@@ -133,7 +130,7 @@
                 ]
             }
         };
-        
+
         document.querySelector("#parent-grid").setAttribute("setup", JSON.stringify(model.setup));
         document.querySelector("#child-grid").setAttribute("setup", JSON.stringify(model.setup2));
     </script>

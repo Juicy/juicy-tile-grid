@@ -13,35 +13,24 @@ version: 1.1.0
 </template>
 
 <template id="juicy-tile-grid">
-    <!-- TODO(tomalec): Refactor inheritance of styles and shadow root -->
     <style>
         :host {
-            display: flex;
-            flex-direction: column;
-        }
-
         /** our grid stuff */
-        #container:not(.disabled) {
-            flex: 1;
-            height: 100%; /** TODO(tomalec): consider removing container */
-
             display: -ms-grid;
             display: -moz-grid;
             display: grid;
             position: static;
-            z-index: initial;
         }
 
-        #container:not(.disabled) > .juicy-tile,
-        #container:not(.disabled) > .containerBackground,
+        .juicy-tile,
+        .containerBackground,
         .juicy-tight-group > .containerBackground,
         .juicy-tight-group > .juicy-tile {
             display: inline-block;
             position: static;
-            z-index: initial;
         }
 
-        #container:not(.disabled) .juicy-tight-group {
+        .juicy-tight-group {
             display: -ms-grid;
             display: -moz-grid;
             display: grid;
@@ -49,46 +38,39 @@ version: 1.1.0
             width: 100%;
         }
 
-        #container.animate > .juicy-tile,
-        #container.animate > .containerBackground {
+        :host(.animate) > .juicy-tile,
+        :host(.animate) > .containerBackground {
             /*-webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
             transition: width 0.5s ease-out, height 0.5s ease-out, top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out;*/
         }
 
         /** for precalculate */
-        #container.disabled {
+        :host(.disabled) {
             position: relative;
             z-index: 0;
         }
 
         polyfill-next-selector {
-            content: ':host #container.disabled> .juicy-tile';
+            content: ':host :host(.disabled)> .juicy-tile';
         }
 
-        #container.disabled .juicy-tile {
+        :host(.disabled) .juicy-tile {
             position: absolute;
             display: inline-block;
         }
 
-        polyfill-next-selector {
-            content: ':host #container.disabled> .containerBackground';
-        }
-
-        #container .containerBackground,
-        #container.disabled .containerBackground {
-            position: absolute;
-            /*z-index: -1;*/
+        .containerBackground{
+            z-index: -1;
         }
 
         /*
         // Makes <a> un-clickable and un-focusable, but required for background.
-        #container:not(.disabled) > .containerBackground,
+        :host > .containerBackground,
         .juicy-tight-group > .containerBackground {
             z-index: -1;
         }
         */
     </style>
-    <div id="container" class="animate"></div>
 </template>
 
 <script>
@@ -103,7 +85,8 @@ version: 1.1.0
             var clone = document.importNode(template.content, true);
 
             root.appendChild(clone);
-            this.shadowContainer= root.querySelector("#container");
+            this.shadowContainer = root;
+            this.shadowContainer.style = root.host.style;
 
             this.attributeChangedCallback("refreshonresize", false, this.getBooleanAttribute("refreshonresize", false));
             this.attributeChangedCallback("refreshonmutation", false, this.getBooleanAttribute("refreshonmutation", false));
@@ -165,8 +148,17 @@ version: 1.1.0
             //TODO: decide how to handle setup when something was removed/added in the middle
             // to shift or not to shift indexes?
             //when something added/ removed clear all first
-            if (element.shadowContainer.children.length) {
-                element.shadowContainer.innerHTML = "";
+            // if (element.shadowContainer.children.length) {
+            //     element.shadowContainer.innerHTML = "";
+            // }
+            //TODO(tomalec): Clean it after refactoring to slots (latest W3C spec)
+            var nextChild = element.shadowContainer.firstChild;
+            while (nextChild) {
+                var currentChild = nextChild;
+                nextChild = currentChild.nextSibling;
+                if(!(currentChild instanceof HTMLStyleElement)){
+                    element.shadowContainer.removeChild(currentChild);
+                }
             }
 
             var tiles = [], tile, child, id,
@@ -385,6 +377,7 @@ version: 1.1.0
                 var packedItem, element, elementStyle, containerStyle;
 
                 if (packedGroup.tightGroup && !hideAll) {
+                    /// probs for root
                     containerStyle = tiles[packedGroup.id].style;
                     containerStyle["grid-template-columns"] = setGridTracks("column", packedGroup.columnAxes, "widthFlexible", "widthDynamic");
                     containerStyle["grid-template-rows"] = setGridTracks("row", packedGroup.rowAxes, "heightFlexible", "heightDynamic");
@@ -556,18 +549,18 @@ version: 1.1.0
 
                 packedTree.id = "root";
                 applyStyles(tiles, packedTree);
-                if (packedTree.direction === "vertical") {
-                    this.shadowContainer.style.height = "100%";
-                }
+                // if (packedTree.direction === "vertical") {
+                //     this.shadowContainer.style.height = "100%";
+                // }
             };
         }());
 
         proto.parentPackItems = proto.packItems;
 
         proto.packItems = function packDOM2Grid(setup) {
-            this.shadowContainer.classList.add("disabled");
+            this.classList.add("disabled");
             var packedTree = this.parentPackItems(setup);
-            this.shadowContainer.classList.remove("disabled");
+            this.classList.remove("disabled");
             return packedTree;
         };
 

@@ -34,16 +34,12 @@
             juicy-tile-grid {
                 /*width: 300px;
                 height: 150px;*/
-                display: block;
                 width: 100%;
                 padding: 1em;
                 box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
             }
 
-            /* juicy-tile-grid>*{ */
-            /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
-            juicy-tile-grid #container > *,
-            juicy-tile-grid > *:not(#container) {
+            juicy-tile-grid > * {
                 box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
                 text-align: center;
                 border: 1px solid lightgray;

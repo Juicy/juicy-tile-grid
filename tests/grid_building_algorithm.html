@@ -24,7 +24,7 @@
       height: 100%;
       margin: 0;
     }
-    juicy-tile-grid /deep/ #container{
+    juicy-tile-grid{
       background-color: lightgrey;
     }
     juicy-tile-grid /deep/ .juicy-tile{
@@ -295,16 +295,12 @@ document.querySelector("template").model = model;
 
 
 function getGridCols(element) {
-  return element.shadowRoot
-            .getElementById("container")
-              .style["gridTemplateColumns"]
+  return element.style["gridTemplateColumns"]
                 // .split(" ")
                 .match(/[a-z0-9]+(\([^\)]*\))?/g);
 }
 function getGridRows(element, width, height){
-  return element.shadowRoot
-            .getElementById("container")
-              .style["gridTemplateRows"]
+  return element.style["gridTemplateRows"]
                 // .split(" ")
                 .match(/[a-z0-9]+(\([^\)]*\))?/g);
 }

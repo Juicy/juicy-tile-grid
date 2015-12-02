@@ -23,7 +23,7 @@
       height: 100%;
       margin: 0;
     }
-    juicy-tile-grid /deep/ #container{
+    juicy-tile-grid{
       background-color: lightgrey;
     }
     juicy-tile-grid /deep/ .juicy-tile{
@@ -131,16 +131,12 @@ function expectSize(element, width, height){
   expect( element.offsetHeight).to.equal(height);
 }
 function getGridCols(element){
-  return element.shadowRoot
-            .getElementById("container")
-              .style["gridTemplateColumns"]
+  return element.style["gridTemplateColumns"]
                 // .split(" ")
                 .match(/[a-z0-9]+(\([^\)]*\))?/g);
 }
 function getGridRows(element, width, height){
-  return element.shadowRoot
-            .getElementById("container")
-              .style["gridTemplateRows"]
+  return element.style["gridTemplateRows"]
                 // .split(" ")
                 .match(/[a-z0-9]+(\([^\)]*\))?/g);
 }
@@ -198,9 +194,12 @@ describe('when items are packed to a `tightGroup`', function() {
       expect(juicyTileList_gridLines.tiles[4].parentElement).not.to.equal(juicyTileList_gridLines.tiles['root']);
     });
     it('should get correct relative position', function (){
-      expectPosition( juicyTileList_gridLines.children[2], 100 + 0, 300 + 0);
-      expectPosition( juicyTileList_gridLines.children[3], 100 + 0, 300 + 300);
-      expectPosition( juicyTileList_gridLines.children[4], 100 + 100, 300 + 0);
+        debugger
+      var container_x = 100
+        , container_y = 300;
+      expectPosition( juicyTileList_gridLines.children[2], container_x + 0, container_y + 0);
+      expectPosition( juicyTileList_gridLines.children[3], container_x + 0, container_y + 300);
+      expectPosition( juicyTileList_gridLines.children[4], container_x + 100, container_y + 0);
     });
 
   });
