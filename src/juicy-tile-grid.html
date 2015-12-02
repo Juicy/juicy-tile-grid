@@ -103,9 +103,7 @@ version: 1.0.2
             var clone = document.importNode(template.content, true);
 
             root.appendChild(clone);
-            this.$ = {
-                container: root.querySelector("#container")
-            };
+            this.shadowContainer= root.querySelector("#container");
 
             this.attributeChangedCallback("refreshonresize", false, this.getBooleanAttribute("refreshonresize", false));
             this.attributeChangedCallback("refreshonmutation", false, this.getBooleanAttribute("refreshonmutation", false));
@@ -167,8 +165,8 @@ version: 1.0.2
             //TODO: decide how to handle setup when something was removed/added in the middle
             // to shift or not to shift indexes?
             //when something added/ removed clear all first
-            if (element.$.container.children.length) {
-                element.$.container.innerHTML = "";
+            if (element.shadowContainer.children.length) {
+                element.shadowContainer.innerHTML = "";
             }
 
             var tiles = [], tile, child, id,
@@ -271,8 +269,8 @@ version: 1.0.2
                 child.setAttribute('juicytile', id);
                 //}
             }
-            element.$.container.appendChild(wrappers);
-            tiles["root"] = element.$.container;
+            element.shadowContainer.appendChild(wrappers);
+            tiles["root"] = element.shadowContainer;
             return tiles;
         };
 
@@ -559,7 +557,7 @@ version: 1.0.2
                 packedTree.id = "root";
                 applyStyles(tiles, packedTree);
                 if (packedTree.direction === "vertical") {
-                    this.$.container.style.height = "100%";
+                    this.shadowContainer.style.height = "100%";
                 }
             };
         }());
@@ -567,9 +565,9 @@ version: 1.0.2
         proto.parentPackItems = proto.packItems;
 
         proto.packItems = function packDOM2Grid(setup) {
-            this.$.container.classList.add("disabled");
+            this.shadowContainer.classList.add("disabled");
             var packedTree = this.parentPackItems(setup);
-            this.$.container.classList.remove("disabled");
+            this.shadowContainer.classList.remove("disabled");
             return packedTree;
         };
 
