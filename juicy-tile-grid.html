@@ -75,15 +75,24 @@ version: 1.1.0
 
 <script>
     (function (scriptDocument) {
-        var tileDecorator = (document._currentScript || document.currentScript).ownerDocument.getElementById("juicy-tile").content;
+        var tileDecorator = scriptDocument.getElementById("juicy-tile").content;
         var JuicyTileGridPrototype = Object.create(JuicyTileList.prototype);
         var proto = JuicyTileGridPrototype;
+
+        // if (window.ShadowDOMPolyfill) {
+        //   WebComponents.ShadowCSS.shimStyling(scriptDocument.querySelector("#juicy-tile-grid"), 'juicy-tile-grid');
+        // }
 
         proto.attachedCallback = function gridAttached() {
             var root = this.createShadowRoot();
             var template = scriptDocument.querySelector("#juicy-tile-grid");
             var clone = document.importNode(template.content, true);
 
+            // IE/polyfill support
+            if (window.ShadowDOMPolyfill) {
+                WebComponents.ShadowCSS.shimStyling(clone, 'juicy-tile-grid');
+            }
+            //
             root.appendChild(clone);
             this.shadowContainer = root;
             this.shadowContainer.style = root.host.style;
@@ -381,6 +390,9 @@ version: 1.1.0
                     containerStyle = tiles[packedGroup.id].style;
                     containerStyle["grid-template-columns"] = setGridTracks("column", packedGroup.columnAxes, "widthFlexible", "widthDynamic");
                     containerStyle["grid-template-rows"] = setGridTracks("row", packedGroup.rowAxes, "heightFlexible", "heightDynamic");
+                    // IE support
+                    containerStyle["-ms-grid-columns"] = containerStyle["grid-template-columns"]
+                    containerStyle["-ms-grid-rows"] = containerStyle["grid-template-rows"]
                 }
                 while (itemNo--) {
                     packedItem = packedGroup.items[itemNo];
@@ -400,10 +412,10 @@ version: 1.1.0
                         elementStyle["grid-column"] = packedItem.columnStart + " / " + packedItem.columnEnd;
                         elementStyle["grid-row"] = packedItem.rowStart + " / " + packedItem.rowEnd;
                         //IE support
-                        elementStyle["-ms-grid-column-start"] = packedItem.columnStart;
-                        elementStyle["-ms-grid-column-end"] = packedItem.columnEnd;
-                        elementStyle["-ms-grid-row-start"] = packedItem.rowStart;
-                        elementStyle["-ms-grid-row-end"] = packedItem.rowEnd;
+                        elementStyle["-ms-grid-column"] = packedItem.columnStart;
+                        elementStyle["-ms-grid-column-span"] = packedItem.columnEnd - packedItem.columnStart;
+                        elementStyle["-ms-grid-row"] = packedItem.rowStart;
+                        elementStyle["-ms-grid-row-span"] = packedItem.rowEnd - packedItem.rowStart;
 
                         var oversize = packedItem.oversize || 0;
                         elementStyle.width = packedItem.widthFlexible || packedItem.widthDynamic ? "100%" : packedItem.width + "px";
@@ -567,5 +579,5 @@ version: 1.1.0
         window.JuicyTileGrid = document.registerElement("juicy-tile-grid", {
             prototype: JuicyTileGridPrototype
         });
-    }(document.currentScript.ownerDocument));
+    }((document._currentScript || document.currentScript).ownerDocument));
 </script>

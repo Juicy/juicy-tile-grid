@@ -36,8 +36,13 @@
             height: 100%;
         }
 
-        juicy-tile-grid > :first-child {
+        juicy-tile-grid >:first-child {
             background-color: transparent;
+        }
+
+        /** ugly one for IE/polyfilled shadow dom*/
+        /*juicy-tile-grid > :first-child,*/
+        juicy-tile-grid [juicytile]:first-child {
             margin: 10px;
             /** make some space for margin */
             height: calc(100% - 20px);
