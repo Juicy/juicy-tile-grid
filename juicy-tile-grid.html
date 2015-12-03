@@ -79,10 +79,6 @@ version: 1.1.0
         var JuicyTileGridPrototype = Object.create(JuicyTileList.prototype);
         var proto = JuicyTileGridPrototype;
 
-        // if (window.ShadowDOMPolyfill) {
-        //   WebComponents.ShadowCSS.shimStyling(scriptDocument.querySelector("#juicy-tile-grid"), 'juicy-tile-grid');
-        // }
-
         proto.attachedCallback = function gridAttached() {
             var root = this.createShadowRoot();
             var template = scriptDocument.querySelector("#juicy-tile-grid");
