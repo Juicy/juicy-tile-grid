@@ -270,7 +270,7 @@ version: 1.2.1
                 //}
             }
             element.shadowContainer.appendChild(wrappers);
-            tiles["root"] = element.shadowContainer;
+            tiles["root"] = element; // real HTML element, not DocumentFragment at // .shadowContainer;
             return tiles;
         };
 
