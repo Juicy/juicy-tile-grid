@@ -102,7 +102,7 @@ version: 1.2.2
             this.attributeChangedCallback("defaulttilesetup", null, this.getAttribute("defaulttilesetup"));
             this.attributeChangedCallback("setup", null, this.getAttribute("setup"));
 
-            // IDEA: consider merging with createItemsList, and re-flow setup, to fix Polyjuice glitches (tomalec)
+            // IDEA: consider merging with createItemsList, and re-flow setup, to fix Starcounter merged partials glitches (tomalec)
             Package.call(this, this.setup && this.setup.items !== undefined ? this.setup : undefined);
 
             if (this.gutter != undefined) {
