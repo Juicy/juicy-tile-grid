@@ -7,8 +7,10 @@
     <script src="../../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../../web-component-tester/browser.js"></script>
 
+    <link rel="import" href="../../../polymer/polymer.html">
+
     <!-- Step 1: import the element to test -->
-    <link rel="import" href="../../src/juicy-tile-grid.html">
+    <link rel="import" href="../../juicy-tile-grid.html">
     <style>
     html,body{
       min-width: 0;
@@ -21,7 +23,7 @@
       height: 100%;
       margin: 0;
     }
-    juicy-tile-grid /deep/ #container{
+    juicy-tile-grid{
       background-color: lightgrey;
     }
     juicy-tile-grid /deep/ .juicy-tile{
@@ -39,8 +41,8 @@
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <template bind id="root">
-      <juicy-tile-grid id="gridLines" setup="{{gridlines}}" style="width: 900px;"><!-- to 1300-->
+    <template is="dom-bind" id="root">
+      <juicy-tile-grid id="gridLines" setup="{{model.gridlines}}" style="width: 900px;"><!-- to 1300-->
         <div>0 - 300 x 300</div>
         <div>1 - 600 x 100</div>
         <div>2 - 300 x 100<br/>
@@ -53,7 +55,7 @@
           tightgroup
         </div>
       </juicy-tile-grid>
-        <!-- <juicy-tile-grid id="gapless" setup="{{setup}}" style="width: 400px;">
+        <!-- <juicy-tile-grid id="gapless" setup="{{model.setup}}" style="width: 400px;">
           <div>0 - 50% x 100</div>
           <div>1 - 50% x 100 - flex</div>
           <div>2 - 50% x 100 - flex<br/>
@@ -63,7 +65,7 @@
             tightgroup
           </div>
         </juicy-tile-grid>
-      <juicy-tile-grid id="grid2" setup="{{setup2}}" style="width: 200px; height:400px">
+      <juicy-tile-grid id="grid2" setup="{{model.setup2}}" style="width: 200px; height:400px">
         <div>0</div>
         <div>1</div>
         <div>3</div>
@@ -118,10 +120,7 @@ var model = {
   }
 };
 
-document.addEventListener("polymer-ready", function(){
-    document.querySelector("template").model = model;
-
-});
+document.querySelector("template").model = model;
 
 function expectPosition(element, x, y){
   expect( element.offsetTop).to.equal(x);
@@ -132,16 +131,12 @@ function expectSize(element, width, height){
   expect( element.offsetHeight).to.equal(height);
 }
 function getGridCols(element){
-  return element.shadowRoots["juicy-tile-list"]
-            .getElementById("container")
-              .style["gridTemplateColumns"]
+  return element.style["gridTemplateColumns"]
                 // .split(" ")
                 .match(/[a-z0-9]+(\([^\)]*\))?/g);
 }
 function getGridRows(element, width, height){
-  return element.shadowRoots["juicy-tile-list"]
-            .getElementById("container")
-              .style["gridTemplateRows"]
+  return element.style["gridTemplateRows"]
                 // .split(" ")
                 .match(/[a-z0-9]+(\([^\)]*\))?/g);
 }
@@ -151,12 +146,13 @@ function getGridRows(element, width, height){
 var juicyTileList;
 describe('when items are packed to a `tightGroup`', function() {
   before(function(done){
-    Polymer.whenReady(function(){
+    setTimeout(function(){
+    // Polymer.whenReady(function(){
       done();
       juicyTileList_gridLines = document.getElementById('gridLines');
       juicyTileList = document.getElementById('gapless');
       juicyTileList2 = document.getElementById('grid2');
-    });
+    },100);
   });
   context('parent container grid lines should not get affected by items inside a group', function () {
     it('and set applicable grid columns', function () {
@@ -198,9 +194,12 @@ describe('when items are packed to a `tightGroup`', function() {
       expect(juicyTileList_gridLines.tiles[4].parentElement).not.to.equal(juicyTileList_gridLines.tiles['root']);
     });
     it('should get correct relative position', function (){
-      expectPosition( juicyTileList_gridLines.children[2], 100 + 0, 300 + 0);
-      expectPosition( juicyTileList_gridLines.children[3], 100 + 0, 300 + 300);
-      expectPosition( juicyTileList_gridLines.children[4], 100 + 100, 300 + 0);
+        debugger
+      var container_x = 100
+        , container_y = 300;
+      expectPosition( juicyTileList_gridLines.children[2], container_x + 0, container_y + 0);
+      expectPosition( juicyTileList_gridLines.children[3], container_x + 0, container_y + 300);
+      expectPosition( juicyTileList_gridLines.children[4], container_x + 100, container_y + 0);
     });
 
   });

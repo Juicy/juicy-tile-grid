@@ -7,8 +7,10 @@
     <script src="../../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../../web-component-tester/browser.js"></script>
 
+    <link rel="import" href="../../../polymer/polymer.html">
+
     <!-- Step 1: import the element to test -->
-    <link rel="import" href="../../src/juicy-tile-grid.html">
+    <link rel="import" href="../../juicy-tile-grid.html">
     <style>
     html,body{
       min-width: 0;
@@ -21,7 +23,7 @@
       height: 100%;
       margin: 0;
     }
-    juicy-tile-grid /deep/ #container{
+    juicy-tile-grid{
       background-color: lightgrey;
     }
     juicy-tile-grid /deep/ .juicy-tile{
@@ -39,13 +41,13 @@
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <template bind id="root">
-      <juicy-tile-grid id="grid1" setup="{{setup}}" style="width: 800px;"><!-- to 1300-->
+    <template is="dom-bind" id="root">
+      <juicy-tile-grid id="grid1" setup="{{model.setup}}" style="width: 800px;"><!-- to 1300-->
         <div>0 - 200 x 100</div>
         <div>1 - 200 x 100 - flex</div>
         <div>2 - 400 x 200 - flex</div>
       </juicy-tile-grid>
-      <juicy-tile-grid id="grid2" setup="{{setup2}}" style="width: 200px; height:400px"><!-- to 1300-->
+      <juicy-tile-grid id="grid2" setup="{{model.setup2}}" style="width: 200px; height:400px"><!-- to 1300-->
         <div>0</div>
         <div>1</div>
         <div>3</div>
@@ -106,11 +108,8 @@ var model = {
     ]
   }
 };
+document.querySelector("template").model = model;
 
-document.addEventListener("polymer-ready", function(){
-    document.querySelector("template").model = model;
-
-});
 
 function expectPosition(element, x, y){
   expect( element.offsetTop).to.equal(x);
@@ -126,11 +125,12 @@ function expectSize(element, width, height){
 var juicyTileList;
 describe('fractions', function() {
   before(function(done){
-    Polymer.whenReady(function(){
+    setTimeout(function(){
+    // Polymer.whenReady(function(){
       done();
       juicyTileList = document.getElementById('grid1');
       juicyTileList2 = document.getElementById('grid2');
-    });
+  },100);
   });
   context('with widthFlexible', function () {
     afterEach(function(){

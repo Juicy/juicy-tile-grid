@@ -7,7 +7,7 @@
     <!-- Importing Web Component's Polyfill -->
     <script src="../../webcomponentsjs/webcomponents.js"></script>
     <!-- Importing Custom Elements -->
-    <link rel="import" href="../src/juicy-tile-grid.html">
+    <link rel="import" href="../juicy-tile-grid.html">
 
     <!-- Importing Polymer for demos -->
     <link rel="import" href="../../polymer/polymer.html" />
@@ -38,12 +38,10 @@ body {
 juicy-tile-grid{
     /*width: 300px;
     height: 150px;*/
-    display: block;
     width: calc( 160px * 3 + 15px * 2 + 25px * 2 );
     padding: 15px;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
-juicy-tile-grid #container>*, /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
 juicy-tile-grid>*{
     box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
     text-align: center;

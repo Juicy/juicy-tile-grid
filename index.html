@@ -9,7 +9,7 @@
 
 
     <!-- Importing Custom Elements -->
-    <link rel="import" href="src/juicy-tile-grid.html">
+    <link rel="import" href="juicy-tile-grid.html">
 
 
     <!-- Importing Polymer for demos -->
@@ -34,16 +34,12 @@
             juicy-tile-grid {
                 /*width: 300px;
                 height: 150px;*/
-                display: block;
                 width: 100%;
                 padding: 1em;
                 box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
             }
 
-            /* juicy-tile-grid>*{ */
-            /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
-            juicy-tile-grid #container > *,
-            juicy-tile-grid > *:not(#container) {
+            juicy-tile-grid > * {
                 box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
                 text-align: center;
                 border: 1px solid lightgray;
@@ -227,6 +223,7 @@
                 <li><a href="examples/recursiveGroupsHeightAuto.html">Virtual groups with automatically adjusted height</a></li>
                 <li><a href="examples/oversize.html">Oversize background of virtual container</a></li>
                 <li><a href="examples/innerHTML.html">HTML/CSS content for virtual group</a></li>
+                <li><a href="examples/fullFill.html">Item that fills full width and height of a grid</a></li>
                 <li><a href="http://juicy.github.io/juicy-tile-list/">Default absolute position layout <code>&lt;juicy-tile-list&gt;</code></a></li>
                 <li><a href="http://juicy.github.io/juicy-tile-editor/examples/juicy-tiles-grid-editor.html">Editing the grid with <code>&lt;juicy-tile-editor&gt;</code></a></li>
             </ul>

@@ -3,41 +3,34 @@
 
 @element juicy-tile-grid
 @demo https://Juicy.github.io/juicy-tile-grid/
-version: 1.0.0
+version: 1.2.3
 -->
 <!-- Import juicy-tile-list -->
-<link rel="import" href="../../juicy-tile-list/src/juicy-tile-list.html">
+<link rel="import" href="../juicy-tile-list/src/juicy-tile-list.html">
 
 <template id="juicy-tile">
     <div class="juicy-tile"><content></content></div>
 </template>
 
 <template id="juicy-tile-grid">
-    <!-- TODO(tomalec): Refactor inheritance of styles and shadow root -->
     <style>
         :host {
-            display: block;
-        }
-
         /** our grid stuff */
-        #container:not(.disabled) {
             display: -ms-grid;
             display: -moz-grid;
             display: grid;
             position: static;
-            z-index: initial;
         }
 
-        #container:not(.disabled) > .juicy-tile,
-        #container:not(.disabled) > .containerBackground,
+        .juicy-tile,
+        .containerBackground,
         .juicy-tight-group > .containerBackground,
         .juicy-tight-group > .juicy-tile {
             display: inline-block;
             position: static;
-            z-index: initial;
         }
 
-        #container:not(.disabled) .juicy-tight-group {
+        .juicy-tight-group {
             display: -ms-grid;
             display: -moz-grid;
             display: grid;
@@ -45,51 +38,47 @@ version: 1.0.0
             width: 100%;
         }
 
-        #container.animate > .juicy-tile,
-        #container.animate > .containerBackground {
+        :host(.animate) > .juicy-tile,
+        :host(.animate) > .containerBackground {
             /*-webkit-transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, -webkit-transform 0.5s;
             transition: width 0.5s ease-out, height 0.5s ease-out, top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out;*/
         }
 
         /** for precalculate */
-        #container.disabled {
+        :host(.disabled) {
             position: relative;
             z-index: 0;
         }
 
         polyfill-next-selector {
-            content: ':host #container.disabled> .juicy-tile';
+            content: ':host :host(.disabled)> .juicy-tile';
         }
 
-        #container.disabled .juicy-tile {
+        :host(.disabled) .juicy-tile {
             position: absolute;
             display: inline-block;
         }
 
-        polyfill-next-selector {
-            content: ':host #container.disabled> .containerBackground';
+        .containerBackground{
+            z-index: -1;
         }
-
-        #container .containerBackground,
-        #container.disabled .containerBackground {
-            position: absolute;
-            /*z-index: -1;*/
+        .containerBackground.juicy-tight-group{
+            z-index: initial;
         }
 
         /*
         // Makes <a> un-clickable and un-focusable, but required for background.
-        #container:not(.disabled) > .containerBackground,
+        :host > .containerBackground,
         .juicy-tight-group > .containerBackground {
             z-index: -1;
         }
         */
     </style>
-    <div id="container" class="animate"></div>
 </template>
 
 <script>
     (function (scriptDocument) {
-        var tileDecorator = (document._currentScript || document.currentScript).ownerDocument.getElementById("juicy-tile").content;
+        var tileDecorator = scriptDocument.getElementById("juicy-tile").content;
         var JuicyTileGridPrototype = Object.create(JuicyTileList.prototype);
         var proto = JuicyTileGridPrototype;
 
@@ -99,10 +88,14 @@ version: 1.0.0
             var clone = document.importNode(template.content, true);
             var gutter = this.getAttribute("gutter");
 
+            // IE/polyfill support
+            if (window.ShadowDOMPolyfill) {
+                WebComponents.ShadowCSS.shimStyling(clone, 'juicy-tile-grid');
+            }
+            //
             root.appendChild(clone);
-            this.$ = {
-                container: root.querySelector("#container")
-            };
+            this.shadowContainer = root;
+            this.shadowContainer.style = root.host.style;
 
             this.attributeChangedCallback("refreshonresize", false, this.getBooleanAttribute("refreshonresize", false));
             this.attributeChangedCallback("refreshonmutation", false, this.getBooleanAttribute("refreshonmutation", false));
@@ -110,7 +103,7 @@ version: 1.0.0
             this.attributeChangedCallback("defaulttilesetup", null, this.getAttribute("defaulttilesetup"));
             this.attributeChangedCallback("setup", null, this.getAttribute("setup"));
 
-            // IDEA: consider merging with createItemsList, and re-flow setup, to fix Polyjuice glitches (tomalec)
+            // IDEA: consider merging with createItemsList, and re-flow setup, to fix Starcounter merged partials glitches (tomalec)
             Package.call(this, this.setup && this.setup.items !== undefined ? this.setup : undefined);
 
             if (gutter) {
@@ -135,29 +128,6 @@ version: 1.0.0
             }
 
             this.isReady = true;
-        };
-
-        proto.parentParseDeclaration = proto.parseDeclaration;
-
-        proto.parseDeclaration = function (elementElement) {
-            // call `juicy-tile-list#parseDeclaration` for this document element/template;
-            return this.parentParseDeclaration([elementElement]);
-
-            // var template = this.fetchTemplate(elementElement);
-            // // make a shadow root
-            // var root = this.createShadowRoot();
-            // // stamp template
-            // var dom = document.importNode(template.content, true);
-            // this.$ = {
-            //   // workaround for lack of getElementById in IE polyfilled templates
-            //   container: dom.getElementById && dom.getElementById("container") || dom.querySelector("#container")
-            // };
-            // // append to shadow dom
-            // root.appendChild(dom);
-            // // perform post-construction initialization tasks on shadow root
-            // //this.shadowRootReady(root, template);
-            // // return the created shadow root
-            // this.shadowRoots[elementElement.name] = root;
         };
 
         proto.parentSetupChanged = proto.setupChanged;
@@ -188,8 +158,17 @@ version: 1.0.0
             //TODO: decide how to handle setup when something was removed/added in the middle
             // to shift or not to shift indexes?
             //when something added/ removed clear all first
-            if (element.$.container.children.length) {
-                element.$.container.innerHTML = "";
+            // if (element.shadowContainer.children.length) {
+            //     element.shadowContainer.innerHTML = "";
+            // }
+            //TODO(tomalec): Clean it after refactoring to slots (latest W3C spec)
+            var nextChild = element.shadowContainer.firstChild;
+            while (nextChild) {
+                var currentChild = nextChild;
+                nextChild = currentChild.nextSibling;
+                if(!(currentChild instanceof HTMLStyleElement)){
+                    element.shadowContainer.removeChild(currentChild);
+                }
             }
 
             var tiles = [], tile, child, id,
@@ -292,8 +271,8 @@ version: 1.0.0
                 child.setAttribute('juicytile', id);
                 //}
             }
-            element.$.container.appendChild(wrappers);
-            tiles["root"] = element.$.container;
+            element.shadowContainer.appendChild(wrappers);
+            tiles["root"] = element; // real HTML element, not DocumentFragment at // .shadowContainer;
             return tiles;
         };
 
@@ -408,9 +387,13 @@ version: 1.0.0
                 var packedItem, element, elementStyle, containerStyle;
 
                 if (packedGroup.tightGroup && !hideAll) {
+                    /// probs for root
                     containerStyle = tiles[packedGroup.id].style;
                     containerStyle["grid-template-columns"] = setGridTracks("column", packedGroup.columnAxes, "widthFlexible", "widthDynamic");
                     containerStyle["grid-template-rows"] = setGridTracks("row", packedGroup.rowAxes, "heightFlexible", "heightDynamic");
+                    // IE support
+                    containerStyle["-ms-grid-columns"] = containerStyle["grid-template-columns"]
+                    containerStyle["-ms-grid-rows"] = containerStyle["grid-template-rows"]
                 }
                 while (itemNo--) {
                     packedItem = packedGroup.items[itemNo];
@@ -430,15 +413,15 @@ version: 1.0.0
                         elementStyle["grid-column"] = packedItem.columnStart + " / " + packedItem.columnEnd;
                         elementStyle["grid-row"] = packedItem.rowStart + " / " + packedItem.rowEnd;
                         //IE support
-                        elementStyle["-ms-grid-column-start"] = packedItem.columnStart;
-                        elementStyle["-ms-grid-column-end"] = packedItem.columnEnd;
-                        elementStyle["-ms-grid-row-start"] = packedItem.rowStart;
-                        elementStyle["-ms-grid-row-end"] = packedItem.rowEnd;
+                        elementStyle["-ms-grid-column"] = packedItem.columnStart;
+                        elementStyle["-ms-grid-column-span"] = packedItem.columnEnd - packedItem.columnStart;
+                        elementStyle["-ms-grid-row"] = packedItem.rowStart;
+                        elementStyle["-ms-grid-row-span"] = packedItem.rowEnd - packedItem.rowStart;
 
                         var oversize = packedItem.oversize || 0;
                         elementStyle.width = packedItem.widthFlexible || packedItem.widthDynamic ? "100%" : packedItem.width + "px";
                         // elementStyle.height = ( packedItem.height /*+ 2 * oversize*/ ) + "px";
-                        elementStyle.height = packedItem.heightFlexible || packedItem.heightDynamic ? "100%" : packedItem.height + "px";
+                        elementStyle.height = packedItem.heightFlexible? '100%' : packedItem.heightDynamic ? 'min-content' : packedItem.height + "px";
                         if (packedItem.background !== undefined) {
                             elementStyle.backgroundColor = packedItem.background || "transparent";
                         } else {
@@ -480,6 +463,9 @@ version: 1.0.0
                 markGridItems(currentLine.starts, trackType + "Start", 1);
                 openedTiles = currentLine.starts;
                 // In CSS Grid lines, and tracks are counted from 1
+                if(linesAmount == 1){
+                    markGridItems(currentLine.ends, trackType + "End", 1);
+                }
                 for (var lineNo = 2; lineNo <= linesAmount; lineNo++) {
                     currentLine = gridLines[lineNo - 1];
                     trackSize = currentLine.position - previousLine.position;
@@ -576,23 +562,23 @@ version: 1.0.0
 
                 packedTree.id = "root";
                 applyStyles(tiles, packedTree);
-                if (packedTree.direction === "vertical") {
-                    this.$.container.style.height = "100%";
-                }
+                // if (packedTree.direction === "vertical") {
+                //     this.shadowContainer.style.height = "100%";
+                // }
             };
         }());
 
         proto.parentPackItems = proto.packItems;
 
         proto.packItems = function packDOM2Grid(setup) {
-            this.$.container.classList.add("disabled");
+            this.classList.add("disabled");
             var packedTree = this.parentPackItems(setup);
-            this.$.container.classList.remove("disabled");
+            this.classList.remove("disabled");
             return packedTree;
         };
 
         window.JuicyTileGrid = document.registerElement("juicy-tile-grid", {
             prototype: JuicyTileGridPrototype
         });
-    }(document.currentScript.ownerDocument));
+    }((document._currentScript || document.currentScript).ownerDocument));
 </script>

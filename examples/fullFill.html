@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;juicy-tile-grid&gt; with groups</title>
+
+    <!-- Importing Web Component's Polyfill -->
+    <script src="../../webcomponentsjs/webcomponents.js"></script>
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="../juicy-tile-grid.html">
+
+    <link rel="stylesheet" href="github-markdown.css">
+    <link rel="stylesheet" href="examples.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        .markdown-body {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+            height: calc( 100% - 2em );
+        }
+        .fill-the-page{
+            flex: 1;
+            position: relative;
+        }
+
+        juicy-tile-grid {
+            position: absolute;
+            padding: 0;
+            height: 100%;
+        }
+
+        juicy-tile-grid >:first-child {
+            background-color: transparent;
+        }
+
+        /** ugly one for IE/polyfilled shadow dom*/
+        /*juicy-tile-grid > :first-child,*/
+        juicy-tile-grid [juicytile]:first-child {
+            margin: 10px;
+            /** make some space for margin */
+            height: calc(100% - 20px);
+        }
+    </style>
+</head>
+
+<body>
+    <a href="https://github.com/Juicy/juicy-tile-grid">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
+    </a>
+
+    <article class="markdown-body">
+        <h1>&lt;juicy-tile-grid&gt;</h1>
+        <blockquote>
+            <p>Masonry-like Custom Element for sortable tiles that packs efficiently without changing HTML structure (changes CSS only).</p>
+        </blockquote>
+
+        <div class="fill-the-page">
+            <!-- EXAMPLE STARTS HERE -->
+            <juicy-tile-grid>
+                <div>Give me as much as you can!</div>
+            </juicy-tile-grid>
+            <script>
+                var model = {
+                    "items": [{
+                        "height": 1,
+                        "heightDynamic": true,
+                        "heightFlexible": true,
+                        "width": 1,
+                        "widthFlexible": true,
+                        "priority": 1,
+                        "id": 0
+                    }],
+                    "width": 1
+                };
+
+                document.querySelector("juicy-tile-grid").setAttribute("setup", JSON.stringify(model));
+            </script>
+            <!-- EXAMPLE ENDS HERE -->
+        </div>
+    </article>
+</body>
+
+</html>
