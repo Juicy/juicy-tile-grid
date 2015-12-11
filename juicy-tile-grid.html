@@ -74,6 +74,7 @@ version: 1.2.4
         }
         */
     </style>
+    <content select="script" class="not-a-tile"></content>
 </template>
 
 <script>
@@ -164,7 +165,7 @@ version: 1.2.4
             while (nextChild) {
                 var currentChild = nextChild;
                 nextChild = currentChild.nextSibling;
-                if(!(currentChild instanceof HTMLStyleElement)){
+                if (!(currentChild instanceof HTMLStyleElement) && !(currentChild && currentChild.classList && currentChild.classList.contains("not-a-tile"))) {
                     element.shadowContainer.removeChild(currentChild);
                 }
             }
