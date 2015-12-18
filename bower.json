@@ -17,7 +17,7 @@
     "bower_components",
     "examples",
     "preview.png",
-    "tests"
+    "test"
   ],
   "dependencies": {
     "juicy-tile-list": ">=0.3.0"

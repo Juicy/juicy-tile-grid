@@ -10,8 +10,8 @@ module.exports = function(grunt) {
                     'juicy-tile-grid.html',
                     '*.html',
                     'examples/**/*.html',
-                    'tests/*.*',
-                    'tests/**/*.html'
+                    'test/*.*',
+                    'test/**/*.html'
                 ],
                 // tasks: ['jshint'],
             },
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         // Mocha
         mocha: {
           all: {
-            src: ['tests/index.html'],
+            src: ['test/index.html'],
           },
           options: {
             run: true

@@ -295,6 +295,7 @@ document.querySelector("template").model = model;
 
 
 function getGridCols(element) {
+    debugger
   return element.style["gridTemplateColumns"]
                 // .split(" ")
                 .match(/[a-z0-9]+(\([^\)]*\))?/g);
