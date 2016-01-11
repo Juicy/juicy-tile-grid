@@ -124,16 +124,16 @@ describe('juicy-tile-grid', function() {
           juicyTileList.refresh();
         });
         it('items should be arranged in ' + layoutDescription(direction, rightToLeft, bottomUp), function () {
-          expect( realRelativeOrientedPosition(juicyTileList.children[0], juicyTileList.tiles["root"].host, direction, rightToLeft, bottomUp) ).to.deep.equal([0,0]);
+          expect( realRelativeOrientedPosition(juicyTileList.children[0], juicyTileList.tiles["root"], direction, rightToLeft, bottomUp) ).to.deep.equal([0,0]);
 
-          expect( realRelativeOrientedPosition(juicyTileList.children[1], juicyTileList.tiles["root"].host, direction, rightToLeft, bottomUp) ).to.deep.equal([0,100]);
+          expect( realRelativeOrientedPosition(juicyTileList.children[1], juicyTileList.tiles["root"], direction, rightToLeft, bottomUp) ).to.deep.equal([0,100]);
 
-          expect( realRelativeOrientedPosition(juicyTileList.children[2], juicyTileList.tiles["root"].host, direction, rightToLeft, bottomUp) ).to.deep.equal([100,0]);
+          expect( realRelativeOrientedPosition(juicyTileList.children[2], juicyTileList.tiles["root"], direction, rightToLeft, bottomUp) ).to.deep.equal([100,0]);
           });
         it('items within virtual group without flags, should be arranged LTR, TTB', function () {
-          expect( realRelativeOrientedPosition(juicyTileList.children[3], juicyTileList.tiles["root"].host, direction, false, false) ).to.deep.equal([100+100, 0]);
+          expect( realRelativeOrientedPosition(juicyTileList.children[3], juicyTileList.tiles["root"], direction, false, false) ).to.deep.equal([100+100, 0]);
 
-          expect( realRelativeOrientedPosition(juicyTileList.children[4], juicyTileList.tiles["root"].host, direction, false, false) ).to.deep.equal([100+100, 100]);
+          expect( realRelativeOrientedPosition(juicyTileList.children[4], juicyTileList.tiles["root"], direction, false, false) ).to.deep.equal([100+100, 100]);
         });
       });
 
@@ -144,23 +144,23 @@ describe('juicy-tile-grid', function() {
           juicyTileList.refresh();
         });
         it('items outside should be arranged as before', function () {
-          expect( realRelativeOrientedPosition(juicyTileList.children[0], juicyTileList.tiles["root"].host, direction, false, false) ).to.deep.equal([0, 0]);
+          expect( realRelativeOrientedPosition(juicyTileList.children[0], juicyTileList.tiles["root"], direction, false, false) ).to.deep.equal([0, 0]);
 
-          expect( realRelativeOrientedPosition(juicyTileList.children[1], juicyTileList.tiles["root"].host, direction, false, false) ).to.deep.equal([0, 100]);
+          expect( realRelativeOrientedPosition(juicyTileList.children[1], juicyTileList.tiles["root"], direction, false, false) ).to.deep.equal([0, 100]);
 
-          expect( realRelativeOrientedPosition(juicyTileList.children[2], juicyTileList.tiles["root"].host, direction, false, false) ).to.deep.equal([100, 0]);
+          expect( realRelativeOrientedPosition(juicyTileList.children[2], juicyTileList.tiles["root"], direction, false, false) ).to.deep.equal([100, 0]);
 
           });
         it('items within virtual group with flags should be arranged in ' + layoutDescription(direction, rightToLeft, bottomUp), function () {
-          // expect( realRelativeOrientedPosition(juicyTileList.children[3], juicyTileList.tiles["root"].host, direction, rightToLeft, bottomUp) ).to.deep.equal([100+100, 0]);
+          // expect( realRelativeOrientedPosition(juicyTileList.children[3], juicyTileList.tiles["root"], direction, rightToLeft, bottomUp) ).to.deep.equal([100+100, 0]);
           expect( realRelativeOrientedPosition(juicyTileList.children[3], juicyTileList.tiles["group"], direction, rightToLeft, bottomUp) ).to.deep.equal([0, 0]);
 
-          // expect( realRelativeOrientedPosition(juicyTileList.tiles["nested"], juicyTileList.tiles["root"].host, direction, rightToLeft, bottomUp) ).to.deep.equal([100+100, 100]);
+          // expect( realRelativeOrientedPosition(juicyTileList.tiles["nested"], juicyTileList.tiles["root"], direction, rightToLeft, bottomUp) ).to.deep.equal([100+100, 100]);
           expect( realRelativeOrientedPosition(juicyTileList.tiles["nested"], juicyTileList.tiles["group"], direction, rightToLeft, bottomUp) ).to.deep.equal([0, 100]);
         });
         it('items within nested virtual group without flags, should be arranged LTR, TTB', function () {
-          // expect( realRelativeOrientedPosition(juicyTileList.children[4], juicyTileList.tiles["root"].host, direction, false, false) ).to.deep.equal([100+100, 40]);
-          // expect( realRelativeOrientedPosition(juicyTileList.children[4], juicyTileList.tiles["root"].host, direction, false, false) ).to.deep.equal([100+100, 100]);
+          // expect( realRelativeOrientedPosition(juicyTileList.children[4], juicyTileList.tiles["root"], direction, false, false) ).to.deep.equal([100+100, 40]);
+          // expect( realRelativeOrientedPosition(juicyTileList.children[4], juicyTileList.tiles["root"], direction, false, false) ).to.deep.equal([100+100, 100]);
           expect( realRelativeOrientedPosition(juicyTileList.children[4], juicyTileList.tiles["nested"], direction, false, false) ).to.deep.equal([0, 0]);
         });
       });
