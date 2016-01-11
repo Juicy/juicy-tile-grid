@@ -80,19 +80,19 @@ version: 1.2.4
 
 <script>
     (function (scriptDocument) {
+        var template = scriptDocument.querySelector("#juicy-tile-grid");
+        if (window.ShadowDOMPolyfill) {
+            WebComponents.ShadowCSS.shimStyling(template.content, 'juicy-tile-grid');
+        }
         var tileDecorator = scriptDocument.getElementById("juicy-tile").content;
         var JuicyTileGridPrototype = Object.create(JuicyTileList.prototype);
         var proto = JuicyTileGridPrototype;
 
         proto.attachedCallback = function gridAttached() {
             var root = this.createShadowRoot();
-            var template = scriptDocument.querySelector("#juicy-tile-grid");
             var clone = document.importNode(template.content, true);
 
             // IE/polyfill support
-            if (window.ShadowDOMPolyfill) {
-                WebComponents.ShadowCSS.shimStyling(clone, 'juicy-tile-grid');
-            }
             //
             root.appendChild(clone);
             this.shadowContainer = root;
