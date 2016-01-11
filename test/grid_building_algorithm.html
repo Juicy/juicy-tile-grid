@@ -11,7 +11,10 @@
 
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../juicy-tile-grid.html">
-    <style>
+    <!-- get some test helpers -->
+    <script src="helpers/getTracks.js"></script>
+
+    <style shim-shadowdom>
     html,body{
       min-width: 0;
       font-size: 10px;
@@ -19,7 +22,9 @@
     juicy-tile-grid{
       position: relative;
     }
-    juicy-tile-grid > *{
+    juicy-tile-grid > *,
+    /** thi selector is for shimmed ShadowDOM browsers */
+    juicy-tile-grid .juicy-tile > [juicytile]{
       background-color: rgba(99,99,99,0.3);
       height: 100%;
       margin: 0;
@@ -293,18 +298,6 @@ var model = {
 
 document.querySelector("template").model = model;
 
-
-function getGridCols(element) {
-    debugger
-  return element.style["gridTemplateColumns"]
-                // .split(" ")
-                .match(/[a-z0-9]+(\([^\)]*\))?/g);
-}
-function getGridRows(element, width, height){
-  return element.style["gridTemplateRows"]
-                // .split(" ")
-                .match(/[a-z0-9]+(\([^\)]*\))?/g);
-}
 /**
  * juicy-tile-grid fractions tests
  */

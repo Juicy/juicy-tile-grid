@@ -11,14 +11,16 @@
 
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../../juicy-tile-grid.html">
-    <style>
+    <style shim-shadowdom>
     html,body{
       min-width: 0;
     }
     juicy-tile-grid{
       position: relative;
     }
-    juicy-tile-grid > *{
+    juicy-tile-grid > *,
+    /** thi selector is for shimmed ShadowDOM browsers */
+    juicy-tile-grid .juicy-tile > [juicytile]{
       background-color: rgba(99,99,99,0.3);
       height: 100%;
       margin: 0;
