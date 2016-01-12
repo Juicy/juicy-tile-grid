@@ -147,6 +147,8 @@ describe('fractions', function() {
         done();
       });
       it('should align items in correct sizes', function (done) {
+        console.info("Fails due to Firefox issue", "https://bugzilla.mozilla.org/show_bug.cgi?id=1163435");
+        console.log("W3C spec:", "A grid item is sized within the containing block defined by its grid area similarly to an equivalent block-level box in an equivalently-sized containing block, except that auto margins and the box alignment properties have special effects. (See §11 Alignment and Spacing.)");
         expectSize( juicyTileList.children[0], 200, 100);
         expectSize( juicyTileList.children[1], 200, 100);
         expectSize( juicyTileList.children[2], 400, 200);
