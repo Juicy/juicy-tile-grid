@@ -18,6 +18,7 @@ version: 1.2.5
         /** our grid stuff */
             display: -ms-grid;
             display: -moz-grid;
+            display: -webkit-grid;
             display: grid;
             position: static;
         }
@@ -33,6 +34,7 @@ version: 1.2.5
         .juicy-tight-group {
             display: -ms-grid;
             display: -moz-grid;
+            display: -webkit-grid;
             display: grid;
             height: 100%;
             width: 100%;
@@ -391,9 +393,14 @@ version: 1.2.5
                     containerStyle = tiles[packedGroup.id].style;
                     containerStyle["grid-template-columns"] = setGridTracks("column", packedGroup.columnAxes, "widthFlexible", "widthDynamic");
                     containerStyle["grid-template-rows"] = setGridTracks("row", packedGroup.rowAxes, "heightFlexible", "heightDynamic");
+
                     // IE support
-                    containerStyle["-ms-grid-columns"] = containerStyle["grid-template-columns"]
-                    containerStyle["-ms-grid-rows"] = containerStyle["grid-template-rows"]
+                    containerStyle["-ms-grid-columns"] = containerStyle["grid-template-columns"];
+                    containerStyle["-ms-grid-rows"] = containerStyle["grid-template-rows"];
+
+                    // WebKit support
+                    containerStyle["-webkit-grid-columns"] = containerStyle["grid-template-columns"];
+                    containerStyle["-webkit-grid-rows"] = containerStyle["grid-template-rows"];
                 }
                 while (itemNo--) {
                     packedItem = packedGroup.items[itemNo];
@@ -412,11 +419,18 @@ version: 1.2.5
 
                         elementStyle["grid-column"] = packedItem.columnStart + " / " + packedItem.columnEnd;
                         elementStyle["grid-row"] = packedItem.rowStart + " / " + packedItem.rowEnd;
+
                         //IE support
                         elementStyle["-ms-grid-column"] = packedItem.columnStart;
                         elementStyle["-ms-grid-column-span"] = packedItem.columnEnd - packedItem.columnStart;
                         elementStyle["-ms-grid-row"] = packedItem.rowStart;
                         elementStyle["-ms-grid-row-span"] = packedItem.rowEnd - packedItem.rowStart;
+
+                        //WebKit support
+                        elementStyle["-webkit-grid-column"] = packedItem.columnStart;
+                        elementStyle["-webkit-grid-column-span"] = packedItem.columnEnd - packedItem.columnStart;
+                        elementStyle["-webkit-grid-row"] = packedItem.rowStart;
+                        elementStyle["-webkit-grid-row-span"] = packedItem.rowEnd - packedItem.rowStart;
 
                         var oversize = packedItem.oversize || 0;
                         elementStyle.width = packedItem.widthFlexible || packedItem.widthDynamic ? "100%" : packedItem.width + "px";
