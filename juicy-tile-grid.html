@@ -122,7 +122,8 @@ version: 1.2.5
             this.attributeChangedCallback("defaulttilesetup", this.defaulttilesetup, this.getAttribute("defaulttilesetup"));
 
             if (this.refreshOnAttached) {
-                this.refresh();
+                // This is ugly hack to wait for most probably asynchronous content distribution (tomalec)
+                setTimeout(this.refresh);
             }
 
             this.isReady = true;
