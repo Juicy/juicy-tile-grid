@@ -88,6 +88,13 @@ version: 1.2.5
         var JuicyTileGridPrototype = Object.create(JuicyTileList.prototype);
         var proto = JuicyTileGridPrototype;
 
+        /**
+         * Flage used to force updating ShadowDOM wrappers on regular .setup change
+         * @private
+         * @type {Boolean}
+         */
+        proto._isShadomDOMOutdated = true;
+
         proto.attachedCallback = function gridAttached() {
             var root = this.createShadowRoot();
             var clone = document.importNode(template.content, true);
@@ -97,10 +104,6 @@ version: 1.2.5
             root.appendChild(clone);
             this.shadowContainer = root;
             this.shadowContainer.style = root.host.style;
-
-
-                        this.attributeChangedCallback("setup", null, this.getAttribute("setup"));
-
 
             // IDEA: consider merging with createItemsList, and re-flow setup, to fix Starcounter merged partials glitches (tomalec)
             Package.call(this, this.setup && this.setup.items !== undefined ? this.setup : undefined);
@@ -119,28 +122,25 @@ version: 1.2.5
             this.attributeChangedCallback("defaulttilesetup", this.defaulttilesetup, this.getAttribute("defaulttilesetup"));
 
             if (this.refreshOnAttached) {
-                setTimeout(function () {
-                    this.refresh();
-                }.bind(this));
+                this.refresh();
             }
 
             this.isReady = true;
         };
 
-        proto.parentSetupChanged = proto.setupChanged;
+        proto.listSetupChanged = proto.setupChanged;
 
         /**
         * Perform action when setup get changed
+        * Sets this._isShadomDOMOutdated to true by default (id undefined)
         * @param {Object} [oldVal] old value
         * @param {Object} [newVal] new value
-        * @param {Object} [changes] changes
-        * @param {Boolean} [hard=true] Set to true if ShadowDOM structure is also changed
         */
-        proto.setupChanged = function (oldVal, newVal, changes, hard) {
-            if (hard === undefined) {
-                hard = true;
+        proto.setupChanged = function (oldVal, newVal) {
+            if (this._isShadomDOMOutdated === undefined) {
+                this._isShadomDOMOutdated = true;
             }
-            this.parentSetupChanged([oldVal, newVal, changes, hard]);
+            this.listSetupChanged(oldVal, newVal);
         };
 
         /**
@@ -270,6 +270,7 @@ version: 1.2.5
             }
             element.shadowContainer.appendChild(wrappers);
             tiles["root"] = element; // real HTML element, not DocumentFragment at // .shadowContainer;
+            this._isShadomDOMOutdated = undefined;
             return tiles;
         };
 
