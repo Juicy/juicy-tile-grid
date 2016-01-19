@@ -15,7 +15,7 @@ addons:
     sources:
       - google-chrome
     packages:
-      - google-chrome-stable
+      - google-chrome-unstable
 script:
   - xvfb-run wct --skip-plugin sauce
   - "if [ \"${TRAVIS_PULL_REQUEST}\" = \"false\" ]; then wct --skip-plugin local --plugin sauce; fi"
