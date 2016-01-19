@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../../webcomponentsjs/webcomponents.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../../juicy-tile-grid.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="parent">
+        <template>
+            <juicy-tile-grid id="parent">
+              <div>
+                <juicy-tile-grid id="list1" >
+                  <div>0</div>
+                  <span>1</span>
+                  <p>3</p>
+              </juicy-tile-grid>
+              </div>
+              <div>
+                <juicy-tile-grid id="list2" refreshOnResize>
+                  <div>0</div>
+                  <div>1</div>
+                  <p>3</p>
+              </juicy-tile-grid>
+              </div>
+              <p>3</p>
+          </juicy-tile-grid>
+        </template>
+    </test-fixture>
+
+    <script>
+/**
+ * JuicyTiles tests
+ */
+describe('juicy-tile-list', function() {
+  var juicyTileParent, juicyTileList, juicyTileList2,
+    refresh, refresh2;
+  beforeEach(function(done){
+    juicyTileParent = fixture('parent');
+    juicyTileList = juicyTileParent.querySelector('#list1');
+    juicyTileList2 = juicyTileParent.querySelector('#list2');
+    setTimeout(function waitForAttached(){
+      refresh = sinon.spy(juicyTileList, "refresh");
+      refresh2 = sinon.spy(juicyTileList2, "refresh");
+      done();
+    });
+  })
+  context('when refreshOnResize attribute', function () {
+    afterEach(function(){
+      juicyTileList.refresh.restore && juicyTileList.refresh.restore();
+      juicyTileList2.refresh.restore && juicyTileList2.refresh.restore();
+    });
+
+    context('was not set', function () {
+      it('refresh method should not be called when parent &lt;juicy-tile-list&gt; is refreshed', function (done) {
+
+        juicyTileParent.refresh();
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList.refresh.callCount ).to.equal(0);
+          juicyTileList.refresh.restore();
+          done();
+        });
+      });
+      xit('refresh method should not be called window is resized', function (done) {
+
+        // resize window
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList.refresh.callCount ).to.equal(0);
+          juicyTileList.refresh.restore();
+          done();
+        });
+      });
+
+    });
+    context('was set when element was created', function () {
+      it('refresh method should be called when parent &lt;juicy-tile-list&gt; is refreshed', function (done) {
+
+        juicyTileParent.refresh();
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList2.refresh.callCount ).to.equal(1);
+          juicyTileList2.refresh.restore();
+          done();
+        });
+      });
+      xit('refresh method should be called when window is resized', function (done) {
+
+        // resize window
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList2.refresh.callCount ).to.equal(1);
+          juicyTileList2.refresh.restore();
+          done();
+        });
+      });
+
+    });
+    context('is set in runtime', function () {
+      beforeEach(function(){
+        juicyTileList.setAttribute("refreshOnResize","");
+      });
+      it('refresh method should be called when parent &lt;juicy-tile-list&gt; is refreshed', function (done) {
+
+        juicyTileParent.refresh();
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList.refresh.callCount ).to.equal(1);
+          juicyTileList.refresh.restore();
+          done();
+        });
+      });
+      xit('refresh method should be called when window is resized', function (done) {
+
+        // resize window
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList.refresh.callCount ).to.equal(1);
+          juicyTileList.refresh.restore();
+          done();
+        });
+      });
+
+    });
+
+    context('is removed in runtime', function () {
+      beforeEach(function(){
+        juicyTileList2.removeAttribute("refreshOnResize");
+      });
+      it('refresh method should not be called when parent &lt;juicy-tile-list&gt; is refreshed', function (done) {
+
+        juicyTileParent.refresh();
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList2.refresh.callCount ).to.equal(0);
+          juicyTileList2.refresh.restore();
+          done();
+        });
+      });
+      xit('refresh method should not be called when window is resized', function (done) {
+
+        // resize window
+
+        // wait for mutation observer callback
+        setTimeout(function whenMutated(){
+          expect( juicyTileList2.refresh.callCount ).to.equal(0);
+          juicyTileList2.refresh.restore();
+          done();
+        });
+      });
+    });
+
+  });
+});
+
+    </script>
+
+  </body>
+</html>
