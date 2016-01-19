@@ -98,11 +98,9 @@ version: 1.2.5
             this.shadowContainer = root;
             this.shadowContainer.style = root.host.style;
 
-            this.attributeChangedCallback("refreshonresize", false, this.getBooleanAttribute("refreshonresize", false));
-            this.attributeChangedCallback("refreshonmutation", false, this.getBooleanAttribute("refreshonmutation", false));
-            this.attributeChangedCallback("refreshonattached", true, this.getBooleanAttribute("refreshonattached", true));
-            this.attributeChangedCallback("defaulttilesetup", null, this.getAttribute("defaulttilesetup"));
-            this.attributeChangedCallback("setup", null, this.getAttribute("setup"));
+
+                        this.attributeChangedCallback("setup", null, this.getAttribute("setup"));
+
 
             // IDEA: consider merging with createItemsList, and re-flow setup, to fix Starcounter merged partials glitches (tomalec)
             Package.call(this, this.setup && this.setup.items !== undefined ? this.setup : undefined);
@@ -113,18 +111,17 @@ version: 1.2.5
 
             this.createItemsList();
 
-            if (this.refreshOnResize) {
-                this.addResizeListeners();
-            }
+            // Setup initials
+            // attributeChangedCallback for refresh* checks the value itselfes
+            this.attributeChangedCallback("refreshonresize", this.refreshonresize);
+            this.attributeChangedCallback("refreshonmutation", this.refreshonmutation);
+            this.attributeChangedCallback("refreshonattached", this.refreshonattached);
+            this.attributeChangedCallback("defaulttilesetup", this.defaulttilesetup, this.getAttribute("defaulttilesetup"));
 
             if (this.refreshOnAttached) {
                 setTimeout(function () {
                     this.refresh();
                 }.bind(this));
-            }
-
-            if (this.refreshOnMutation) {
-                this.observer.observe(this, { childList: true });
             }
 
             this.isReady = true;
