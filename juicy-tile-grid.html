@@ -129,7 +129,7 @@ version: 1.3.0
             this.isReady = true;
         };
 
-        proto.listSetupChanged = proto.setupChanged;
+        proto._listSetupChanged = proto._setupChanged;
 
         /**
         * Perform action when setup get changed
@@ -137,7 +137,7 @@ version: 1.3.0
         * @param {Object} [oldVal] old value
         * @param {Object} [newVal] new value
         */
-        proto.setupChanged = function (oldVal, newVal) {
+        proto._setupChanged = function (oldVal, newVal) {
             if (this._isShadomDOMOutdated === undefined) {
                 this._isShadomDOMOutdated = true;
             }
