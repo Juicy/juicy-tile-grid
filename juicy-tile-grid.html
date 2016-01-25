@@ -121,12 +121,18 @@ version: 1.3.2
             this.attributeChangedCallback("refreshonattached", this.refreshonattached);
             this.attributeChangedCallback("defaulttilesetup", this.defaulttilesetup, this.getAttribute("defaulttilesetup"));
 
-            if (this.refreshOnAttached) {
-                // This is ugly hack to wait for most probably asynchronous content distribution (tomalec)
-                setTimeout(this.refresh);
-            }
 
-            this.isReady = true;
+            if (this.refreshOnAttached){
+                // This is ugly hack to wait for most probably asynchronous content distribution (tomalec)
+                var list = this;
+                setTimeout(function(){
+                    list.refresh();
+                    list.isReady = true;
+                });
+                // --
+            } else {
+                this.isReady = true;
+            }
         };
 
         proto._listSetupChanged = proto._setupChanged;
