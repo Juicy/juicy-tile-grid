@@ -123,12 +123,19 @@ version: 1.3.2
 
 
             if (this.refreshOnAttached){
-                // This is ugly hack to wait for most probably asynchronous content distribution (tomalec)
-                var list = this;
-                setTimeout(function(){
-                    list.refresh();
-                    list.isReady = true;
-                });
+                // This is ugly hack to wait for element to get attached
+                // to measure its inner dimention if not provided in setup (tomalec)
+                // if(!this.setup.width || this.setup.direction == "vertical" && !this.setup.height) {
+                // it's even uglier as we need it just in case something inside may be precalculate
+                    var list = this;
+                    setTimeout(function(){
+                        list.refresh();
+                        list.isReady = true;
+                    });
+                // } else {
+                //     this.refresh();
+                //     this.isReady = true;
+                // }
                 // --
             } else {
                 this.isReady = true;
@@ -575,6 +582,13 @@ version: 1.3.2
 
         proto.parentPackItems = proto.packItems;
 
+        /**
+         * Add a specific class for precalculate phase
+         * Call juicy-tile-list.packItems to precalculate dimensions
+         * @TODO (tomalec): Juicy/juicy-tile-grid/issues/41 start here
+         * @param  {Object} setup
+         * @return {Object}       packed setup
+         */
         proto.packItems = function packDOM2Grid(setup) {
             this.classList.add("disabled");
             var packedTree = this.parentPackItems(setup);
