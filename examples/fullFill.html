@@ -63,24 +63,22 @@
 
         <div class="fill-the-page">
             <!-- EXAMPLE STARTS HERE -->
-            <juicy-tile-grid>
+            <juicy-tile-grid setup='{
+                "items": [{
+                    "height": 1,
+                    "heightDynamic": true,
+                    "heightFlexible": true,
+                    "width": 1,
+                    "widthFlexible": true,
+                    "priority": 1,
+                    "id": 0
+                }],
+                "width": 1
+            }'>
                 <div>Give me as much as you can!</div>
             </juicy-tile-grid>
             <script>
-                var model = {
-                    "items": [{
-                        "height": 1,
-                        "heightDynamic": true,
-                        "heightFlexible": true,
-                        "width": 1,
-                        "widthFlexible": true,
-                        "priority": 1,
-                        "id": 0
-                    }],
-                    "width": 1
-                };
-
-                document.querySelector("juicy-tile-grid").setAttribute("setup", JSON.stringify(model));
+                setup = document.querySelector("juicy-tile-grid").setup;
             </script>
             <!-- EXAMPLE ENDS HERE -->
         </div>

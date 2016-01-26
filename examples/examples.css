@@ -21,24 +21,11 @@ juicy-tile-grid >*{
 section input{
     width: 4em;
 }
-juicy-tile-grid>:first-child{
-    background:lightgreen;
-}
-
-juicy-tile-grid>:nth-child(2) {
-    background:lightblue;
-}
 
 juicy-tile-grid>:nth-child(3) {
-    background:yellow;
     overflow:auto;
 }
 
 juicy-tile-grid>:nth-child(4) {
-    background:gray;
     overflow:auto;
-}
-
-juicy-tile-grid>:nth-child(5) {
-    background:orange;
 }
