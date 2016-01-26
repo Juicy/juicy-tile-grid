@@ -95,7 +95,43 @@ version: 1.3.2
          */
         proto._isShadomDOMOutdated = true;
 
+        /**
+         * attachedCallback wrapper to workaround Chromium Bugs
+         * https://code.google.com/p/chromium/issues/detail?id=581176
+         * @see #_attachedCallback
+         */
         proto.attachedCallback = function gridAttached() {
+            debugger
+            this.attributeChangedCallback("refreshonattached", this.refreshOnAttached);
+
+            // tomalec: Ugly workaround for https://code.google.com/p/chromium/issues/detail?id=581176
+            // to wait for element to get attached, and Chromium HTML imports release metrics
+            // to measure elements inner dimention if not provided in setup
+            // XXX: causes FOUC
+            // if (this.refreshOnAttached &&
+            //         navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && // is chrome
+            //         (!this.setup ||
+            //             (!this.setup.width || this.setup.direction == "vertical" && !this.setup.height)
+            //         )
+            //     ) {
+            //     What is worse, we need it anyway for `precalculate*`
+            if (
+                this.refreshOnAttached &&
+                navigator.userAgent.toLowerCase().indexOf('chrome') > -1 // is chrome
+                ) {
+                var list = this;
+                setTimeout(function(){
+                    list._attachedCallback();
+                });
+            } else {
+                this._attachedCallback();
+            }
+            // ---
+        };
+        /**
+         * The real meat of attachedCallback
+         */
+        proto._attachedCallback = function deferredGridAttached() {
             var root = this.createShadowRoot();
             var clone = document.importNode(template.content, true);
 
@@ -118,28 +154,14 @@ version: 1.3.2
             // attributeChangedCallback for refresh* checks the value itselfes
             this.attributeChangedCallback("refreshonresize", this.refreshonresize);
             this.attributeChangedCallback("refreshonmutation", this.refreshonmutation);
-            this.attributeChangedCallback("refreshonattached", this.refreshonattached);
+            this.attributeChangedCallback("refreshonattached", this.refreshOnAttached);
             this.attributeChangedCallback("defaulttilesetup", this.defaulttilesetup, this.getAttribute("defaulttilesetup"));
 
 
             if (this.refreshOnAttached){
-                // This is ugly hack to wait for element to get attached
-                // to measure its inner dimention if not provided in setup (tomalec)
-                // if(!this.setup.width || this.setup.direction == "vertical" && !this.setup.height) {
-                // it's even uglier as we need it just in case something inside may be precalculate
-                    var list = this;
-                    setTimeout(function(){
-                        list.refresh();
-                        list.isReady = true;
-                    });
-                // } else {
-                //     this.refresh();
-                //     this.isReady = true;
-                // }
-                // --
-            } else {
-                this.isReady = true;
+                this.refresh();
             }
+            this.isReady = true;
         };
 
         proto._listSetupChanged = proto._setupChanged;
