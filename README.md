@@ -39,7 +39,7 @@ Or [download as ZIP](https://github.com/Juicy/juicy-tile-grid/archive/gh-pages.z
 2. Import Custom Element:
 
     ```html
-    <link rel="import" href="bower_components/juicy-tile-grid/dist/juicy-tile-grid.html">
+    <link rel="import" href="bower_components/juicy-tile-grid/juicy-tile-grid.html">
     ```
 
 3. Start using it!
