@@ -115,7 +115,8 @@
 
                             noSetup.parentNode.removeChild(noSetup);
                             inlineSetup.parentNode.removeChild(inlineSetup);
-                            done();
+                            console.warn('Changes made to removed nodes are done asynchronously due to https://github.com/webcomponents/webcomponentsjs/issues/491');
+                            setTimeout(done);
                         });
                     });
                     afterEach(function() {
@@ -124,11 +125,15 @@
                     });
 
                     it('refresh method should not be called', function(done) {
+                        expect(noSetup_refresh.callCount).to.equal(0);
+                        expect(inlineSetup_refresh.callCount).to.equal(0);
+
                         noSetup.setAttribute('setup', JSON.stringify(newSetup()));
                         inlineSetup.setAttribute('setup', JSON.stringify(newSetup()));
                         // wait for mutation observer callback
                         setTimeout(function whenMutated() {
                             expect(noSetup_refresh.callCount).to.equal(0);
+                            expect(inlineSetup_refresh.callCount).to.equal(0);
                             done();
                         });
                     });
@@ -181,7 +186,7 @@
                     });
 
                     it('refresh method should be called only once, after attached', function(done) {
-                        noSetup.setup = JSON.stringify(newSetup());
+                        noSetup.setup = newSetup();
                         document.body.appendChild(noSetup);
                         // wait for mutation observer callback
                         setTimeout(function whenMutated() {
@@ -228,7 +233,8 @@
 
                             noSetup.parentNode.removeChild(noSetup);
                             inlineSetup.parentNode.removeChild(inlineSetup);
-                            done();
+                            console.warn('Changes made to removed nodes are done asynchronously due to https://github.com/webcomponents/webcomponentsjs/issues/491');
+                            setTimeout(done);
                         });
                     });
                     afterEach(function() {

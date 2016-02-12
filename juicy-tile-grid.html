@@ -296,6 +296,8 @@ version: 1.3.2
                     stampShadowTileToFragment(wrappers, id);
                     tile = tiles[id];
                 }
+                // Add reference to Light DOM element to make it easier for setup checking
+                tile.element = child;
                 // make it work with good old indexes as well
                 tiles[regularTileIndex] = tile;
                 //if (elem.setAttribute) {
