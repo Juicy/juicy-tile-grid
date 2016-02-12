@@ -19,22 +19,36 @@
 </head>
 <body>
     <script>
-        // Load and run all tests (.html, .js):
-        WCT.loadSuites([
+        var suites = [
+          'list_refresh/onMutation.html',
+          'list_refresh/onResize.html',
+          'list_refresh/onAttached.html',
+          'list_refresh/onSetupChange.html',
+          'list_declarative_setup/juicy-style_attribute.html',
+        ];
+        var gridRelatedSuites = [
           'grid_building_algorithm.html',
           'fractions/basic.html',
           'fractions/gaps_and_mixed_units.html',
           'tightGroups/tracks.html',
           'directions.html',
           'precalculate.html',
-          'list_refresh/onMutation.html',
-          'list_refresh/onResize.html',
-          'list_refresh/onAttached.html',
-          'list_refresh/onSetupChange.html',
-          'list_declarative_setup/juicy-style_attribute.html',
 
           'smoke/full-fill.html'
-        ]);
+        ]
+        if(gridSupported()){
+            suites = suites.concat(gridRelatedSuites);
+        }
+        // Load and run all tests (.html, .js):
+        WCT.loadSuites(suites);
+
+        function gridSupported(){
+            var grid = document.createElement('div');
+            grid.style.display = '-webkit-grid';
+            grid.style.display = '-ms-grid';
+            grid.style.display = 'grid';
+            return !!grid.style.display;
+        }
     </script>
 </body>
 </html>
