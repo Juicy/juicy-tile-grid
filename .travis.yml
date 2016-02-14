@@ -8,6 +8,7 @@ before_script:
 branches:
   only:
     - gh-pages
+    - /.*/
 node_js: 4
 addons:
   firefox: latest
@@ -15,7 +16,7 @@ addons:
     sources:
       - google-chrome
     packages:
-      - google-chrome-unstable
+      - google-chrome-stable
 script:
   - xvfb-run wct --skip-plugin sauce
   - "if [ \"${TRAVIS_PULL_REQUEST}\" = \"false\" ]; then wct --skip-plugin local --plugin sauce; fi"
