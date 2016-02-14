@@ -10,3 +10,15 @@ function getGridRows(element, width, height){
                 // .split(" ")
                 .match(/[a-z0-9]+(\([^\)]*\))?/g);
 }
+function realRelativePosition(element, context) {
+    var contextPosition = context.getBoundingClientRect(),
+        elementPosition = element.getBoundingClientRect();
+    return {
+        top: elementPosition.top - contextPosition.top,
+        right: contextPosition.right - elementPosition.right,
+        bottom: contextPosition.bottom - elementPosition.bottom,
+        left: elementPosition.left - contextPosition.left,
+        width: elementPosition.width,
+        height: elementPosition.height
+    }
+}

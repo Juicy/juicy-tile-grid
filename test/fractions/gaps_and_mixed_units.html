@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
@@ -12,314 +13,312 @@
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../../juicy-tile-grid.html">
     <style shim-shadowdom>
-    html,body{
-      min-width: 0;
-      font-size: 10px;
-    }
-    juicy-tile-grid{
-      position: relative;
-    }
-    juicy-tile-grid > *,
-    /** thi selector is for shimmed ShadowDOM browsers */
-    juicy-tile-grid .juicy-tile > [juicytile]{
-      background-color: rgba(99,99,99,0.3);
-      height: 100%;
-      margin: 0;
-    }
-    juicy-tile-grid{
-      background-color: lightgrey;
-    }
-    juicy-tile-grid /deep/ .juicy-tile{
-      background-color: lightblue;
-      /*border: 1px solid black;*/
-      /*box-sizing: border-box;*/
-    }
-    juicy-tile-grid /deep/ .juicy-tile:nth-child(2n){
-      /*background-color: darkblue;*/
-      /*border: 1px solid black;*/
-      /*box-sizing: border-box;*/
-    }
+        html,
+        body {
+            min-width: 0;
+            font-size: 10px;
+        }
+
+        juicy-tile-grid {
+            position: relative;
+        }
+
+        juicy-tile-grid > *,
+        /** thi selector is for shimmed ShadowDOM browsers */
+
+        juicy-tile-grid .juicy-tile > [juicytile] {
+            background-color: rgba(99, 99, 99, 0.3);
+            height: 100%;
+            margin: 0;
+        }
+
+        juicy-tile-grid {
+            background-color: lightgrey;
+        }
+
+        juicy-tile-grid /deep/ .juicy-tile {
+            background-color: lightblue;
+            /*border: 1px solid black;*/
+            /*box-sizing: border-box;*/
+        }
+
+        juicy-tile-grid /deep/ .juicy-tile:nth-child(2n) {
+            /*background-color: darkblue;*/
+            /*border: 1px solid black;*/
+            /*box-sizing: border-box;*/
+        }
     </style>
-  </head>
-  <body>
+</head>
 
-    <!-- You can use the document as a place to set up your fixtures. -->
-    <template is="dom-bind" id="root">
-      <juicy-tile-grid id="grid0" setup="{{model.setup}}" style="width: 420px;<!--  visibility: hidden; -->"><!-- to 1300-->
-        <div>100px x 100px</div>
-        <div>200px x 100px <br/>flexible</div>
-        <div>100px x 100px <br/>flexible</div>
-        <div>100% x 100px <br/>flexible</div>
-        <div>50% x 100px <br/>flexible</div>
-      </juicy-tile-grid>
-      <juicy-tile-grid id="grid1" setup="{{model.setup}}" style="width: 420px; <!-- visibility: hidden; -->"><!-- to 1300-->
-        <div>100px x 100px</div>
-        <div>200px x 100px <br/>flexible</div>
-        <div>100px x 100px <br/>flexible</div>
-        <div>100% x 100px <br/>flexible</div>
-        <div>50% x 100px <br/>flexible</div>
-      </juicy-tile-grid>
-      <juicy-tile-grid id="grid2" setup="{{model.setup2}}" style="height: 420px; width: 320px<!-- visibility: hidden; -->"><!-- to 1300-->
-        <div>100px x 100px</div>
-        <div>200px x 100px <br/>flexible</div>
-        <div>100px x 100px <br/>flexible</div>
-        <div>100% x 100px <br/>flexible</div>
-        <div>50% x 100px <br/>flexible</div>
-      </juicy-tile-grid>
-    </template>
-    </template>
-    <script>
-var templ = document.getElementById('root');
-var model = {
-  width: 450,
-  setup : {
-    gutter: 10,
-    items:[
-      {
-          id:0,
-          priority:0.9,
-          height: 100,
-          width: 100
-      },
-      {
-          id:1,
-          priority:0.6,
-          height: 100,
-          width:200,
-          widthFlexible: true
-      },
-      {
-          id:2,
-          priority:0.4,
-          height: 100,
-          width: 100,
-          widthFlexible: true
-      },
-      {
-          id:3,
-          priority:0.4,
-          height: 100,
-          width: "100%",
-          widthFlexible: true
-      },
-      {
-          id:4,
-          priority:0.4,
-          height: 100,
-          width: "50%",
-          widthFlexible: true
-      }
-    ]
-  },
-  setup2 : {
-    gutter: 10,
-    direction: "vertical",
-    items:[
-      {
-          id:0,
-          priority:0.9,
-          width: 100,
-          height: 100
-      },
-      {
-          id:1,
-          priority:0.6,
-          width: 100,
-          height:200,
-          heightFlexible: true
-      },
-      {
-          id:2,
-          priority:0.4,
-          width: 100,
-          height: 100,
-          heightFlexible: true
-      },
-      {
-          id:3,
-          priority:0.4,
-          width: 100,
-          height: "100%",
-          heightFlexible: true
-      },
-      {
-          id:4,
-          priority:0.4,
-          width: 100,
-          height: "50%",
-          heightFlexible: true
-      }
-    ]
-  }
-};
+<body>
 
-document.querySelector("template").model = model;
+    <test-fixture id="grid1">
+        <template>
+            <juicy-tile-grid setup='{
+        "gutter": 10,
+        "items":[
+          {
+              "id":0,
+              "priority":0.9,
+              "height": 100,
+              "width": 100
+          },
+          {
+              "id":1,
+              "priority":0.6,
+              "height": 100,
+              "width":200,
+              "widthFlexible": true
+          },
+          {
+              "id":2,
+              "priority":0.4,
+              "height": 100,
+              "width": 100,
+              "widthFlexible": true
+          },
+          {
+              "id":3,
+              "priority":0.4,
+              "height": 100,
+              "width": "100%",
+              "widthFlexible": true
+          },
+          {
+              "id":4,
+              "priority":0.4,
+              "height": 100,
+              "width": "50%",
+              "widthFlexible": true
+          }
+        ]
+      }' style="width: 420px; <!-- visibility: hidden; -->">
+                <!-- to 1300-->
+                <div>100px x 100px</div>
+                <div>200px x 100px
+                    <br/>flexible</div>
+                <div>100px x 100px
+                    <br/>flexible</div>
+                <div>100% x 100px
+                    <br/>flexible</div>
+                <div>50% x 100px
+                    <br/>flexible</div>
+            </juicy-tile-grid>
+        </template>
 
+    </test-fixture>
+    <test-fixture id="grid_height">
+        <template>
+            <juicy-tile-grid setup='{
+        "gutter": 10,
+        "direction": "vertical",
+        "items":[
+          {
+              "id":0,
+              "priority":0.9,
+              "width": 100,
+              "height": 100
+          },
+          {
+              "id":1,
+              "priority":0.6,
+              "width": 100,
+              "height":200,
+              "heightFlexible": true
+          },
+          {
+              "id":2,
+              "priority":0.4,
+              "width": 100,
+              "height": 100,
+              "heightFlexible": true
+          },
+          {
+              "id":3,
+              "priority":0.4,
+              "width": 100,
+              "height": "100%",
+              "heightFlexible": true
+          },
+          {
+              "id":4,
+              "priority":0.4,
+              "width": 100,
+              "height": "50%",
+              "heightFlexible": true
+          }
+        ]
+      }' style="height: 420px; width: 320px<!-- visibility: hidden; -->">
+                <!-- to 1300-->
+                <div>100px x 100px</div>
+                <div>200px x 100px
+                    <br/>flexible</div>
+                <div>100px x 100px
+                    <br/>flexible</div>
+                <div>100% x 100px
+                    <br/>flexible</div>
+                <div>50% x 100px
+                    <br/>flexible</div>
+            </juicy-tile-grid>
+        </template>
 
-function expectPosition(element, x, y){
-  expect( element.offsetTop).to.equal(x);
-  expect( element.offsetLeft).to.equal(y);
-}
-function expectPosition_yx(element, y, x){
-	return expectPosition(element, x, y);
-}
-function expectSize(element, width, height){
-  expect( element.offsetWidth).to.equal(width);
-  expect( element.offsetHeight).to.equal(height);
-}
-function expectSize_hw(element, height, width){
-	return expectSize(element, width, height);
-}
-/**
- * juicy-tile-grid fractions tests
- */
-var juicyTileList;
-describe('fractions', function() {
-  before(function(done){
-    setTimeout(function(){
-    // Polymer.whenReady(function(){
-      done();
-      juicyTileList = document.getElementById('grid1');
-      juicyTileList_height = document.getElementById('grid2');
-    },100);
-  });
-  context('with widthFlexible', function () {
-    afterEach(function(){
-      juicyTileList.refresh.restore && juicyTileList.refresh.restore();
-    });
+    </test-fixture>
+</body>
+<script>
+    function expectPosition(element, x, y) {
+        expect(element.offsetTop).to.equal(x);
+        expect(element.offsetLeft).to.equal(y);
+    }
 
-    context('when rendered, ', function () {
-      it('should align items in correct places', function (done) {
-        expectPosition( juicyTileList.children[0], 0, 0);
-        expectPosition( juicyTileList.children[1], 0, 100+10);
-        expectPosition( juicyTileList.children[2], 0, 100+10+200+10);
-        expectPosition( juicyTileList.children[3], 100+10, 0);
-        expectPosition( juicyTileList.children[4], 100+10+100+10, 0);
-        done();
-      });
-      it('should align items in correct sizes (Chrome seems to fail with rounding)', function (done) {
-        expectSize( juicyTileList.children[0], 100, 100);
-        expectSize( juicyTileList.children[1], 200, 100);
-        expectSize( juicyTileList.children[2], 100, 100);
-        expectSize( juicyTileList.children[3], 100+10+200+10+100, 100);
-        expectSize( juicyTileList.children[4], (100+10+200+10+100)/2 - 10/2, 100);
-        done();
-      });
+    function expectPosition_yx(element, y, x) {
+        return expectPosition(element, x, y);
+    }
 
-    });
-    context('when resized', function () {
-      it('refresh method should not be called', function (done) {
-        var refresh = sinon.spy(juicyTileList, "refresh");
+    function expectSize(element, width, height) {
+        expect(element.offsetWidth).to.equal(width);
+        expect(element.offsetHeight).to.equal(height);
+    }
 
-        juicyTileList.style.width = (450+100+100+230)+"px";
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList.refresh.callCount ).to.equal(0);
-          done();
-        },10);
-      });
-      it('added width should be distributed proportionally among columns with items marked as expandable', function (done) {
-        juicyTileList.style.width = (420+100+100+200)+"px";
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-        expectPosition( juicyTileList.children[0], 0, 0);
-        expectPosition( juicyTileList.children[1], 0, 100*2+10);
-        expectPosition( juicyTileList.children[2], 0, 100*2+10+200*2+10);
-        expectPosition( juicyTileList.children[3], 100+10, 0);
-        expectPosition( juicyTileList.children[4], 100+10+100+10, 0);
-        done();
+    function expectSize_hw(element, height, width) {
+        return expectSize(element, width, height);
+    }
+    /**
+     * juicy-tile-grid fractions tests
+     */
+    var grid_width, grid_height;
+    describe('fractions', function() {
+        beforeEach(function(done) {
+            grid_width = fixture('grid1');
+            grid_height = fixture('grid_height');
+            setTimeout(done, 1);
         });
-      });
-      it('items marked as expandable should change size accordingly', function (done) {
-        juicyTileList.style.width = (420+100+100+200)+"px";
+        context('with widthFlexible', function() {
+            context('when rendered, ', function() {
+                it('should align items in correct places', function(done) {
+                    expectPosition(grid_width.children[0], 0, 0);
+                    expectPosition(grid_width.children[1], 0, 100 + 10);
+                    expectPosition(grid_width.children[2], 0, 100 + 10 + 200 + 10);
+                    expectPosition(grid_width.children[3], 100 + 10, 0);
+                    expectPosition(grid_width.children[4], 100 + 10 + 100 + 10, 0);
+                    done();
+                });
+                it('should align items in correct sizes (Chrome seems to fail with rounding)', function(done) {
+                    expectSize(grid_width.children[0], 100, 100);
+                    expectSize(grid_width.children[1], 200, 100);
+                    expectSize(grid_width.children[2], 100, 100);
+                    expectSize(grid_width.children[3], 100 + 10 + 200 + 10 + 100, 100);
+                    expectSize(grid_width.children[4], (100 + 10 + 200 + 10 + 100) / 2 - 10 / 2, 100);
+                    done();
+                });
 
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-        expectSize( juicyTileList.children[0], 100, 100);
-        expectSize( juicyTileList.children[1], 200*2, 100);
-        expectSize( juicyTileList.children[2], 100*2, 100);
-        expectSize( juicyTileList.children[3], 100*2+10+200*2+10+100*2, 100);
-        expectSize( juicyTileList.children[4], 2*((420)/2 - 10/2) - 10, 100);
-        done();
+            });
+            context('when resized', function() {
+                it('refresh method should not be called', function(done) {
+                    var refresh = sinon.spy(grid_width, "refresh");
+
+                    grid_width.style.width = (450 + 100 + 100 + 230) + "px";
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(grid_width.refresh.callCount).to.equal(0);
+                        done();
+                    }, 10);
+                });
+                it('added width should be distributed proportionally among columns with items marked as expandable', function(done) {
+                    grid_width.style.width = (420 + 100 + 100 + 200) + "px";
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expectPosition(grid_width.children[0], 0, 0);
+                        expectPosition(grid_width.children[1], 0, 100 * 2 + 10);
+                        expectPosition(grid_width.children[2], 0, 100 * 2 + 10 + 200 * 2 + 10);
+                        expectPosition(grid_width.children[3], 100 + 10, 0);
+                        expectPosition(grid_width.children[4], 100 + 10 + 100 + 10, 0);
+                        done();
+                    });
+                });
+                it('items marked as expandable should change size accordingly', function(done) {
+                    grid_width.style.width = (420 + 100 + 100 + 200) + "px";
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expectSize(grid_width.children[0], 100, 100);
+                        expectSize(grid_width.children[1], 200 * 2, 100);
+                        expectSize(grid_width.children[2], 100 * 2, 100);
+                        expectSize(grid_width.children[3], 100 * 2 + 10 + 200 * 2 + 10 + 100 * 2, 100);
+                        expectSize(grid_width.children[4], 2 * ((420) / 2 - 10 / 2) - 10, 100);
+                        done();
+                    });
+                });
+
+            });
+
         });
-      });
-
-    });
-
-  });
 
 
-  context('with heightFlexible', function () {
-    afterEach(function(){
-      juicyTileList_height.refresh.restore && juicyTileList_height.refresh.restore();
-    });
+        context('with heightFlexible', function() {
+            context('when rendered, ', function() {
+                it('should align items in correct places', function(done) {
+                    expectPosition_yx(grid_height.children[0], 0, 0);
+                    expectPosition_yx(grid_height.children[1], 0, 100 + 10);
+                    expectPosition_yx(grid_height.children[2], 0, 100 + 10 + 200 + 10);
+                    expectPosition_yx(grid_height.children[3], 100 + 10, 0);
+                    expectPosition_yx(grid_height.children[4], 100 + 10 + 100 + 10, 0);
+                    done();
+                });
+                it('should align items in correct sizes (Chrome seems to fail with rounding)', function(done) {
+                    expectSize_hw(grid_height.children[0], 100, 100);
+                    expectSize_hw(grid_height.children[1], 200, 100);
+                    expectSize_hw(grid_height.children[2], 100, 100);
+                    expectSize_hw(grid_height.children[3], 100 + 10 + 200 + 10 + 100, 100);
+                    expectSize_hw(grid_height.children[4], (100 + 10 + 200 + 10 + 100) / 2 - 10 / 2, 100);
+                    done();
+                });
 
-    context('when rendered, ', function () {
-      it('should align items in correct places', function (done) {
-        expectPosition_yx( juicyTileList_height.children[0], 0, 0);
-        expectPosition_yx( juicyTileList_height.children[1], 0, 100+10);
-        expectPosition_yx( juicyTileList_height.children[2], 0, 100+10+200+10);
-        expectPosition_yx( juicyTileList_height.children[3], 100+10, 0);
-        expectPosition_yx( juicyTileList_height.children[4], 100+10+100+10, 0);
-        done();
-      });
-      it('should align items in correct sizes (Chrome seems to fail with rounding)', function (done) {
-        expectSize_hw( juicyTileList_height.children[0], 100, 100);
-        expectSize_hw( juicyTileList_height.children[1], 200, 100);
-        expectSize_hw( juicyTileList_height.children[2], 100, 100);
-        expectSize_hw( juicyTileList_height.children[3], 100+10+200+10+100, 100);
-        expectSize_hw( juicyTileList_height.children[4], (100+10+200+10+100)/2 - 10/2, 100);
-        done();
-      });
+            });
+            context('when resized', function() {
+                it('refresh method should not be called', function(done) {
+                    var refresh = sinon.spy(grid_height, "refresh");
 
-    });
-    context('when resized', function () {
-      it('refresh method should not be called', function (done) {
-        var refresh = sinon.spy(juicyTileList_height, "refresh");
+                    grid_height.style.height = (450 + 100 + 100 + 230) + "px";
 
-        juicyTileList_height.style.height = (450+100+100+230)+"px";
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(grid_height.refresh.callCount).to.equal(0);
+                        done();
+                    }, 10);
+                });
+                it('added height should be distributed proportionally among columns with items marked as expandable', function(done) {
+                    grid_height.style.height = (420 + 100 + 100 + 200) + "px";
 
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList_height.refresh.callCount ).to.equal(0);
-          done();
-        },10);
-      });
-      it('added height should be distributed proportionally among columns with items marked as expandable', function (done) {
-        juicyTileList_height.style.height = (420+100+100+200)+"px";
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expectPosition_yx(grid_height.children[0], 0, 0);
+                        expectPosition_yx(grid_height.children[1], 0, 100 * 2 + 10);
+                        expectPosition_yx(grid_height.children[2], 0, 100 * 2 + 10 + 200 * 2 + 10);
+                        expectPosition_yx(grid_height.children[3], 100 + 10, 0);
+                        expectPosition_yx(grid_height.children[4], 100 + 10 + 100 + 10, 0);
+                        done();
+                    });
+                });
+                it('items marked as expandable should change size accordingly', function(done) {
+                    grid_height.style.height = (420 + 100 + 100 + 200) + "px";
 
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-        expectPosition_yx( juicyTileList_height.children[0], 0, 0);
-        expectPosition_yx( juicyTileList_height.children[1], 0, 100*2+10);
-        expectPosition_yx( juicyTileList_height.children[2], 0, 100*2+10+200*2+10);
-        expectPosition_yx( juicyTileList_height.children[3], 100+10, 0);
-        expectPosition_yx( juicyTileList_height.children[4], 100+10+100+10, 0);
-        done();
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expectSize_hw(grid_height.children[0], 100, 100);
+                        expectSize_hw(grid_height.children[1], 200 * 2, 100);
+                        expectSize_hw(grid_height.children[2], 100 * 2, 100);
+                        expectSize_hw(grid_height.children[3], 100 * 2 + 10 + 200 * 2 + 10 + 100 * 2, 100);
+                        expectSize_hw(grid_height.children[4], 2 * ((420) / 2 - 10 / 2) - 10, 100);
+                        done();
+                    });
+                });
+
+            });
+
         });
-      });
-      it('items marked as expandable should change size accordingly', function (done) {
-        juicyTileList_height.style.height = (420+100+100+200)+"px";
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-        expectSize_hw( juicyTileList_height.children[0], 100, 100);
-        expectSize_hw( juicyTileList_height.children[1], 200*2, 100);
-        expectSize_hw( juicyTileList_height.children[2], 100*2, 100);
-        expectSize_hw( juicyTileList_height.children[3], 100*2+10+200*2+10+100*2, 100);
-        expectSize_hw( juicyTileList_height.children[4], 2*((420)/2 - 10/2) - 10, 100);
-        done();
-        });
-      });
-
     });
+</script>
 
-  });
-});
-
-    </script>
-
-  </body>
 </html>

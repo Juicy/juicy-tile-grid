@@ -9,6 +9,8 @@
 
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../juicy-tile-grid.html">
+    <!-- get some test helpers -->
+    <script src="helpers/getTracks.js"></script>
     <style shim-shadowdom>
         juicy-tile-grid {
             position: relative;
@@ -167,18 +169,6 @@
                 }]
             }]
         };
-    }
-    function realRelativePosition(element, context) {
-        var contextPosition = context.getBoundingClientRect(),
-            elementPosition = element.getBoundingClientRect();
-        return {
-            top: elementPosition.top - contextPosition.top,
-            right: contextPosition.right - elementPosition.right,
-            bottom: contextPosition.bottom - elementPosition.bottom,
-            left: elementPosition.left - contextPosition.left,
-            width: elementPosition.width,
-            height: elementPosition.height,
-        }
     }
 
     function realRelativeOrientedPosition(element, context, direction, rightToLeft, bottomUp) {

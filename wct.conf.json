@@ -6,6 +6,7 @@
         },
         "sauce": {
             "disabled": true,
+            "name": "juicy-tile-grid",
             "browsers": [{
                 "browserName": "microsoftedge",
                 "platform": "Windows 10",

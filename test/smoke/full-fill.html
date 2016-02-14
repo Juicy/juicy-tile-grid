@@ -25,7 +25,8 @@
 
         juicy-tile-grid > *,
         /** thi selector is for shimmed ShadowDOM browsers */
-        juicy-tile-grid .juicy-tile > [juicytile]{
+
+        juicy-tile-grid .juicy-tile > [juicytile] {
             background-color: rgba(99, 99, 99, 0.3);
             height: 100%;
             margin: 0;
@@ -39,94 +40,87 @@
 
 <body>
 
-    <!-- You can use the document as a place to set up your fixtures. -->
-    <template is="dom-bind" id="root">
-        <juicy-tile-grid id="fullfill_number" setup="{{model.fullfill_number}}" style="width: 200px; height: 200px;">
-            <div>0 - 300 x 300</div>
-        </juicy-tile-grid>
-        <juicy-tile-grid id="fullfill_percent" setup="{{model.fullfill_percent}}" style="width: 200px; height: 200px;">
-            <div>0 - 300 x 300</div>
-        </juicy-tile-grid>
-    </template>
-    <script>
-        var templ = document.getElementById('root');
-        var model = {
-            fullfill_number: {
-                "items": [{
-                    "height": 1,
-                    "heightDynamic": true,
-                    "heightFlexible": true,
-                    "width": 1,
-                    "widthFlexible": true,
-                    "priority": 1,
-                    "id": 0
-                }],
-                "width": 1
-            },
-            fullfill_percent: {
-                "items": [{
-                    "height": "100%",
-                    "heightDynamic": true,
-                    "heightFlexible": true,
-                    "width": "100%",
-                    "widthFlexible": true,
-                    "priority": 1,
-                    "id": 0
-                }],
-                height: 200 // currently this is required for % in height
-            }
-        };
+    <test-fixture id="fullfill_number">
+        <template>
+            <juicy-tile-grid setup='{
+            "items": [{
+                "height": 1,
+                "heightDynamic": true,
+                "heightFlexible": true,
+                "width": 1,
+                "widthFlexible": true,
+                "priority": 1,
+                "id": 0
+            }],
+            "width": 1
+        }' style="width: 200px; height: 200px;">
+                <div>0 - 300 x 300</div>
+            </juicy-tile-grid>
+        </template>
+    </test-fixture>
+    <test-fixture id="fullfill_percent">
+        <template>
+            <juicy-tile-grid setup='{
+            "items": [{
+                "height": "100%",
+                "heightDynamic": true,
+                "heightFlexible": true,
+                "width": "100%",
+                "widthFlexible": true,
+                "priority": 1,
+                "id": 0
+            }],
+            "height": 200
+        }' style="width: 200px; height: 200px;">
+                <div>0 - 300 x 300</div>
+            </juicy-tile-grid>
+        </template>
+    </test-fixture>
+</body>
+<script>
+    function expectPosition(element, x, y) {
+        expect(element.offsetTop).to.equal(x);
+        expect(element.offsetLeft).to.equal(y);
+    }
 
-        document.querySelector("template").model = model;
+    function expectSize(element, width, height) {
+        expect(element.offsetWidth).to.equal(width);
+        expect(element.offsetHeight).to.equal(height);
+    }
 
-        function expectPosition(element, x, y) {
-            expect(element.offsetTop).to.equal(x);
-            expect(element.offsetLeft).to.equal(y);
-        }
-
-        function expectSize(element, width, height) {
-            expect(element.offsetWidth).to.equal(width);
-            expect(element.offsetHeight).to.equal(height);
-        }
-
-        /**
-         * juicy-tile-grid fractions tests
-         */
-        var juicyTileList;
-        describe('when item is configured to fill entire grid', function() {
-            before(function(done) {
-                setTimeout(function() {
-                    // Polymer.whenReady(function(){
-                    done();
-                    juicyTileList_fullfill_number = document.getElementById('fullfill_number');
-                    juicyTileList_fullfill_percent = document.getElementById('fullfill_percent');
-                }, 100);
-            });
-            describe('using numeric values', function() {
-                context('item', function() {
-                    it('should be in the size of a container', function() {
-                        expectSize(juicyTileList_fullfill_number.children[0], juicyTileList_fullfill_number.offsetWidth, juicyTileList_fullfill_number.offsetHeight );
-                    });
-                    it('should be place in (0,0)', function() {
-                        expectPosition(juicyTileList_fullfill_number.children[0], 0, 0);
-                    });
-
+    /**
+     * juicy-tile-grid fractions tests
+     */
+    var grid_fullfill_number, grid_fullfill_percent;
+    describe('when item is configured to fill entire grid', function() {
+        beforeEach(function(done) {
+            grid_fullfill_number = fixture('fullfill_number');
+            grid_fullfill_percent = fixture('fullfill_percent');
+            setTimeout(done, 1);
+        });
+        describe('using numeric values', function() {
+            context('item', function() {
+                it('should be in the size of a container', function() {
+                    expectSize(grid_fullfill_number.children[0], grid_fullfill_number.offsetWidth, grid_fullfill_number.offsetHeight);
                 });
-            });
-            describe('using percentage values', function() {
-                context('item', function() {
-                    it('should be in the size of a container', function() {
-                        expectSize(juicyTileList_fullfill_percent.children[0], juicyTileList_fullfill_percent.offsetWidth, juicyTileList_fullfill_percent.offsetHeight );
-                    });
-                    it('should be place in (0,0)', function() {
-                        expectPosition(juicyTileList_fullfill_percent.children[0], 0, 0);
-                    });
-
+                it('should be place in (0,0)', function() {
+                    expectPosition(grid_fullfill_number.children[0], 0, 0);
                 });
+
             });
         });
-    </script>
+        describe('using percentage values', function() {
+            context('item', function() {
+                it('should be in the size of a container', function() {
+                    expectSize(grid_fullfill_percent.children[0], grid_fullfill_percent.offsetWidth, grid_fullfill_percent.offsetHeight);
+                });
+                it('should be place in (0,0)', function() {
+                    expectPosition(grid_fullfill_percent.children[0], 0, 0);
+                });
 
-</body>
+            });
+        });
+    });
+</script>
 
 </html>

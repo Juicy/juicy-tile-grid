@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
@@ -12,249 +13,259 @@
     <!-- Step 1: import the element to test -->
     <link rel="import" href="../../juicy-tile-grid.html">
     <style shim-shadowdom>
-    html,body{
-      min-width: 0;
-    }
-    juicy-tile-grid{
-      position: relative;
-    }
-    juicy-tile-grid > *,
-    /** thi selector is for shimmed ShadowDOM browsers */
-    juicy-tile-grid .juicy-tile > [juicytile]{
-      background-color: rgba(99,99,99,0.3);
-      height: 100%;
-      margin: 0;
-    }
-    juicy-tile-grid{
-      background-color: lightgrey;
-    }
-    juicy-tile-grid /deep/ .juicy-tile{
-      background-color: lightblue;
-      /*border: 1px solid black;*/
-      /*box-sizing: border-box;*/
-    }
-    juicy-tile-grid /deep/ .juicy-tile:nth-child(2){
-      background-color: lightpink;
-      /*border: 1px solid black;*/
-      /*box-sizing: border-box;*/
-    }
+        html,
+        body {
+            min-width: 0;
+        }
+
+        juicy-tile-grid {
+            position: relative;
+        }
+
+        juicy-tile-grid > *,
+        /** thi selector is for shimmed ShadowDOM browsers */
+
+        juicy-tile-grid .juicy-tile > [juicytile] {
+            background-color: rgba(99, 99, 99, 0.3);
+            height: 100%;
+            margin: 0;
+        }
+
+        juicy-tile-grid {
+            background-color: lightgrey;
+        }
+
+        juicy-tile-grid /deep/ .juicy-tile {
+            background-color: lightblue;
+            /*border: 1px solid black;*/
+            /*box-sizing: border-box;*/
+        }
+
+        juicy-tile-grid /deep/ .juicy-tile:nth-child(2) {
+            background-color: lightpink;
+            /*border: 1px solid black;*/
+            /*box-sizing: border-box;*/
+        }
     </style>
-  </head>
-  <body>
+</head>
 
-    <!-- You can use the document as a place to set up your fixtures. -->
-    <template is="dom-bind" id="root">
-      <juicy-tile-grid id="grid1" setup="{{model.setup}}" style="width: 800px;"><!-- to 1300-->
-        <div>0 - 200 x 100</div>
-        <div>1 - 200 x 100 - flex</div>
-        <div>2 - 400 x 200 - flex</div>
-      </juicy-tile-grid>
-      <juicy-tile-grid id="grid2" setup="{{model.setup2}}" style="width: 200px; height:400px"><!-- to 1300-->
-        <div>0</div>
-        <div>1</div>
-        <div>3</div>
-      </juicy-tile-grid>
-    </template>
-    <script>
-var templ = document.getElementById('root');
-var model = {
-  setup : {
-    gutter: 0,
-    items:[
-      {
-          id:0,
-          priority:0.9,
-          height: 100,
-          width: 200
-      },
-      {
-          id:1,
-          priority:0.6,
-          height: 100,
-          width:200,
-          widthFlexible: true
-      },
-      {
-          id:2,
-          priority:0.4,
-          height: 200,
-          width:400,
-          widthFlexible: true
-      }
-    ]
-  },
-  setup2 : {
-    gutter: 0,
-    direction: "vertical",
-    items:[
-      {
-          id:0,
-          priority:0.9,
-          height: 100,
-          width: 200
-      },
-      {
-          id:1,
-          priority:0.6,
-          height: 100,
-          width:200,
-          heightFlexible: true
-      },
-      {
-          id:2,
-          priority:0.4,
-          height: 200,
-          width:200,
-          heightFlexible: true
-      }
-    ]
-  }
-};
-document.querySelector("template").model = model;
+<body>
+    <test-fixture id="gridHorizontal">
+        <template>
+            <juicy-tile-grid setup='{
+        "gutter": 0,
+        "items":[
+          {
+              "id":0,
+              "priority":0.9,
+              "height": 100,
+              "width": 200
+          },
+          {
+              "id":1,
+              "priority":0.6,
+              "height": 100,
+              "width":200,
+              "widthFlexible": true
+          },
+          {
+              "id":2,
+              "priority":0.4,
+              "height": 200,
+              "width":400,
+              "widthFlexible": true
+          }
+        ]
+    }' style="width: 800px;">
+                <!-- to 1300-->
+                <div>0 - 200 x 100</div>
+                <div>1 - 200 x 100 - flex</div>
+                <div>2 - 400 x 200 - flex</div>
+            </juicy-tile-grid>
+        </template>
+
+    </test-fixture>
+    <test-fixture id="gridVertical">
+        <template>
+            <juicy-tile-grid setup='{
+        "gutter": 0,
+        "direction": "vertical",
+        "items":[
+          {
+              "id":0,
+              "priority":0.9,
+              "height": 100,
+              "width": 200
+          },
+          {
+              "id":1,
+              "priority":0.6,
+              "height": 100,
+              "width":200,
+              "heightFlexible": true
+          },
+          {
+              "id":2,
+              "priority":0.4,
+              "height": 200,
+              "width":200,
+              "heightFlexible": true
+          }
+        ]
+    }' style="width: 200px; height:400px">
+                <!-- to 1300-->
+                <div>0</div>
+                <div>1</div>
+                <div>3</div>
+            </juicy-tile-grid>
+        </template>
+    </test-fixture>
+</body>
+<script>
+    var templ = document.getElementById('root');
 
 
-function expectPosition(element, x, y){
-  expect( element.offsetTop).to.equal(x);
-  expect( element.offsetLeft).to.equal(y);
-}
-function expectSize(element, width, height){
-  expect( element.offsetWidth).to.equal(width);
-  expect( element.offsetHeight).to.equal(height);
-}
-/**
- * juicy-tile-grid fractions tests
- */
-var juicyTileList;
-describe('fractions', function() {
-  before(function(done){
-    setTimeout(function(){
-    // Polymer.whenReady(function(){
-      done();
-      juicyTileList = document.getElementById('grid1');
-      juicyTileList2 = document.getElementById('grid2');
-  },100);
-  });
-  context('with widthFlexible', function () {
-    afterEach(function(){
-      juicyTileList.refresh.restore && juicyTileList.refresh.restore();
-    });
+    function expectPosition(element, x, y) {
+        expect(element.offsetTop).to.equal(x);
+        expect(element.offsetLeft).to.equal(y);
+    }
 
-    context('when rendered, ', function () {
-      it('should align items in correct places', function (done) {
-        expectPosition( juicyTileList.children[0], 0, 0);
-        expectPosition( juicyTileList.children[1], 0, 200);
-        expectPosition( juicyTileList.children[2], 0, 400);
-        done();
-      });
-      it('should align items in correct sizes', function (done) {
-        console.info("Fails due to Firefox issue", "https://bugzilla.mozilla.org/show_bug.cgi?id=1163435");
-        console.log("W3C spec:", "A grid item is sized within the containing block defined by its grid area similarly to an equivalent block-level box in an equivalently-sized containing block, except that auto margins and the box alignment properties have special effects. (See §11 Alignment and Spacing.)");
-        expectSize( juicyTileList.children[0], 200, 100);
-        expectSize( juicyTileList.children[1], 200, 100);
-        expectSize( juicyTileList.children[2], 400, 200);
-        done();
-      });
-
-    });
-    context('when resized', function () {
-      it('refresh method should not be called', function (done) {
-        var refresh = sinon.spy(juicyTileList, "refresh");
-
-        juicyTileList.style.width = "1100px";
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList.refresh.callCount ).to.equal(0);
-          done();
-        },10);
-      });
-      it('added width should be distributed proportionally among columns with items marked as expandable', function (done) {
-        juicyTileList.style.width = "1100px";
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-        expectPosition( juicyTileList.children[0], 0, 0);
-        expectPosition( juicyTileList.children[1], 0, 200);
-        expectPosition( juicyTileList.children[2], 0, 500);
-        done();
+    function expectSize(element, width, height) {
+        expect(element.offsetWidth).to.equal(width);
+        expect(element.offsetHeight).to.equal(height);
+    }
+    /**
+     * juicy-tile-grid fractions tests
+     */
+    var gridHorizontal;
+    describe('fractions', function() {
+        beforeEach(function(done) {
+            gridHorizontal = fixture('gridHorizontal');
+            gridVertical = fixture('gridVertical');
+            setTimeout(done, 1);
         });
-      });
-      it('items marked as expandable should change size accordingly', function (done) {
-        juicyTileList.style.width = "1100px";
+        context('with widthFlexible', function() {
 
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-        expectSize( juicyTileList.children[0], 200, 100);
-        expectSize( juicyTileList.children[1], 300, 100);
-        expectSize( juicyTileList.children[2], 600, 200);
-        done();
+            context('when rendered, ', function() {
+                it('should align items in correct places', function(done) {
+                    expectPosition(gridHorizontal.children[0], 0, 0);
+                    expectPosition(gridHorizontal.children[1], 0, 200);
+                    expectPosition(gridHorizontal.children[2], 0, 400);
+                    done();
+                });
+                it('should align items in correct sizes', function(done) {
+                    console.info("Fails due to Firefox issue", "https://bugzilla.mozilla.org/show_bug.cgi?id=1163435");
+                    console.log("W3C spec:",
+                        "A grid item is sized within the containing block defined by its grid area similarly to an equivalent block-level box in an equivalently-sized containing block, except that auto margins and the box alignment properties have special effects. (See §11 Alignment and Spacing.)"
+                    );
+                    expectSize(gridHorizontal.children[0], 200, 100);
+                    expectSize(gridHorizontal.children[1], 200, 100);
+                    expectSize(gridHorizontal.children[2], 400, 200);
+                    done();
+                });
+
+            });
+            context('when resized', function() {
+                it('refresh method should not be called', function(done) {
+                    var refresh = sinon.spy(gridHorizontal, "refresh");
+
+                    gridHorizontal.style.width = "1100px";
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(gridHorizontal.refresh.callCount).to.equal(0);
+                        done();
+                    }, 10);
+                });
+                it('added width should be distributed proportionally among columns with items marked as expandable', function(done) {
+                    gridHorizontal.style.width = "1100px";
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expectPosition(gridHorizontal.children[0], 0, 0);
+                        expectPosition(gridHorizontal.children[1], 0, 200);
+                        expectPosition(gridHorizontal.children[2], 0, 500);
+                        done();
+                    });
+                });
+                it('items marked as expandable should change size accordingly', function(done) {
+                    console.info("Fails due to Firefox issue", "https://bugzilla.mozilla.org/show_bug.cgi?id=1163435");
+                    console.log("W3C spec:",
+                        "A grid item is sized within the containing block defined by its grid area similarly to an equivalent block-level box in an equivalently-sized containing block, except that auto margins and the box alignment properties have special effects. (See §11 Alignment and Spacing.)"
+                    );
+                    gridHorizontal.style.width = "1100px";
+
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expectSize(gridHorizontal.children[0], 200, 100);
+                        expectSize(gridHorizontal.children[1], 300, 100);
+                        expectSize(gridHorizontal.children[2], 600, 200);
+                        done();
+                    });
+                });
+
+            });
+
         });
-      });
+        context('with heightFlexible', function() {
+            afterEach(function() {
+                gridVertical.refresh.restore && gridVertical.refresh.restore();
+            });
 
-    });
+            context('when rendered, ', function() {
+                it('should align items in correct places', function(done) {
+                    expectPosition(gridVertical.children[0], 0, 0);
+                    expectPosition(gridVertical.children[1], 100, 0);
+                    expectPosition(gridVertical.children[2], 200, 0);
+                    done();
+                });
+                it('should align items in correct sizes', function(done) {
+                    expectSize(gridVertical.children[0], 200, 100);
+                    expectSize(gridVertical.children[1], 200, 100);
+                    expectSize(gridVertical.children[2], 200, 200);
+                    done();
+                });
 
-  });
-  context('with heightFlexible', function () {
-    afterEach(function(){
-      juicyTileList2.refresh.restore && juicyTileList2.refresh.restore();
-    });
+            });
+            context('when resized', function() {
+                it('refresh method should not be called', function(done) {
+                    var refresh = sinon.spy(gridVertical, "refresh");
 
-    context('when rendered, ', function () {
-      it('should align items in correct places', function (done) {
-        expectPosition( juicyTileList2.children[0], 0, 0);
-        expectPosition( juicyTileList2.children[1], 100, 0);
-        expectPosition( juicyTileList2.children[2], 200, 0);
-        done();
-      });
-      it('should align items in correct sizes', function (done) {
-        expectSize( juicyTileList2.children[0], 200, 100);
-        expectSize( juicyTileList2.children[1], 200, 100);
-        expectSize( juicyTileList2.children[2], 200, 200);
-        done();
-      });
+                    gridVertical.style.height = "700px";
 
-    });
-    context('when resized', function () {
-      it('refresh method should not be called', function (done) {
-        var refresh = sinon.spy(juicyTileList2, "refresh");
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expect(gridVertical.refresh.callCount).to.equal(0);
+                        done();
+                    }, 10);
+                });
+                it('added width should be distributed proportionally among columns with items marked as expandable', function(done) {
+                    gridVertical.style.height = "700px";
 
-        juicyTileList2.style.height = "700px";
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expectPosition(gridVertical.children[0], 0, 0);
+                        expectPosition(gridVertical.children[1], 100, 0);
+                        expectPosition(gridVertical.children[2], 300, 0);
+                        done();
+                    });
+                });
+                it('items marked as expandable should change size accordingly', function(done) {
+                    gridVertical.style.height = "700px";
 
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-          expect( juicyTileList2.refresh.callCount ).to.equal(0);
-          done();
-        },10);
-      });
-      it('added width should be distributed proportionally among columns with items marked as expandable', function (done) {
-        juicyTileList2.style.height = "700px";
+                    // wait for mutation observer callback
+                    setTimeout(function whenMutated() {
+                        expectSize(gridVertical.children[0], 200, 100);
+                        expectSize(gridVertical.children[1], 200, 200);
+                        expectSize(gridVertical.children[2], 200, 400);
+                        done();
+                    });
+                });
 
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-        expectPosition( juicyTileList2.children[0], 0, 0);
-        expectPosition( juicyTileList2.children[1], 100, 0);
-        expectPosition( juicyTileList2.children[2], 300, 0);
-        done();
+            });
+
         });
-      });
-      it('items marked as expandable should change size accordingly', function (done) {
-        juicyTileList2.style.height = "700px";
-
-        // wait for mutation observer callback
-        setTimeout(function whenMutated(){
-        expectSize( juicyTileList2.children[0], 200, 100);
-        expectSize( juicyTileList2.children[1], 200, 200);
-        expectSize( juicyTileList2.children[2], 200, 400);
-        done();
-        });
-      });
-
     });
+</script>
 
-  });
-});
-
-    </script>
-
-  </body>
 </html>
