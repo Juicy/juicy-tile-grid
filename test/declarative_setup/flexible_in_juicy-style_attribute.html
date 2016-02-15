@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../../webcomponentsjs/webcomponents.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../../juicy-tile-grid.html">
+    <style>
+        juicy-tile-grid>* {
+            background-color: lightgray;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="list">
+        <template>
+            <juicy-tile-grid style="width: 500px;">
+                <!-- CSS-like px=> fixed &  % =>flex -->
+                <div juicy-style="width:100%; height: 100px;">
+                    <div>0 - px => fixed &amp;  % => flex
+                        <code>width: 100%; widthFlexible: 1; height: 100; </code>
+                    </div>
+                </div>
+            </juicy-tile-grid>
+        </template>
+    </test-fixture>
+
+    <script>
+        var juicyTileGrid;
+        describe('juicy-tile-list declarative per-element setup', function() {
+            var initialSetup
+            before(function(done) {
+                juicyTileGrid = fixture('list');
+                // wait for attached
+                setTimeout(done);
+            });
+            it('`%` and `px` given in `juicy-style` attribute, should also set `*Flexible` to `true` and `false` respectively for tile\'s setup', function() {
+                expect(juicyTileGrid.allItems[0].widthFlexible).to.be.ok;
+                expect(juicyTileGrid.allItems[0].heightFlexible).to.not.be.ok;
+            });
+        });
+    </script>
+
+</body>
+
+</html>

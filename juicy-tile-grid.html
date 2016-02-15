@@ -619,6 +619,60 @@ version: 1.3.2
             return packedTree;
         };
 
+        /*
+          Parses given string containing css directives
+          and returns a map ruleName: ruleValue,
+          Parse `(width|height):NNpx` as `(width|height):NN`
+          and `(width|height):NN%` as `(width|height):NN%;(width|height)Flexible: true;`
+          @param {String} rules, css directive-like string example
+              \n\width:40%;\n    priority:0.5;\n
+          Modified ver
+        */
+        proto.parseRules = function(rules) {
+          var map = {};
+          rules = rules.split(';');
+
+          //proccess rules
+          for (var i = 0; i < rules.length; i++) {
+            var declaration = rules[i];
+
+            //determine if declaration is a valid css declaration, ie `property S* ':' S* value;``
+            declaration = declaration.trim();
+            if (declaration.indexOf(':') !== -1) {
+              //declaration contains :
+              declaration = declaration.split(':');
+              var cssProperty = declaration[0].trim();
+              var cssValue = declaration.slice(1).join(':').trim();
+
+              // TODO (tomalec): parse some values according to
+              // https://drafts.csswg.org/css2/syndata.html#tokenization
+              // but optimze to avoid regexps as much as possible
+              if(cssValue === '0'){
+                  cssValue = 0;
+              }
+              if(cssProperty === 'width' || cssProperty === 'height'){
+                  if(cssValue.indexOf('px')>-1){
+                      cssValue = parseFloat(cssValue);
+                      map[cssProperty+'Flexible'] = false;
+                  } else if(cssValue.indexOf('%')>-1){
+                      map[cssProperty+'Flexible'] = true;
+                  }
+              }
+
+              // silently ignore unknown values https://drafts.csswg.org/css2/syndata.html#unsupported-values
+              //   if (cssProperty.length < 1 || cssValue.length < 1) {
+              //     continue; //there is no css directive or value
+              //   }
+              //save rule
+              map[cssProperty] = cssValue;
+          } else if(declaration !== ''){
+               console.warn("juicy-style for ", this," contains defective declaration: ", declaration);
+            }
+          }
+
+          return map;
+        };
+
         window.JuicyTileGrid = document.registerElement("juicy-tile-grid", {
             prototype: JuicyTileGridPrototype
         });
