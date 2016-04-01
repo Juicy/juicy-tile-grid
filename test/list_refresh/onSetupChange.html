@@ -74,7 +74,7 @@
                         setTimeout(function whenMutated() {
                             expect(noSetup_refresh.callCount).to.equal(1);
                             done();
-                        });
+                        }, 50);
                     });
                 });
                 context('after element was attached', function() {
@@ -192,7 +192,7 @@
                         setTimeout(function whenMutated() {
                             expect(noSetup_refresh.callCount).to.equal(1);
                             done();
-                        });
+                        }, 50);
                     });
                 });
                 context('after element was attached', function() {
