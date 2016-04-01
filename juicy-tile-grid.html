@@ -74,7 +74,7 @@ version: 1.3.2
         }
         */
     </style>
-    <content class="not-a-tile"></content>
+    <content select=":not([juicytile])" class="not-a-tile"></content>
 </template>
 
 <script>
@@ -245,7 +245,7 @@ version: 1.3.2
                 var frag = document.importNode(tileDecorator, true);
                 var tile = frag.children[0];
                 tile.id = id;
-                tile.firstChild.setAttribute("select", "[juicytile='" + id + "']");
+                tile.firstChild.setAttribute('select', '[juicytile="' + id + '"]');
                 // add to key based map
                 tiles[id] = tile;
                 fragment.appendChild(frag);
