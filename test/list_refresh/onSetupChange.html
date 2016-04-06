@@ -169,7 +169,7 @@
                     setTimeout(function whenMutated() {
                         expect(JSON.stringify(inlineSetup.setup)).to.equal(JSON.stringify(noSetup.setup));
                         done();
-                    });
+                    }, 100);
                 });
             });
             context('when setup property gets changed or set', function() {
