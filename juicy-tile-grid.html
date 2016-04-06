@@ -625,10 +625,10 @@ version: 1.3.4
           and `(width|height):NN%` as `(width|height):NN%;(width|height)Flexible: true;`
           @param {String} rules, css directive-like string example
               \n\width:40%;\n    priority:0.5;\n
-          Modified ver
+          @param {Object} map set of JSON properties to be extended
+          @retruns {Object} modified map
         */
-        proto.parseRules = function(rules) {
-          var map = {};
+        proto.parseRules = function(rules, map) {
           rules = rules.split(';');
 
           //proccess rules
