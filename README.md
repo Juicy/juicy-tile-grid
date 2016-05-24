@@ -47,7 +47,7 @@ Or [download as ZIP](https://github.com/Juicy/juicy-tile-grid/archive/gh-pages.z
     ```html
     <juicy-tile-grid></juicy-tile-grid>
     ```
-    
+
 ## Requirements
 This element is using [CSS Grid Layout](http://www.w3.org/TR/2014/WD-css-grid-1-20140513/), so if your environment does not support it, you may need to [enable it](http://igalia.github.io/css-grid-layout/enable.html) or use shim.
 
@@ -84,4 +84,4 @@ For detailed changelog, check [Releases](https://github.com/Juicy/juicy-tile-gri
 
 ## License
 
-[MIT License](http://opensource.org/licenses/MIT)
+MIT
